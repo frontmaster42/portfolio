@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анна Соколова — фотограф</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #faf8f5;
+    --text: #1a1a1a;
+    --text-muted: #8a8a8a;
+    --accent: #c9a87a;
+    --line: #ebe5dc;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--text); background: var(--bg); line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 30px; }
+
+  /* HEADER */
+  .header {
+    padding: 30px 0;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(250,248,245,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .header__inner { display: flex; justify-content: space-between; align-items: center; }
+  .logo {
+    font-size: 22px; font-weight: 400;
+    letter-spacing: 4px; text-transform: uppercase;
+    text-decoration: none; color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .nav { display: flex; gap: 40px; }
+  .nav a {
+    color: var(--text); text-decoration: none;
+    font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 400;
+    transition: color 0.3s;
+  }
+  .nav a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding-top: 100px;
+    position: relative;
+  }
+  .hero__content { max-width: 700px; }
+  .hero__small {
+    color: var(--accent); font-size: 13px; letter-spacing: 5px;
+    text-transform: uppercase; margin-bottom: 30px;
+    font-family: -apple-system, sans-serif; font-weight: 500;
+  }
+  .hero h1 {
+    font-size: 88px; line-height: 1.05; margin-bottom: 30px;
+    font-weight: 400; letter-spacing: -1px;
+  }
+  .hero h1 em { color: var(--accent); font-style: italic; }
+  .hero__lead {
+    font-size: 19px; color: var(--text-muted);
+    max-width: 520px; margin-bottom: 50px;
+    line-height: 1.7;
+  }
+  .btn {
+    display: inline-block;
+    background: var(--text); color: var(--bg);
+    padding: 18px 40px;
+    text-decoration: none; font-size: 13px;
+    letter-spacing: 3px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 500;
+    border: 1px solid var(--text);
+    transition: background 0.3s, color 0.3s;
+    cursor: pointer;
+  }
+  .btn:hover { background: transparent; color: var(--text); }
+  .btn--outline {
+    background: transparent; color: var(--text);
+    margin-left: 12px;
+  }
+  .btn--outline:hover { background: var(--text); color: var(--bg); }
+
+  /* SECTIONS */
+  .section { padding: 130px 0; }
+  .section__label {
+    color: var(--accent); font-size: 13px; letter-spacing: 5px;
+    text-transform: uppercase; margin-bottom: 20px;
+    font-family: -apple-system, sans-serif; font-weight: 500;
+  }
+  .section__title {
+    font-size: 56px; margin-bottom: 60px;
+    font-weight: 400; line-height: 1.1;
+  }
+  .section__title em { color: var(--accent); font-style: italic; }
+
+  /* PORTFOLIO GRID */
+  .portfolio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .photo {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #d4c4a8, #8a7860);
+    display: flex; align-items: flex-end;
+    padding: 28px; color: white;
+    font-size: 14px; letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .photo::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+  }
+  .photo span { position: relative; z-index: 2; }
+  .photo:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+  .photo--1 { background: linear-gradient(135deg, #d4a574, #8a6240); }
+  .photo--2 { background: linear-gradient(135deg, #a8b8a0, #5a6a52); }
+  .photo--3 { background: linear-gradient(135deg, #c8a0a0, #7a4f4f); }
+  .photo--4 { background: linear-gradient(135deg, #a0a8c8, #4f5a7a); }
+  .photo--5 { background: linear-gradient(135deg, #d4c4a8, #8a7860); }
+  .photo--6 { background: linear-gradient(135deg, #e0d4c0, #a0907a); }
+
+  /* SERVICES */
+  .services {
+    background: white;
+    border-radius: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+  }
+  .service { text-align: center; }
+  .service__num {
+    color: var(--accent); font-size: 14px; letter-spacing: 3px;
+    margin-bottom: 16px; font-family: -apple-system, sans-serif;
+  }
+  .service__name {
+    font-size: 28px; margin-bottom: 16px; font-weight: 400;
+  }
+  .service__desc {
+    color: var(--text-muted); font-size: 15px;
+    margin-bottom: 24px; line-height: 1.7;
+  }
+  .service__price {
+    font-size: 22px; color: var(--accent);
+    font-family: -apple-system, sans-serif; font-weight: 600;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about__photo {
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #d4c4a8, #8a7860);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 140px;
+  }
+  .about__text h2 {
+    font-size: 48px; margin-bottom: 24px;
+    font-weight: 400; line-height: 1.2;
+  }
+  .about__text h2 em { color: var(--accent); font-style: italic; }
+  .about__text p {
+    color: var(--text-muted); margin-bottom: 18px;
+    line-height: 1.8; font-size: 16px;
+  }
+
+  /* CTA */
+  .cta {
+    background: var(--text); color: var(--bg);
+    padding: 100px 60px;
+    text-align: center;
+  }
+  .cta h2 {
+    font-size: 56px; margin-bottom: 24px;
+    font-weight: 400;
+  }
+  .cta h2 em { color: var(--accent); font-style: italic; }
+  .cta p {
+    color: rgba(255,255,255,0.7); margin-bottom: 40px;
+    font-size: 18px;
+  }
+  .cta .btn {
+    background: var(--accent); color: var(--text);
+    border-color: var(--accent);
+  }
+  .cta .btn:hover { background: transparent; color: var(--bg); }
+
+  /* FOOTER */
+  .footer {
+    padding: 50px 0;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-family: -apple-system, sans-serif;
+  }
+  .footer a { color: var(--accent); text-decoration: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav { display: none; }
+    .hero h1 { font-size: 46px; }
+    .section { padding: 70px 0; }
+    .section__title { font-size: 32px; }
+    .portfolio { grid-template-columns: 1fr 1fr; }
+    .services-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .cta { padding: 60px 30px; }
+    .cta h2 { font-size: 32px; }
+    .btn--outline { margin-left: 0; margin-top: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="#" class="logo">SOKOLOVA</a>
+    <nav class="nav">
+      <a href="#portfolio">Работы</a>
+      <a href="#services">Услуги</a>
+      <a href="#about">Обо мне</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero__content">
+    <div class="hero__small">★ Фотограф · Москва · С 2019 года</div>
+    <h1>Останавливаю<br>мгновения,<br>в которых<br>живёт <em>тишина</em></h1>
+    <p class="hero__lead">Семейная, портретная и предметная съёмка. Снимаю на плёнку и цифру. Работаю на естественном свете — без излишеств и пафоса.</p>
+    <a href="#portfolio" class="btn">Смотреть работы</a>
+    <a href="#contact" class="btn btn--outline">Связаться</a>
+  </div>
+</section>
+
+<section class="section" id="portfolio">
+  <div class="container">
+    <div class="section__label">— Избранное</div>
+    <h2 class="section__title">Недавние <em>работы</em></h2>
+    <div class="portfolio">
+      <div class="photo photo--1"><span>Семейная съёмка</span></div>
+      <div class="photo photo--2"><span>Портрет на природе</span></div>
+      <div class="photo photo--3"><span>Свадьба · Анна и Илья</span></div>
+      <div class="photo photo--4"><span>Lookbook · бренд OAK</span></div>
+      <div class="photo photo--5"><span>Студия · Москва</span></div>
+      <div class="photo photo--6"><span>Детская фотосессия</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section services">
+  <div class="container">
+    <div class="section__label">— Что я снимаю</div>
+    <h2 class="section__title">Услуги и <em>цены</em></h2>
+    <div class="services-grid">
+      <div class="service">
+        <div class="service__num">— 01</div>
+        <div class="service__name">Семейная съёмка</div>
+        <div class="service__desc">2 часа съёмки на природе или в студии. До 40 обработанных фото в высоком разрешении.</div>
+        <div class="service__price">15 000 ₽</div>
+      </div>
+      <div class="service">
+        <div class="service__num">— 02</div>
+        <div class="service__name">Портретная съёмка</div>
+        <div class="service__desc">1.5 часа индивидуальной работы. Помогу с локацией и образом. До 30 фото в обработке.</div>
+        <div class="service__price">12 000 ₽</div>
+      </div>
+      <div class="service">
+        <div class="service__num">— 03</div>
+        <div class="service__name">Свадебная съёмка</div>
+        <div class="service__desc">Полный день, от утренних сборов до банкета. От 200 фото + плёнка в подарок.</div>
+        <div class="service__price">45 000 ₽</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about__photo">📷</div>
+      <div class="about__text">
+        <div class="section__label">— Привет</div>
+        <h2>Меня зовут <em>Анна</em></h2>
+        <p>Снимаю с 2019 года. Сначала — для друзей, потом — для всех, кто разделил со мной любовь к негромкой эстетике повседневности.</p>
+        <p>Не люблю постановочные позы. Люблю настоящие эмоции, тёплый свет из окна и кадры, которые хочется распечатать и поставить на стол.</p>
+        <p>За плечами — больше 300 семейных съёмок, 80 свадеб и несколько обложек для журналов. Но главное — кадры, которые до сих пор любят мои клиенты.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="container">
+    <div class="cta">
+      <h2>Давайте <em>познакомимся</em></h2>
+      <p>Расскажите о своей идее — я отвечу в течение дня</p>
+      <a href="mailto:hello@sokolova-photo.ru" class="btn">Написать</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    © 2026 Анна Соколова · Фотограф · <a href="#">Telegram</a> · <a href="#">Instagram</a>
+  </div>
+</footer>
+
+</body>
+</html>

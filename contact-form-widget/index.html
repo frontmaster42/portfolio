@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Демо: Всплывающая форма обратной связи</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    min-height: 100vh;
+    color: #333;
+    padding: 40px 20px;
+  }
+  .demo-container {
+    max-width: 720px;
+    margin: 0 auto;
+    background: white;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.3);
+  }
+  h1 { color: #1a202c; margin-bottom: 16px; font-size: 32px; }
+  p { color: #4a5568; line-height: 1.6; margin-bottom: 16px; font-size: 15px; }
+  ul { margin: 16px 0 24px 24px; color: #4a5568; }
+  ul li { margin-bottom: 8px; }
+  .demo-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white; border: none;
+    padding: 16px 36px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 12px;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .demo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(245,87,108,0.4);
+  }
+  code {
+    background: #f7fafc;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    font-size: 13px;
+    color: #d53f8c;
+  }
+
+  /* ============== WIDGET FAB ============== */
+  .fab {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 28px;
+    box-shadow: 0 10px 30px rgba(102,126,234,0.5);
+    z-index: 998;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s;
+  }
+  .fab:hover { transform: scale(1.08); }
+  .fab__pulse {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 50%;
+    background: rgba(102,126,234,0.4);
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+
+  /* ============== MODAL ============== */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15,23,42,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  .modal-overlay.show { opacity: 1; visibility: visible; }
+
+  .modal {
+    background: white;
+    border-radius: 20px;
+    max-width: 480px;
+    width: 100%;
+    padding: 40px;
+    position: relative;
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.3s;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+  }
+  .modal-overlay.show .modal { transform: translateY(0) scale(1); }
+
+  .modal__close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    border: none; background: #f7fafc;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    color: #4a5568;
+    transition: background 0.2s;
+  }
+  .modal__close:hover { background: #edf2f7; }
+
+  .modal__icon {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  .modal h2 {
+    font-size: 26px; margin-bottom: 8px; color: #1a202c;
+  }
+  .modal__lead {
+    color: #718096; margin-bottom: 28px; font-size: 14px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: #4a5568;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+  .form-group .error {
+    color: #e53e3e;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+  }
+  .form-group.has-error input,
+  .form-group.has-error textarea {
+    border-color: #fc8181;
+  }
+  .form-group.has-error .error { display: block; }
+
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    margin-top: 8px;
+  }
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(102,126,234,0.4);
+  }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .success-message {
+    text-align: center;
+    padding: 30px 0 10px;
+    display: none;
+  }
+  .success-message.show { display: block; }
+  .success-message__icon {
+    width: 70px; height: 70px;
+    background: #48bb78;
+    color: white;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  .success-message h2 { color: #1a202c; margin-bottom: 12px; }
+  .success-message p { color: #718096; }
+
+  @media (max-width: 480px) {
+    .modal { padding: 30px 24px; }
+    .fab { width: 56px; height: 56px; bottom: 20px; right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-container">
+  <h1>📨 Виджет «Обратная связь»</h1>
+  <p>Лёгкая всплывающая форма для любого сайта. Не нужны библиотеки — всё на чистом HTML/CSS/JS.</p>
+
+  <p><strong>Что внутри:</strong></p>
+  <ul>
+    <li>Плавающая кнопка-FAB с анимацией пульсации</li>
+    <li>Модальное окно с формой (имя, телефон, сообщение)</li>
+    <li>JS-валидация в реальном времени</li>
+    <li>Telegram-маска и проверка длины полей</li>
+    <li>Анимированное состояние «успешно отправлено»</li>
+    <li>Закрытие по клику вне окна и по клавише <code>Esc</code></li>
+    <li>Полностью адаптивный</li>
+  </ul>
+
+  <p>Нажмите <strong>фиолетовую кнопку в правом нижнем углу</strong> — увидите виджет в действии.</p>
+
+  <button class="demo-btn" onclick="openModal()">Открыть форму через кнопку</button>
+</div>
+
+<!-- ============== ВИДЖЕТ (этот блок копируем на сайт) ============== -->
+
+<button class="fab" id="fabBtn" aria-label="Открыть форму обратной связи">
+  <span class="fab__pulse"></span>
+  <span style="position:relative;z-index:2;">💬</span>
+</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="modal__close" id="closeBtn" aria-label="Закрыть">✕</button>
+
+    <div id="formBlock">
+      <div class="modal__icon">💬</div>
+      <h2>Свяжитесь с нами</h2>
+      <p class="modal__lead">Оставьте контакты — перезвоним в течение 15 минут</p>
+
+      <form id="contactForm" novalidate>
+        <div class="form-group" id="nameGroup">
+          <label for="nameInput">Ваше имя</label>
+          <input type="text" id="nameInput" placeholder="Артём">
+          <div class="error">Введите имя (минимум 2 символа)</div>
+        </div>
+
+        <div class="form-group" id="phoneGroup">
+          <label for="phoneInput">Телефон</label>
+          <input type="tel" id="phoneInput" placeholder="+7 (___) ___-__-__">
+          <div class="error">Введите корректный телефон</div>
+        </div>
+
+        <div class="form-group" id="messageGroup">
+          <label for="messageInput">Сообщение</label>
+          <textarea id="messageInput" placeholder="Коротко опишите задачу..."></textarea>
+          <div class="error">Сообщение должно быть от 10 символов</div>
+        </div>
+
+        <button type="submit" class="submit-btn">Отправить заявку</button>
+      </form>
+    </div>
+
+    <div class="success-message" id="successBlock">
+      <div class="success-message__icon">✓</div>
+      <h2>Заявка отправлена!</h2>
+      <p>Мы свяжемся с вами в течение 15 минут</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var fab = document.getElementById('fabBtn');
+    var overlay = document.getElementById('modalOverlay');
+    var closeBtn = document.getElementById('closeBtn');
+    var form = document.getElementById('contactForm');
+    var formBlock = document.getElementById('formBlock');
+    var successBlock = document.getElementById('successBlock');
+
+    var nameInput = document.getElementById('nameInput');
+    var phoneInput = document.getElementById('phoneInput');
+    var messageInput = document.getElementById('messageInput');
+
+    var nameGroup = document.getElementById('nameGroup');
+    var phoneGroup = document.getElementById('phoneGroup');
+    var messageGroup = document.getElementById('messageGroup');
+
+    // Открытие/закрытие
+    window.openModal = function() {
+      overlay.classList.add('show');
+      setTimeout(function(){ nameInput.focus(); }, 300);
+    };
+    function closeModal() {
+      overlay.classList.remove('show');
+      setTimeout(function() {
+        formBlock.style.display = 'block';
+        successBlock.classList.remove('show');
+        form.reset();
+        [nameGroup, phoneGroup, messageGroup].forEach(function(g){ g.classList.remove('has-error'); });
+      }, 300);
+    }
+    fab.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Маска телефона
+    phoneInput.addEventListener('input', function(e) {
+      var x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+      e.target.value = !x[2] ? x[1] : '+' + (x[1] || '7') + ' (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+    });
+
+    // Валидация
+    function validate() {
+      var ok = true;
+      if (nameInput.value.trim().length < 2) { nameGroup.classList.add('has-error'); ok = false; }
+      else nameGroup.classList.remove('has-error');
+
+      var phoneDigits = phoneInput.value.replace(/\D/g, '');
+      if (phoneDigits.length < 11) { phoneGroup.classList.add('has-error'); ok = false; }
+      else phoneGroup.classList.remove('has-error');
+
+      if (messageInput.value.trim().length < 10) { messageGroup.classList.add('has-error'); ok = false; }
+      else messageGroup.classList.remove('has-error');
+
+      return ok;
+    }
+
+    // Очистка ошибок при вводе
+    [nameInput, phoneInput, messageInput].forEach(function(input, idx) {
+      input.addEventListener('input', function() {
+        var groups = [nameGroup, phoneGroup, messageGroup];
+        groups[idx].classList.remove('has-error');
+      });
+    });
+
+    // Сабмит
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!validate()) return;
+
+      // тут была бы реальная отправка через fetch() на ваш бэкенд
+      // например: fetch('/api/contact', { method: 'POST', body: ... })
+
+      formBlock.style.display = 'none';
+      successBlock.classList.add('show');
+      setTimeout(closeModal, 2500);
+    });
+  })();
+</script>
+
+</body>
+</html>
