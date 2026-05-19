@@ -118,15 +118,12 @@
     position: relative;
     overflow: hidden;
   }
-  .work--1 .work__preview {
-    background: linear-gradient(135deg, #1a202c 0%, #4a5568 100%);
-  }
-  .work--2 .work__preview {
-    background: linear-gradient(135deg, #2b1810 0%, #8b5a3c 100%);
-  }
-  .work--3 .work__preview {
-    background: linear-gradient(135deg, #0a0a0a 0%, #c9a86a 150%);
-  }
+  .work--1 .work__preview { background: linear-gradient(135deg, #1a202c 0%, #4a5568 100%); }
+  .work--2 .work__preview { background: linear-gradient(135deg, #2b1810 0%, #8b5a3c 100%); }
+  .work--3 .work__preview { background: linear-gradient(135deg, #0a0a0a 0%, #c9a86a 150%); }
+  .work--4 .work__preview { background: linear-gradient(135deg, #faf8f5 0%, #d4c4a8 100%); color: #1a1a1a; }
+  .work--5 .work__preview { background: linear-gradient(135deg, #667eea 0%, #f5576c 100%); }
+
   .work__body {
     padding: 24px 28px;
     flex: 1;
@@ -272,23 +269,9 @@
 <section class="section">
   <div class="container">
     <h2 class="section__title">Работы</h2>
-    <p class="section__lead">Несколько примеров — кликни, чтобы посмотреть в действии</p>
+    <p class="section__lead">5 кейсов — кликни на любой, чтобы посмотреть в действии</p>
 
     <div class="works">
-
-      <a href="cookie-banner/index.html" class="work work--1">
-        <div class="work__preview">🍪</div>
-        <div class="work__body">
-          <div class="work__category">Виджет</div>
-          <div class="work__title">Cookie-баннер</div>
-          <div class="work__desc">
-            Всплывающий баннер согласия на обработку cookies. Запоминает выбор пользователя через localStorage, плавная анимация, адаптивный.
-          </div>
-          <div class="work__stack">
-            <span>HTML</span><span>CSS</span><span>JS</span><span>localStorage</span>
-          </div>
-        </div>
-      </a>
 
       <a href="coffee-landing/index.html" class="work work--2">
         <div class="work__preview">☕</div>
@@ -296,7 +279,7 @@
           <div class="work__category">Лендинг</div>
           <div class="work__title">Кофейня «Зерно»</div>
           <div class="work__desc">
-            Одностраничник для небольшой кофейни: hero, меню, история, контакты, форма брони столика. Полностью адаптивный.
+            Одностраничник для кофейни: hero, меню, история, контакты, форма брони. Тёплая стилистика, адаптив.
           </div>
           <div class="work__stack">
             <span>HTML</span><span>CSS Grid</span><span>Flexbox</span><span>Адаптив</span>
@@ -310,10 +293,52 @@
           <div class="work__category">Лендинг</div>
           <div class="work__title">Барбершоп BLADE</div>
           <div class="work__desc">
-            Премиум-лендинг для мужского барбершопа: услуги с ценами, команда мастеров, форма записи. Тёмная тема, премиум-эстетика.
+            Премиум-лендинг для мужского барбершопа: услуги, команда мастеров, форма записи. Тёмная тема, премиум-эстетика.
           </div>
           <div class="work__stack">
             <span>HTML</span><span>CSS</span><span>JS</span><span>Form validation</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="photographer-landing/index.html" class="work work--4">
+        <div class="work__preview">📷</div>
+        <div class="work__body">
+          <div class="work__category">Лендинг</div>
+          <div class="work__title">Фотограф Анна Соколова</div>
+          <div class="work__desc">
+            Светлый минималистичный лендинг для фотографа: галерея работ, услуги с ценами, история, контакты. Журнальная стилистика.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS Grid</span><span>Адаптив</span><span>Минимализм</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="cookie-banner/index.html" class="work work--1">
+        <div class="work__preview">🍪</div>
+        <div class="work__body">
+          <div class="work__category">Виджет</div>
+          <div class="work__title">Cookie-баннер</div>
+          <div class="work__desc">
+            Всплывающий баннер согласия на cookies. Запоминает выбор пользователя через localStorage, плавная анимация, адаптивный.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>localStorage</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="contact-form-widget/index.html" class="work work--5">
+        <div class="work__preview">💬</div>
+        <div class="work__body">
+          <div class="work__category">Виджет</div>
+          <div class="work__title">Форма обратной связи</div>
+          <div class="work__desc">
+            Плавающая кнопка + модальное окно с формой. Маска телефона, JS-валидация, анимация успеха, закрытие по Esc.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>Модалка</span>
           </div>
         </div>
       </a>
@@ -380,7 +405,7 @@
 </footer>
 
 <script>
-  // защита от спам-ботов: собираем email из кусочков
+  // защита email от спам-ботов
   (function() {
     var u = ['r','a','l','e','k','s','e','e','v','4','3','7'].join('');
     var d = ['g','m','a','i','l'].join('') + '.' + 'com';
@@ -391,6 +416,6 @@
     if (label) label.textContent = email;
   })();
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fe50773489ff103',t:'MTc3OTIxMzkxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+</body>
 </html>
