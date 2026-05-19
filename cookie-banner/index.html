@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Демо: Cookie-баннер</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    padding: 40px 20px;
+  }
+  .demo-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  h1 { color: #2d3748; margin-bottom: 16px; font-size: 28px; }
+  p { color: #4a5568; line-height: 1.6; margin-bottom: 16px; }
+  .reset-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 16px;
+    transition: background 0.2s;
+  }
+  .reset-btn:hover { background: #5568d3; }
+  code {
+    background: #f7fafc;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    font-size: 13px;
+    color: #d53f8c;
+  }
+
+  /* ======================== COOKIE BANNER ======================== */
+  .cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 720px;
+    margin: 0 auto;
+    background: #1a202c;
+    color: #fff;
+    padding: 20px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 9999;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+  }
+  .cookie-banner.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .cookie-banner__icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .cookie-banner__text { flex: 1; }
+  .cookie-banner__text a {
+    color: #90cdf4;
+    text-decoration: underline;
+  }
+  .cookie-banner__text a:hover { color: #bee3f8; }
+  .cookie-banner__btn {
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+    flex-shrink: 0;
+  }
+  .cookie-banner__btn:hover { background: #38a169; }
+  .cookie-banner__btn:active { transform: scale(0.97); }
+
+  @media (max-width: 640px) {
+    .cookie-banner {
+      flex-direction: column;
+      text-align: center;
+      padding: 18px 20px;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+    }
+    .cookie-banner__btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ДЕМО-ОБЁРТКА: показать заказчику, как это выглядит на странице -->
+<div class="demo-container">
+  <h1>🍪 Демо cookie-баннера</h1>
+  <p>Это пример того, как баннер появляется на сайте при первом посещении. Нажмите <strong>«Принять»</strong> — баннер скроется и больше не появится (запомнится через <code>localStorage</code>).</p>
+  <p>Чтобы увидеть баннер снова — нажмите кнопку ниже (она очистит запомненное согласие).</p>
+  <button class="reset-btn" onclick="localStorage.removeItem('cookies_accepted'); location.reload();">
+    🔄 Показать баннер снова
+  </button>
+</div>
+
+<!-- ======================== COOKIE BANNER (этот блок копируем на сайт) ======================== -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-banner__icon">🍪</div>
+  <div class="cookie-banner__text">
+    Мы обрабатываем cookies, чтобы сделать сайт удобнее и полезнее для вас согласно
+    <a href="/cookie-policy" target="_blank">политике использования cookies</a> и
+    <a href="/privacy-policy" target="_blank">защите данных</a>.
+  </div>
+  <button class="cookie-banner__btn" id="cookieAcceptBtn">Принять</button>
+</div>
+
+<script>
+  (function() {
+    var banner = document.getElementById('cookieBanner');
+    var btn = document.getElementById('cookieAcceptBtn');
+    var STORAGE_KEY = 'cookies_accepted';
+
+    // Если согласие ещё не дано — показываем баннер
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      // Небольшая задержка, чтобы баннер появился плавно после загрузки
+      setTimeout(function() { banner.classList.add('show'); }, 300);
+    }
+
+    btn.addEventListener('click', function() {
+      localStorage.setItem(STORAGE_KEY, '1');
+      banner.classList.remove('show');
+    });
+  })();
+</script>
+
+</body>
+</html>
