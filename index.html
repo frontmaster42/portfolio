@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Портфолио — фронтенд-разработчик</title>
+<title>Артём — фронтенд-разработчик (FutureCode_Lab)</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -184,22 +184,43 @@
     border: 1px solid var(--bg-light);
   }
   .contact h2 { font-size: 32px; margin-bottom: 12px; }
-  .contact p { color: var(--text-muted); margin-bottom: 24px; }
+  .contact p { color: var(--text-muted); margin-bottom: 32px; }
+  .contact__buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
   .btn {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: var(--bg);
-    padding: 14px 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
     border-radius: 10px;
     text-decoration: none;
     font-weight: 700;
     font-size: 15px;
     transition: transform 0.15s, box-shadow 0.2s;
   }
-  .btn:hover {
+  .btn--primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--bg);
+  }
+  .btn--primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(56,189,248,0.4);
   }
+  .btn--secondary {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--bg-light);
+  }
+  .btn--secondary:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  .btn__icon { font-size: 18px; }
 
   /* FOOTER */
   .footer {
@@ -209,6 +230,11 @@
     font-size: 13px;
     border-top: 1px solid var(--bg-light);
   }
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .footer a:hover { text-decoration: underline; }
 
   /* RESPONSIVE */
   @media (max-width: 640px) {
@@ -217,6 +243,8 @@
     .section__title { font-size: 26px; }
     .skills { padding: 28px; }
     .contact { padding: 40px 24px; }
+    .contact__buttons { flex-direction: column; }
+    .btn { justify-content: center; }
   }
 </style>
 </head>
@@ -330,17 +358,39 @@
   <div class="container">
     <div class="contact">
       <h2>Нужен сайт или виджет?</h2>
-      <p>Свяжитесь со мной на Kwork — обсудим задачу и подберём решение</p>
-      <a href="https://kwork.ru" class="btn">Связаться</a>
+      <p>Свяжитесь со мной удобным способом — отвечу в течение часа</p>
+      <div class="contact__buttons">
+        <a href="https://kwork.ru/user/futurecode_lab" target="_blank" rel="noopener" class="btn btn--primary">
+          <span class="btn__icon">💼</span>
+          Написать на Kwork
+        </a>
+        <a href="#" id="emailBtn" class="btn btn--secondary">
+          <span class="btn__icon">✉️</span>
+          <span id="emailText">Написать на e-mail</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
 <footer class="footer">
   <div class="container">
-    © 2026 Портфолио. Сделано на HTML, CSS и кофе ☕
+    © 2026 Артём — фронтенд-разработчик · <a href="https://kwork.ru/user/futurecode_lab" target="_blank" rel="noopener">FutureCode_Lab на Kwork</a>
   </div>
 </footer>
 
-</body>
+<script>
+  // защита от спам-ботов: собираем email из кусочков
+  (function() {
+    var u = ['r','a','l','e','k','s','e','e','v','4','3','7'].join('');
+    var d = ['g','m','a','i','l'].join('') + '.' + 'com';
+    var email = u + String.fromCharCode(64) + d;
+    var btn = document.getElementById('emailBtn');
+    var label = document.getElementById('emailText');
+    if (btn) btn.setAttribute('href', 'mailto:' + email);
+    if (label) label.textContent = email;
+  })();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fe50773489ff103',t:'MTc3OTIxMzkxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
