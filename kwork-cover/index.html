@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Обложка кворка</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 20px;
+  }
+  .cover {
+    width: 1200px;
+    height: 800px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(56,189,248,0.25) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(167,139,250,0.25) 0%, transparent 50%),
+      #0f172a;
+    color: #f1f5f9;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 80px 90px;
+  }
+  .cover::before {
+    content: "</>";
+    position: absolute;
+    right: -80px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 580px;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    color: rgba(56,189,248,0.06);
+    font-weight: 700;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(56,189,248,0.15);
+    color: #38bdf8;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 22px;
+    border: 1px solid rgba(56,189,248,0.4);
+    font-weight: 500;
+  }
+  .badge::before { content: '● '; }
+  .main {
+    position: relative;
+    z-index: 2;
+  }
+  h1 {
+    font-size: 96px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 36px;
+  }
+  h1 .accent {
+    background: linear-gradient(135deg, #38bdf8, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .lead {
+    font-size: 32px;
+    color: #94a3b8;
+    margin-bottom: 50px;
+    max-width: 800px;
+    line-height: 1.4;
+  }
+  .tags {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    background: #1e293b;
+    color: #f1f5f9;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 24px;
+    border: 1px solid #334155;
+    font-weight: 500;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+  .price {
+    background: linear-gradient(135deg, #38bdf8, #a78bfa);
+    color: #0f172a;
+    padding: 24px 44px;
+    border-radius: 16px;
+    font-size: 36px;
+    font-weight: 800;
+    box-shadow: 0 20px 60px rgba(56,189,248,0.4);
+  }
+  .url {
+    color: #94a3b8;
+    font-size: 22px;
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+  }
+  .stars {
+    color: #fbbf24;
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="header">
+    <span class="badge">Открыт к заказам</span>
+  </div>
+
+  <div class="main">
+    <h1>Сверстаю<br>современный <span class="accent">лендинг</span></h1>
+    <p class="lead">На чистом HTML / CSS / JavaScript<br>Адаптив. Кроссбраузерность. Чистый код.</p>
+    <div class="tags">
+      <div class="tag">HTML5</div>
+      <div class="tag">CSS3</div>
+      <div class="tag">JavaScript</div>
+      <div class="tag">Адаптив</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <div class="url">frontmaster42.github.io/portfolio</div>
+    </div>
+    <div class="price">от 800 ₽</div>
+  </div>
+</div>
+</body>
+</html>
