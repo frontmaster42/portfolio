@@ -1113,12 +1113,17 @@
   })();
 
   // ============== VALIDATION HELPERS ==============
-  function setError(input) {
-    input.closest('.form-group').classList.add('error');
-  }
-
   function clearErrors(form) {
-    form.querySelectorAll('.form-group').forEach(g => g.classList.remove('error'));
+    form.querySelectorAll('.error').forEach(function(el) { el.style.display = 'none'; });
+    form.querySelectorAll('input, textarea').forEach(function(el) { el.style.borderColor = ''; });
+  }
+  function setError(inputEl) {
+    if (typeof inputEl === 'string') inputEl = document.getElementById(inputEl);
+    if (inputEl) {
+      inputEl.style.borderColor = '#e53e3e';
+      var errEl = inputEl.parentElement.querySelector('.error');
+      if (errEl) errEl.style.display = 'block';
+    }
   }
 
   // Clear error on input

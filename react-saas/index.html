@@ -132,7 +132,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; colo
 .demo-video-area .play-btn { width: 72px; height: 72px; background: rgba(108,99,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, background 0.2s; }
 .demo-video-area .play-btn:hover { transform: scale(1.1); background: #6c63ff; }
 .demo-video-area .play-btn::after { content: ''; border-style: solid; border-width: 12px 0 12px 22px; border-color: transparent transparent transparent white; margin-left: 4px; }
-.demo-video-area .play-btn.playing::after { border-width: 0 0 0 0; width: 8px; height: 24px; border-left: 4px solid white; border-right: 4px solid white; margin-left: 0; }
+.demo-video-area .play-btn.playing::after { display: inline-block; border-width: 0 0 0 0; width: 8px; height: 24px; border-left: 4px solid white; border-right: 4px solid white; margin-left: 0; }
 .demo-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: #6c63ff; width: 0%; transition: width 0.1s linear; }
 .demo-content { padding: 32px; }
 .demo-content h2 { font-size: 22px; margin-bottom: 16px; }

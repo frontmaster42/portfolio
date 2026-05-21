@@ -364,9 +364,9 @@ function renderAll() {
 
     // Apply filter
     if (currentFilter === 'inprogress') {
-      colTasks = col.column === 'inprogress' ? colTasks : [];
+      colTasks = col === 'inprogress' ? colTasks : [];
     } else if (currentFilter === 'done') {
-      colTasks = col.column === 'done' ? colTasks : [];
+      colTasks = col === 'done' ? colTasks : [];
     } else if (currentFilter === 'favorites') {
       colTasks = colTasks.filter(t => t.starred);
     }
