@@ -3,107 +3,468 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaaS Landing — React Next.js</title>
+<title>FlowSync — Управление проектами на новом уровне</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; color: #1a1a2e; }
-.nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; }
-.logo { font-size: 22px; font-weight: 800; color: #6c63ff; }
-.nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { color: #555; text-decoration: none; font-size: 14px; }
-.btn-try { background: #6c63ff; color: white; border: none; padding: 10px 24px; border-radius: 24px; font-size: 14px; }
-.hero { text-align: center; padding: 80px 60px 60px; }
-.hero .badge { display: inline-block; background: #6c63ff11; color: #6c63ff; font-size: 13px; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px; }
-.hero h1 { font-size: 52px; line-height: 1.15; margin-bottom: 20px; }
-.hero h1 span { background: linear-gradient(135deg, #6c63ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero p { color: #666; font-size: 18px; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
-.hero-buttons { display: flex; gap: 16px; justify-content: center; }
-.btn-primary { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; }
-.btn-outline { background: white; color: #6c63ff; border: 2px solid #6c63ff; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; }
-.stats { display: flex; justify-content: center; gap: 60px; padding: 40px 60px; }
-.stat { text-align: center; }
-.stat .num { font-size: 36px; font-weight: 800; color: #6c63ff; }
-.stat .label { font-size: 14px; color: #888; margin-top: 4px; }
-.features { padding: 80px 60px; background: #f8f9ff; }
-.features h2 { text-align: center; font-size: 36px; margin-bottom: 48px; }
-.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
-.feature { background: white; border-radius: 16px; padding: 28px; border: 1px solid #eee; }
-.feature .icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
-.feature .icon.blue { background: #6c63ff15; }
-.feature .icon.green { background: #34d39915; }
-.feature .icon.orange { background: #fb923c15; }
-.feature .icon.purple { background: #a855f715; }
-.feature h3 { font-size: 17px; margin-bottom: 8px; }
-.feature p { font-size: 14px; color: #888; line-height: 1.5; }
-.pricing { padding: 80px 60px; text-align: center; }
-.pricing h2 { font-size: 36px; margin-bottom: 48px; }
-.plans { display: flex; gap: 24px; justify-content: center; }
-.plan { background: white; border: 2px solid #eee; border-radius: 20px; padding: 32px; width: 300px; }
-.plan.popular { border-color: #6c63ff; position: relative; }
-.plan.popular::before { content: 'Популярный'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6c63ff; color: white; font-size: 12px; padding: 4px 14px; border-radius: 10px; }
-.plan h3 { font-size: 20px; margin-bottom: 8px; }
-.plan .price { font-size: 36px; font-weight: 800; color: #6c63ff; margin-bottom: 4px; }
-.plan .period { font-size: 13px; color: #888; margin-bottom: 20px; }
-.plan ul { list-style: none; text-align: left; margin-bottom: 24px; }
-.plan li { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; color: #555; }
-.plan li::before { content: '✓'; color: #6c63ff; font-weight: 700; margin-right: 8px; }
-.cta { background: linear-gradient(135deg, #6c63ff, #a855f7); color: white; padding: 80px 60px; text-align: center; }
-.cta h2 { font-size: 36px; margin-bottom: 16px; }
-.cta p { font-size: 16px; opacity: 0.9; margin-bottom: 28px; }
-.btn-white { background: white; color: #6c63ff; border: none; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; }
-.footer { padding: 24px 60px; text-align: center; color: #888; font-size: 13px; }
+/* ===== RESET & BASE ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;color:#1a1a2e;overflow-x:hidden}
+
+/* ===== LOADING SCREEN ===== */
+.loader{position:fixed;inset:0;z-index:9999;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .6s ease,visibility .6s ease}
+.loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-logo{font-size:28px;font-weight:800;color:#6c63ff;animation:loaderPulse 1.2s ease-in-out infinite}
+.loader-bar-wrap{width:160px;height:3px;background:#eee;border-radius:3px;margin-top:18px;overflow:hidden}
+.loader-bar{height:100%;width:0;background:linear-gradient(90deg,#6c63ff,#a855f7);border-radius:3px;animation:loaderFill 1.4s ease-in-out forwards}
+@keyframes loaderPulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes loaderFill{0%{width:0}100%{width:100%}}
+
+/* ===== NAV ===== */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:18px 60px;position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s ease,box-shadow .4s ease,backdrop-filter .4s ease,padding .3s ease}
+.nav.scrolled{background:rgba(255,255,255,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 24px rgba(108,99,255,.08);padding:12px 60px}
+.logo{font-size:22px;font-weight:800;color:#6c63ff;letter-spacing:-.5px;transition:transform .3s ease}
+.logo:hover{transform:scale(1.05)}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{color:#555;text-decoration:none;font-size:14px;position:relative;transition:color .3s ease}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:#6c63ff;border-radius:2px;transition:width .3s ease}
+.nav-links a:hover{color:#6c63ff}
+.nav-links a:hover::after{width:100%}
+.btn-try{background:linear-gradient(135deg,#6c63ff,#7c73ff);color:#fff;border:none;padding:10px 24px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+.btn-try::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#7c73ff,#a855f7);opacity:0;transition:opacity .3s ease}
+.btn-try:hover::before{opacity:1}
+.btn-try:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 6px 24px rgba(108,99,255,.35)}
+.btn-try span{position:relative;z-index:1}
+
+/* ===== HERO ===== */
+.hero{text-align:center;padding:140px 60px 60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(108,99,255,.06) 0%,transparent 70%);pointer-events:none}
+.hero .badge{display:inline-flex;align-items:center;gap:6px;background:#6c63ff11;color:#6c63ff;font-size:13px;padding:8px 18px;border-radius:24px;margin-bottom:24px;border:1px solid #6c63ff22;cursor:default}
+.hero .badge .badge-dot{animation:badgePulse 2s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.15)}}
+.hero h1{font-size:56px;line-height:1.12;margin-bottom:22px;font-weight:800;letter-spacing:-1px}
+.hero h1 .word{display:inline-block;opacity:0;transform:translateY(30px);animation:wordReveal .7s ease forwards}
+.hero h1 .gradient-text{background:linear-gradient(135deg,#6c63ff 0%,#a855f7 40%,#6c63ff 80%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s linear infinite}
+@keyframes wordReveal{to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
+.hero p{color:#666;font-size:18px;max-width:580px;margin:0 auto 36px;line-height:1.7;opacity:0;animation:fadeUp .8s ease forwards;animation-delay:1s}
+.hero-buttons{display:flex;gap:16px;justify-content:center;opacity:0;animation:fadeUp .8s ease forwards;animation-delay:1.2s}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* ===== BUTTONS ===== */
+.btn-primary,.btn-outline,.btn-white{cursor:pointer;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+.btn-primary{background:linear-gradient(135deg,#6c63ff,#7c73ff);color:#fff;border:none;padding:15px 34px;border-radius:30px;font-size:16px;font-weight:600;transform:translateY(20px)}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#7c73ff,#a855f7);opacity:0;transition:opacity .35s ease}
+.btn-primary:hover::before{opacity:1}
+.btn-primary:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 10px 32px rgba(108,99,255,.4)}
+.btn-primary span{position:relative;z-index:1}
+.btn-outline{background:#fff;color:#6c63ff;border:2px solid #6c63ff;padding:14px 34px;border-radius:30px;font-size:16px;font-weight:600;transform:translateY(20px)}
+.btn-outline:hover{background:#6c63ff;color:#fff;transform:translateY(-3px) scale(1.05);box-shadow:0 10px 32px rgba(108,99,255,.25)}
+.btn-white{background:#fff;color:#6c63ff;border:none;padding:15px 38px;border-radius:30px;font-size:16px;font-weight:600;transform:translateY(20px)}
+.btn-white::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#f8f9ff,#fff);opacity:0;transition:opacity .3s ease}
+.btn-white:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 10px 32px rgba(0,0,0,.15)}
+.btn-white:hover::before{opacity:1}
+.btn-white span{position:relative;z-index:1}
+
+/* ===== STATS ===== */
+.stats{display:flex;justify-content:center;gap:60px;padding:50px 60px 60px;position:relative}
+.stats::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:80%;height:1px;background:linear-gradient(90deg,transparent,#6c63ff22,transparent)}
+.stat{text-align:center;opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.stat.revealed{opacity:1;transform:translateY(0)}
+.stat .num{font-size:38px;font-weight:800;color:#6c63ff;letter-spacing:-1px}
+.stat .label{font-size:14px;color:#888;margin-top:4px}
+
+/* ===== FEATURES ===== */
+.features{padding:80px 60px;background:#f8f9ff;position:relative}
+.features::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#6c63ff15,transparent)}
+.features h2{text-align:center;font-size:36px;margin-bottom:48px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.features h2.revealed{opacity:1;transform:translateY(0)}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:1100px;margin:0 auto}
+.feature{background:#fff;border-radius:16px;padding:32px 28px;border:1px solid #eee;opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease,border-color .35s ease,box-shadow .35s ease,transform .35s ease}
+.feature.revealed{opacity:1;transform:translateY(0)}
+.feature:hover{transform:translateY(-8px)!important;border-color:#6c63ff55;box-shadow:0 12px 40px rgba(108,99,255,.12)}
+.feature .icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;transition:transform .4s ease}
+.feature:hover .icon{animation:iconBounce .5s ease}
+@keyframes iconBounce{0%{transform:scale(1)}30%{transform:scale(1.25) rotate(-5deg)}60%{transform:scale(.95) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+.feature .icon.blue{background:#6c63ff15}
+.feature .icon.green{background:#34d39915}
+.feature .icon.orange{background:#fb923c15}
+.feature .icon.purple{background:#a855f715}
+.feature h3{font-size:17px;margin-bottom:8px;color:#1a1a2e}
+.feature p{font-size:14px;color:#888;line-height:1.6}
+
+/* ===== PRICING ===== */
+.pricing{padding:80px 60px;text-align:center}
+.pricing h2{font-size:36px;margin-bottom:48px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.pricing h2.revealed{opacity:1;transform:translateY(0)}
+.plans{display:flex;gap:24px;justify-content:center;align-items:stretch}
+.plan{background:#fff;border:2px solid #eee;border-radius:20px;padding:36px 32px;width:300px;opacity:0;transform:translateY(30px) scale(.97);transition:opacity .6s ease,transform .6s ease,border-color .35s ease,box-shadow .35s ease}
+.plan.revealed{opacity:1;transform:translateY(0) scale(1)}
+.plan:hover{transform:translateY(-8px) scale(1.02)!important;border-color:#6c63ff88;box-shadow:0 16px 48px rgba(108,99,255,.12)}
+.plan.popular{border-color:#6c63ff;position:relative;box-shadow:0 8px 32px rgba(108,99,255,.1)}
+.plan.popular::before{content:'Популярный';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;font-size:12px;font-weight:600;padding:5px 16px;border-radius:12px;animation:popularPulse 2.5s ease-in-out infinite;box-shadow:0 4px 16px rgba(108,99,255,.3)}
+@keyframes popularPulse{0%,100%{box-shadow:0 4px 16px rgba(108,99,255,.3);transform:translateX(-50%) scale(1)}50%{box-shadow:0 4px 24px rgba(108,99,255,.5);transform:translateX(-50%) scale(1.06)}}
+.plan h3{font-size:20px;margin-bottom:8px;color:#1a1a2e}
+.plan .price{font-size:38px;font-weight:800;color:#6c63ff;margin-bottom:4px;letter-spacing:-1px}
+.plan .period{font-size:13px;color:#888;margin-bottom:22px}
+.plan ul{list-style:none;text-align:left;margin-bottom:28px}
+.plan li{font-size:14px;padding:9px 0;border-bottom:1px solid #f5f5f5;color:#555}
+.plan li::before{content:'✓';color:#6c63ff;font-weight:700;margin-right:8px}
+
+/* ===== CTA ===== */
+.cta{position:relative;color:#fff;padding:90px 60px;text-align:center;overflow:hidden}
+.cta-bg{position:absolute;inset:0;background:linear-gradient(135deg,#6c63ff,#a855f7,#6c63ff,#8b5cf6);background-size:300% 300%;animation:ctaGradient 8s ease infinite;z-index:0}
+@keyframes ctaGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.cta-bg::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.cta>*{position:relative;z-index:1}
+.cta h2{font-size:38px;margin-bottom:16px;font-weight:800}
+.cta p{font-size:17px;opacity:.92;margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ===== FOOTER ===== */
+.footer{padding:28px 60px;text-align:center;color:#999;font-size:13px;border-top:1px solid #f0f0f0}
+
+/* ===== SCROLL REVEAL ===== */
+.sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.sr.revealed{opacity:1;transform:translateY(0)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .nav{padding:14px 24px}
+  .nav.scrolled{padding:10px 24px}
+  .nav-links{gap:16px}
+  .hero{padding:120px 24px 50px}
+  .hero h1{font-size:36px}
+  .stats{gap:28px;padding:40px 24px;flex-wrap:wrap}
+  .stat .num{font-size:28px}
+  .features{padding:60px 24px}
+  .feature-grid{grid-template-columns:1fr}
+  .pricing{padding:60px 24px}
+  .plans{flex-direction:column;align-items:center}
+  .plan{width:100%;max-width:360px}
+  .cta{padding:60px 24px}
+  .footer{padding:20px 24px}
+}
+
+/* ===== UTILITY ===== */
+::selection{background:#6c63ff33;color:#1a1a2e}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#6c63ff44;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#6c63ff88}
 </style>
 </head>
 <body>
-<div class="nav">
+
+<!-- ===== LOADING SCREEN ===== -->
+<div class="loader" id="loader">
+  <div class="loader-logo">FlowSync</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="nav">
   <div class="logo">FlowSync</div>
   <div class="nav-links">
-    <a href="#">Возможности</a>
-    <a href="#">Цены</a>
+    <a href="#features">Возможности</a>
+    <a href="#pricing">Цены</a>
     <a href="#">Документация</a>
     <a href="#">Блог</a>
-    <button class="btn-try">Начать бесплатно</button>
+    <button class="btn-try"><span>Начать бесплатно</span></button>
   </div>
-</div>
-<div class="hero">
-  <div class="badge">🚀 Новая версия 2.0</div>
-  <h1>Управление проектами<br><span>на новом уровне</span></h1>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="badge"><span class="badge-dot">🚀</span> Новая версия 2.0</div>
+  <h1 id="hero-title"></h1>
   <p>Автоматизируйте рутину, отслеживайте прогресс и сотрудничайте с командой в реальном времени</p>
   <div class="hero-buttons">
-    <button class="btn-primary">Попробовать бесплатно</button>
+    <button class="btn-primary"><span>Попробовать бесплатно</span></button>
     <button class="btn-outline">Смотреть демо</button>
   </div>
-</div>
-<div class="stats">
-  <div class="stat"><div class="num">10K+</div><div class="label">Пользователей</div></div>
-  <div class="stat"><div class="num">99.9%</div><div class="label">Аптайм</div></div>
-  <div class="stat"><div class="num">50М+</div><div class="label">Задач выполнено</div></div>
-  <div class="stat"><div class="num">4.9★</div><div class="label">Рейтинг</div></div>
-</div>
-<div class="features">
-  <h2>Возможности</h2>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats" id="stats">
+  <div class="stat" data-delay="0">
+    <div class="num" data-target="10" data-suffix="K+">0</div>
+    <div class="label">Пользователей</div>
+  </div>
+  <div class="stat" data-delay="100">
+    <div class="num" data-target="99.9" data-suffix="%" data-decimals="1">0</div>
+    <div class="label">Аптайм</div>
+  </div>
+  <div class="stat" data-delay="200">
+    <div class="num" data-target="50" data-suffix="М+">0</div>
+    <div class="label">Задач выполнено</div>
+  </div>
+  <div class="stat" data-delay="300">
+    <div class="num" data-target="4.9" data-suffix="★" data-decimals="1">0</div>
+    <div class="label">Рейтинг</div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features" id="features">
+  <h2 class="sr">Возможности</h2>
   <div class="feature-grid">
-    <div class="feature"><div class="icon blue">📊</div><h3>Аналитика</h3><p>Детальные отчёты и дашборды для принятия решений на основе данных</p></div>
-    <div class="feature"><div class="icon green">⚡</div><h3>Автоматизация</h3><p>Настройте автоматические правила и триггеры для рутинных задач</p></div>
-    <div class="feature"><div class="icon orange">👥</div><h3>Сотрудничество</h3><p>Работайте в реальном времени с командой, комментариями и уведомлениями</p></div>
-    <div class="feature"><div class="icon purple">🔗</div><h3>Интеграции</h3><p>Подключайте Slack, GitHub, Jira и более 100 сервисов</p></div>
-    <div class="feature"><div class="icon blue">🔒</div><h3>Безопасность</h3><p>Шифрование данных, 2FA и соответствие стандартам GDPR</p></div>
-    <div class="feature"><div class="icon green">📱</div><h3>Мобильное приложение</h3><p>Управляйте проектами из любой точки мира с любого устройства</p></div>
+    <div class="feature" data-delay="0">
+      <div class="icon blue">📊</div>
+      <h3>Аналитика</h3>
+      <p>Детальные отчёты и дашборды для принятия решений на основе данных</p>
+    </div>
+    <div class="feature" data-delay="80">
+      <div class="icon green">⚡</div>
+      <h3>Автоматизация</h3>
+      <p>Настройте автоматические правила и триггеры для рутинных задач</p>
+    </div>
+    <div class="feature" data-delay="160">
+      <div class="icon orange">👥</div>
+      <h3>Сотрудничество</h3>
+      <p>Работайте в реальном времени с командой, комментариями и уведомлениями</p>
+    </div>
+    <div class="feature" data-delay="240">
+      <div class="icon purple">🔗</div>
+      <h3>Интеграции</h3>
+      <p>Подключайте Slack, GitHub, Jira и более 100 сервисов</p>
+    </div>
+    <div class="feature" data-delay="320">
+      <div class="icon blue">🔒</div>
+      <h3>Безопасность</h3>
+      <p>Шифрование данных, 2FA и соответствие стандартам GDPR</p>
+    </div>
+    <div class="feature" data-delay="400">
+      <div class="icon green">📱</div>
+      <h3>Мобильное приложение</h3>
+      <p>Управляйте проектами из любой точки мира с любого устройства</p>
+    </div>
   </div>
-</div>
-<div class="pricing">
-  <h2>Тарифы</h2>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="pricing" id="pricing">
+  <h2 class="sr">Тарифы</h2>
   <div class="plans">
-    <div class="plan"><h3>Старт</h3><div class="price">0 ₽</div><div class="period">навсегда</div><ul><li>До 5 проектов</li><li>3 участника</li><li>1 ГБ хранилище</li><li>Базовая аналитика</li></ul><button class="btn-outline" style="width:100%">Начать</button></div>
-    <div class="plan popular"><h3>Бизнес</h3><div class="price">1 490 ₽</div><div class="period">в месяц</div><ul><li>Безлимит проектов</li><li>20 участников</li><li>50 ГБ хранилище</li><li>Продвинутая аналитика</li><li>Автоматизация</li></ul><button class="btn-primary" style="width:100%">Попробовать</button></div>
-    <div class="plan"><h3>Корпорация</h3><div class="price">4 990 ₽</div><div class="period">в месяц</div><ul><li>Всё из Бизнес</li><li>Безлимит участников</li><li>500 ГБ хранилище</li><li>SSO и аудит</li><li>Приоритетная поддержка</li></ul><button class="btn-outline" style="width:100%">Связаться</button></div>
+    <div class="plan" data-delay="0">
+      <h3>Старт</h3>
+      <div class="price">0 ₽</div>
+      <div class="period">навсегда</div>
+      <ul>
+        <li>До 5 проектов</li>
+        <li>3 участника</li>
+        <li>1 ГБ хранилище</li>
+        <li>Базовая аналитика</li>
+      </ul>
+      <button class="btn-outline" style="width:100%">Начать</button>
+    </div>
+    <div class="plan popular" data-delay="120">
+      <h3>Бизнес</h3>
+      <div class="price">1 490 ₽</div>
+      <div class="period">в месяц</div>
+      <ul>
+        <li>Безлимит проектов</li>
+        <li>20 участников</li>
+        <li>50 ГБ хранилище</li>
+        <li>Продвинутая аналитика</li>
+        <li>Автоматизация</li>
+      </ul>
+      <button class="btn-primary" style="width:100%"><span>Попробовать</span></button>
+    </div>
+    <div class="plan" data-delay="240">
+      <h3>Корпорация</h3>
+      <div class="price">4 990 ₽</div>
+      <div class="period">в месяц</div>
+      <ul>
+        <li>Всё из Бизнес</li>
+        <li>Безлимит участников</li>
+        <li>500 ГБ хранилище</li>
+        <li>SSO и аудит</li>
+        <li>Приоритетная поддержка</li>
+      </ul>
+      <button class="btn-outline" style="width:100%">Связаться</button>
+    </div>
   </div>
-</div>
-<div class="cta">
-  <h2>Готовы начать?</h2>
-  <p>Присоединяйтесь к 10 000+ командам, которые уже используют FlowSync</p>
-  <button class="btn-white">Начать бесплатно</button>
-</div>
-<div class="footer">© 2026 FlowSync. React + Next.js + Tailwind CSS</div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <div class="cta-bg"></div>
+  <h2 class="sr">Готовы начать?</h2>
+  <p class="sr">Присоединяйтесь к 10 000+ командам, которые уже используют FlowSync</p>
+  <button class="btn-white sr"><span>Начать бесплатно</span></button>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">© 2026 FlowSync. React + Next.js + Tailwind CSS</footer>
+
+<script>
+/* ===== LOADER ===== */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('hidden');
+    animateHero();
+  }, 1600);
+});
+
+/* ===== HERO WORD ANIMATION ===== */
+function animateHero() {
+  const titleEl = document.getElementById('hero-title');
+  const line1 = 'Управление проектами';
+  const line2 = 'на новом уровне';
+
+  let html = '';
+  let wordIndex = 0;
+
+  // Line 1
+  line1.split(' ').forEach(word => {
+    html += `<span class="word" style="animation-delay:${0.3 + wordIndex * 0.1}s">${word}</span> `;
+    wordIndex++;
+  });
+
+  // Line 2 (gradient)
+  html += '<br>';
+  line2.split(' ').forEach(word => {
+    html += `<span class="word gradient-text" style="animation-delay:${0.3 + wordIndex * 0.1}s">${word}</span> `;
+    wordIndex++;
+  });
+
+  titleEl.innerHTML = html;
+}
+
+/* ===== NAV SCROLL EFFECT ===== */
+const nav = document.getElementById('nav');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y > 40) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+  lastScroll = y;
+}, { passive: true });
+
+/* ===== SMOOTH SCROLL ===== */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      const offset = 80;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ===== INTERSECTION OBSERVER — SCROLL REVEAL ===== */
+const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
+
+// Generic .sr elements
+const srObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      srObserver.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.sr').forEach(el => srObserver.observe(el));
+
+// Feature cards with stagger
+const featureObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = parseInt(entry.target.dataset.delay) || 0;
+      setTimeout(() => {
+        entry.target.classList.add('revealed');
+      }, delay);
+      featureObserver.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.feature').forEach(el => featureObserver.observe(el));
+
+// Pricing cards with stagger
+const planObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = parseInt(entry.target.dataset.delay) || 0;
+      setTimeout(() => {
+        entry.target.classList.add('revealed');
+      }, delay);
+      planObserver.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.plan').forEach(el => planObserver.observe(el));
+
+// Stat items with stagger
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = parseInt(entry.target.dataset.delay) || 0;
+      setTimeout(() => {
+        entry.target.classList.add('revealed');
+        animateCounter(entry.target.querySelector('.num'));
+      }, delay);
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.stat').forEach(el => statObserver.observe(el));
+
+/* ===== COUNTER ANIMATION ===== */
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const decimals = parseInt(el.dataset.decimals) || 0;
+  const duration = 2000;
+  const start = performance.now();
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = target * eased;
+
+    if (decimals > 0) {
+      el.textContent = current.toFixed(decimals) + suffix;
+    } else {
+      el.textContent = Math.floor(current) + suffix;
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      if (decimals > 0) {
+        el.textContent = target.toFixed(decimals) + suffix;
+      } else {
+        el.textContent = target + suffix;
+      }
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+/* ===== FEATURES SECTION HEADING OBSERVER ===== */
+const featuresH2 = document.querySelector('.features h2.sr');
+if (featuresH2) {
+  const h2Observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        h2Observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+  h2Observer.observe(featuresH2);
+}
+</script>
 </body>
 </html>

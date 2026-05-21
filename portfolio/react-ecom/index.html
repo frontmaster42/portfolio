@@ -3,45 +3,184 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Магазин кроссовок — React Next.js</title>
+<title>SneakPeak — Магазин кроссовок</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafafa; color: #1a1a2e; }
-.header { background: white; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-.logo { font-size: 22px; font-weight: 800; }
-.logo span { color: #6c63ff; }
-.nav-links { display: flex; gap: 24px; }
-.nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; }
-.nav-links a:hover { color: #6c63ff; }
-.cart-btn { background: #6c63ff; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; }
-.hero { padding: 60px 40px; display: flex; align-items: center; gap: 40px; max-width: 1200px; margin: 0 auto; }
-.hero-text { flex: 1; }
-.hero-text h1 { font-size: 42px; line-height: 1.2; margin-bottom: 16px; }
-.hero-text h1 span { color: #6c63ff; }
-.hero-text p { color: #666; font-size: 16px; margin-bottom: 24px; line-height: 1.6; }
-.hero-btn { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; }
-.hero-img { width: 400px; height: 300px; background: linear-gradient(135deg, #6c63ff22, #6c63ff11); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
-.products { padding: 40px; max-width: 1200px; margin: 0 auto; }
-.products h2 { font-size: 28px; margin-bottom: 24px; }
-.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.product { background: white; border-radius: 16px; padding: 20px; border: 1px solid #eee; transition: transform 0.2s; }
-.product:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.product-img { width: 100%; height: 140px; background: #f5f5f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 12px; }
-.product h3 { font-size: 15px; margin-bottom: 4px; }
-.product .brand { color: #999; font-size: 12px; margin-bottom: 8px; }
-.product .price { font-size: 18px; font-weight: 700; color: #6c63ff; }
-.product .old-price { font-size: 13px; color: #999; text-decoration: line-through; margin-left: 8px; }
-.product .rating { font-size: 12px; color: #f59e0b; margin-top: 4px; }
-.features { padding: 60px 40px; max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; }
-.feature { flex: 1; background: white; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #eee; }
-.feature .icon { font-size: 36px; margin-bottom: 12px; }
-.feature h3 { font-size: 15px; margin-bottom: 6px; }
-.feature p { font-size: 13px; color: #888; }
-.footer { background: #1a1a2e; color: white; padding: 40px; text-align: center; margin-top: 40px; }
-.footer p { color: #888; font-size: 13px; margin-top: 8px; }
+/* ============================================
+   RESET & BASE
+   ============================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafafa;color:#1a1a2e;overflow-x:hidden}
+
+/* ============================================
+   LOADING SCREEN
+   ============================================ */
+.loader{position:fixed;inset:0;z-index:9999;background:#1a1a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
+.loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-logo{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px}
+.loader-logo span{color:#6c63ff}
+.loader-bar-track{width:160px;height:4px;background:#2a2a3e;border-radius:4px;margin-top:24px;overflow:hidden}
+.loader-bar{height:100%;width:0;background:linear-gradient(90deg,#6c63ff,#a78bfa);border-radius:4px;animation:loaderFill 1.4s ease-in-out forwards}
+.loader-shoe{font-size:42px;margin-bottom:20px;animation:loaderBounce .6s ease infinite alternate}
+@keyframes loaderFill{0%{width:0}100%{width:100%}}
+@keyframes loaderBounce{0%{transform:translateY(0) rotate(-10deg)}100%{transform:translateY(-14px) rotate(10deg)}}
+
+/* ============================================
+   KEYFRAMES — MASTER SET
+   ============================================ */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(3deg)}}
+@keyframes cartBadgeBounce{0%{transform:scale(1)}30%{transform:scale(1.6)}50%{transform:scale(.85)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes cartPulse{0%{box-shadow:0 0 0 0 rgba(108,99,255,.5)}70%{box-shadow:0 0 0 14px rgba(108,99,255,0)}100%{box-shadow:0 0 0 0 rgba(108,99,255,0)}}
+@keyframes addPop{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes strikethrough{from{background-size:0% 2px}to{background-size:100% 2px}}
+@keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes iconSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes iconShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes heroTextReveal{from{opacity:0;transform:translateY(20px) skewY(1deg)}to{opacity:1;transform:translateY(0) skewY(0)}}
+
+/* ============================================
+   SCROLL-REVEAL SYSTEM
+   ============================================ */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.header{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:16px 40px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;position:sticky;top:0;z-index:100;animation:fadeInDown .6s ease both;animation-delay:.2s}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.5px}
+.logo span{color:#6c63ff}
+.nav-links{display:flex;gap:28px}
+.nav-links a{color:#555;text-decoration:none;font-size:14px;font-weight:500;position:relative;padding:4px 0;transition:color .3s ease}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:#6c63ff;border-radius:2px;transition:width .35s cubic-bezier(.22,1,.36,1)}
+.nav-links a:hover{color:#6c63ff}
+.nav-links a:hover::after{width:100%}
+.cart-btn{background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;padding:10px 22px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;position:relative;transition:transform .25s ease,box-shadow .25s ease;background-size:200% 200%}
+.cart-btn:hover{transform:scale(1.06);box-shadow:0 4px 20px rgba(108,99,255,.4);animation:gradientShift 2s ease infinite}
+.cart-btn:active{transform:scale(.97)}
+.cart-badge{background:#ff4757;color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;position:absolute;top:-6px;right:-6px;animation:cartBadgeBounce .8s ease .8s both;box-shadow:0 2px 8px rgba(255,71,87,.4)}
+.cart-badge.pop{animation:cartBadgeBounce .5s ease}
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero{padding:70px 40px;display:flex;align-items:center;gap:50px;max-width:1200px;margin:0 auto;overflow:hidden}
+.hero-text{flex:1;animation:fadeInUp .8s ease both;animation-delay:.4s}
+.hero-text .eyebrow{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#6c63ff;margin-bottom:12px;animation:heroTextReveal .6s ease both;animation-delay:.6s}
+.hero-text h1{font-size:46px;line-height:1.15;margin-bottom:18px;animation:heroTextReveal .7s ease both;animation-delay:.7s}
+.hero-text h1 span{color:#6c63ff;position:relative}
+.hero-text h1 span::after{content:'';position:absolute;bottom:2px;left:0;width:100%;height:8px;background:rgba(108,99,255,.15);border-radius:4px;z-index:-1}
+.hero-text p{color:#666;font-size:17px;margin-bottom:28px;line-height:1.7;animation:heroTextReveal .7s ease both;animation-delay:.85s}
+.hero-btn{background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;padding:16px 36px;border-radius:30px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease;background-size:200% 200%;animation:heroTextReveal .7s ease both;animation-delay:1s}
+.hero-btn:hover{transform:scale(1.06);box-shadow:0 8px 30px rgba(108,99,255,.35);animation:gradientShift 2s ease infinite}
+.hero-btn:active{transform:scale(.97)}
+.hero-img{width:420px;height:320px;background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(108,99,255,.04));border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:90px;position:relative;animation:fadeIn .8s ease both;animation-delay:.5s;overflow:hidden}
+.hero-img::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(108,99,255,.08),transparent,rgba(108,99,255,.06));border-radius:24px}
+.hero-img .sneaker{animation:float 3s ease-in-out infinite;filter:drop-shadow(0 20px 30px rgba(108,99,255,.2));z-index:1;user-select:none}
+.hero-img .glow{position:absolute;width:180px;height:180px;background:radial-gradient(circle,rgba(108,99,255,.18),transparent 70%);border-radius:50%;animation:iconPulse 3s ease-in-out infinite}
+
+/* ============================================
+   PRODUCTS
+   ============================================ */
+.products{padding:50px 40px;max-width:1200px;margin:0 auto}
+.products h2{font-size:30px;margin-bottom:30px;position:relative;display:inline-block}
+.products h2::after{content:'';position:absolute;bottom:-6px;left:0;width:50px;height:3px;background:#6c63ff;border-radius:3px;transition:width .4s ease}
+.products h2:hover::after{width:100%}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.product{background:#fff;border-radius:18px;padding:22px;border:1px solid #eee;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease;position:relative;overflow:hidden}
+.product::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6c63ff,#a78bfa);transform:scaleX(0);transform-origin:left;transition:transform .35s ease;border-radius:18px 18px 0 0}
+.product:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 16px 40px rgba(0,0,0,.1)}
+.product:hover::before{transform:scaleX(1)}
+.product:hover .product-img-emoji{transform:rotate(-8deg) scale(1.12)}
+.product-img{width:100%;height:150px;background:#f5f5f5;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:50px;margin-bottom:14px;position:relative;overflow:hidden;transition:background .3s ease}
+.product:hover .product-img{background:#f0eeff}
+.product-img-emoji{transition:transform .4s cubic-bezier(.22,1,.36,1);filter:drop-shadow(0 4px 8px rgba(0,0,0,.1))}
+.product-img .shimmer-overlay{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);opacity:0;transition:opacity .3s}
+.product:hover .shimmer-overlay{opacity:1;animation:shimmer 1.2s ease}
+.product h3{font-size:15px;margin-bottom:4px;font-weight:600}
+.product .brand{color:#999;font-size:12px;margin-bottom:10px;font-weight:500}
+.price-row{display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.product .price{font-size:19px;font-weight:700;color:#6c63ff}
+.product .old-price{font-size:13px;color:#bbb;background:linear-gradient(to right,#bbb,#bbb) no-repeat left center;background-size:0% 2px;background-position:0 55%;-webkit-background-size:0% 2px;animation:strikethrough .8s ease forwards;animation-delay:1.5s;padding-bottom:2px;position:relative}
+.product .rating{font-size:12px;color:#f59e0b;margin-top:4px}
+.product .add-cart-btn{width:100%;margin-top:14px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;padding:10px 0;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;background-size:200% 200%;opacity:0;transform:translateY(8px)}
+.product:hover .add-cart-btn{opacity:1;transform:translateY(0);transition:opacity .3s ease .1s,transform .3s ease .1s,box-shadow .2s ease}
+.add-cart-btn:hover{transform:scale(1.04)!important;box-shadow:0 4px 16px rgba(108,99,255,.35);animation:gradientShift 2s ease infinite}
+.add-cart-btn:active{transform:scale(.96)!important}
+.add-cart-btn.pulsing{animation:cartPulse .6s ease,addPop .4s ease}
+.add-cart-btn .btn-text{transition:opacity .2s}
+.add-cart-btn.pulsing .btn-text{opacity:0}
+.add-cart-btn .btn-added{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.add-cart-btn.pulsing .btn-added{opacity:1}
+
+/* ============================================
+   FEATURES
+   ============================================ */
+.features{padding:60px 40px;max-width:1200px;margin:0 auto;display:flex;gap:24px}
+.feature{flex:1;background:#fff;border-radius:18px;padding:28px 20px;text-align:center;border:1px solid #eee;transition:transform .3s ease,box-shadow .3s ease}
+.feature:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.07)}
+.feature .icon{font-size:38px;margin-bottom:14px;display:inline-block}
+.feature .icon.bounce{animation:iconBounce 2s ease-in-out infinite}
+.feature .icon.spin{animation:iconSpin 4s linear infinite}
+.feature .icon.pulse{animation:iconPulse 2s ease-in-out infinite}
+.feature .icon.shake{animation:iconShake 2.5s ease-in-out infinite}
+.feature h3{font-size:15px;margin-bottom:8px;font-weight:600}
+.feature p{font-size:13px;color:#888;line-height:1.5}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer{background:#1a1a2e;color:#fff;padding:50px 40px;text-align:center;margin-top:50px;position:relative;overflow:hidden}
+.footer::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6c63ff,#a78bfa,#6c63ff);background-size:200% 100%;animation:gradientShift 4s ease infinite}
+.footer .logo{font-size:24px;margin-bottom:8px}
+.footer p{color:#666;font-size:13px;margin-top:8px}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .hero{flex-direction:column;text-align:center;padding:40px 20px}
+  .hero-img{width:100%;max-width:320px;height:240px}
+  .features{flex-wrap:wrap}
+  .feature{min-width:45%}
+  .header{padding:14px 20px}
+  .products{padding:40px 20px}
+  .features{padding:40px 20px}
+  .nav-links{display:none}
+}
+@media(max-width:500px){
+  .grid{grid-template-columns:1fr}
+  .hero-text h1{font-size:30px}
+  .features{flex-direction:column}
+}
 </style>
 </head>
 <body>
+
+<!-- ============================================
+     LOADING SCREEN
+     ============================================ -->
+<div class="loader" id="loader">
+  <div class="loader-shoe">👟</div>
+  <div class="loader-logo">Sneak<span>Peak</span></div>
+  <div class="loader-bar-track"><div class="loader-bar"></div></div>
+</div>
+
+<!-- ============================================
+     HEADER
+     ============================================ -->
 <div class="header">
   <div class="logo">Sneak<span>Peak</span></div>
   <div class="nav-links">
@@ -50,58 +189,208 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafafa; colo
     <a href="#">Бренды</a>
     <a href="#">О нас</a>
   </div>
-  <button class="cart-btn">🛒 Корзина (3)</button>
+  <button class="cart-btn" id="cartBtn">
+    🛒 Корзина
+    <span class="cart-badge" id="cartBadge">3</span>
+  </button>
 </div>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
 <div class="hero">
   <div class="hero-text">
+    <div class="eyebrow">Новая коллекция</div>
     <h1>Новая коллекция <span>Spring 2026</span></h1>
     <p>Стильные кроссовки от ведущих брендов с быстрой доставкой по всей России. Более 2000 моделей в наличии.</p>
-    <button class="hero-btn">Смотреть каталог</button>
+    <button class="hero-btn">Смотреть каталог →</button>
   </div>
-  <div class="hero-img">👟</div>
+  <div class="hero-img">
+    <div class="glow"></div>
+    <div class="sneaker">👟</div>
+  </div>
 </div>
+
+<!-- ============================================
+     PRODUCTS
+     ============================================ -->
 <div class="products">
-  <h2>Популярные модели</h2>
+  <h2 class="reveal">Популярные модели</h2>
   <div class="grid">
-    <div class="product">
-      <div class="product-img">👟</div>
+    <div class="product reveal reveal-delay-1" data-name="Air Max Pulse">
+      <div class="product-img">
+        <span class="shimmer-overlay"></span>
+        <span class="product-img-emoji">👟</span>
+      </div>
       <h3>Air Max Pulse</h3>
       <div class="brand">Nike</div>
-      <div><span class="price">12 990 ₽</span><span class="old-price">15 990 ₽</span></div>
+      <div class="price-row">
+        <span class="price">12 990 ₽</span>
+        <span class="old-price">15 990 ₽</span>
+      </div>
       <div class="rating">★★★★★ (124)</div>
+      <button class="add-cart-btn" onclick="addToCart(this)">
+        <span class="btn-text">В корзину</span>
+        <span class="btn-added">✓ Добавлено</span>
+      </button>
     </div>
-    <div class="product">
-      <div class="product-img">👟</div>
+    <div class="product reveal reveal-delay-2" data-name="Ultraboost Light">
+      <div class="product-img">
+        <span class="shimmer-overlay"></span>
+        <span class="product-img-emoji">👟</span>
+      </div>
       <h3>Ultraboost Light</h3>
       <div class="brand">Adidas</div>
-      <div><span class="price">14 490 ₽</span></div>
+      <div class="price-row">
+        <span class="price">14 490 ₽</span>
+      </div>
       <div class="rating">★★★★☆ (89)</div>
+      <button class="add-cart-btn" onclick="addToCart(this)">
+        <span class="btn-text">В корзину</span>
+        <span class="btn-added">✓ Добавлено</span>
+      </button>
     </div>
-    <div class="product">
-      <div class="product-img">👟</div>
+    <div class="product reveal reveal-delay-3" data-name="574 Classic">
+      <div class="product-img">
+        <span class="shimmer-overlay"></span>
+        <span class="product-img-emoji">👟</span>
+      </div>
       <h3>574 Classic</h3>
       <div class="brand">New Balance</div>
-      <div><span class="price">9 990 ₽</span><span class="old-price">11 990 ₽</span></div>
+      <div class="price-row">
+        <span class="price">9 990 ₽</span>
+        <span class="old-price">11 990 ₽</span>
+      </div>
       <div class="rating">★★★★★ (201)</div>
+      <button class="add-cart-btn" onclick="addToCart(this)">
+        <span class="btn-text">В корзину</span>
+        <span class="btn-added">✓ Добавлено</span>
+      </button>
     </div>
-    <div class="product">
-      <div class="product-img">👟</div>
+    <div class="product reveal reveal-delay-4" data-name="Gel-Kayano 30">
+      <div class="product-img">
+        <span class="shimmer-overlay"></span>
+        <span class="product-img-emoji">👟</span>
+      </div>
       <h3>Gel-Kayano 30</h3>
       <div class="brand">ASICS</div>
-      <div><span class="price">16 990 ₽</span></div>
+      <div class="price-row">
+        <span class="price">16 990 ₽</span>
+      </div>
       <div class="rating">★★★★☆ (67)</div>
+      <button class="add-cart-btn" onclick="addToCart(this)">
+        <span class="btn-text">В корзину</span>
+        <span class="btn-added">✓ Добавлено</span>
+      </button>
     </div>
   </div>
 </div>
+
+<!-- ============================================
+     FEATURES
+     ============================================ -->
 <div class="features">
-  <div class="feature"><div class="icon">🚀</div><h3>Быстрая доставка</h3><p>От 1 дня по Москве</p></div>
-  <div class="feature"><div class="icon">🔄</div><h3>Обмен и возврат</h3><p>30 дней на возврат</p></div>
-  <div class="feature"><div class="icon">✅</div><h3>Оригинал 100%</h3><p>Гарантия подлинности</p></div>
-  <div class="feature"><div class="icon">💳</div><h3>Оплата</h3><p>Любым способом</p></div>
+  <div class="feature reveal reveal-delay-1">
+    <div class="icon bounce">🚀</div>
+    <h3>Быстрая доставка</h3>
+    <p>От 1 дня по Москве</p>
+  </div>
+  <div class="feature reveal reveal-delay-2">
+    <div class="icon spin">🔄</div>
+    <h3>Обмен и возврат</h3>
+    <p>30 дней на возврат</p>
+  </div>
+  <div class="feature reveal reveal-delay-3">
+    <div class="icon pulse">✅</div>
+    <h3>Оригинал 100%</h3>
+    <p>Гарантия подлинности</p>
+  </div>
+  <div class="feature reveal reveal-delay-4">
+    <div class="icon shake">💳</div>
+    <h3>Оплата</h3>
+    <p>Любым способом</p>
+  </div>
 </div>
-<div class="footer">
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<div class="footer reveal">
   <div class="logo">Sneak<span>Peak</span></div>
   <p>© 2026 SneakPeak. React + Next.js + Tailwind CSS</p>
 </div>
+
+<!-- ============================================
+     JAVASCRIPT
+     ============================================ -->
+<script>
+/* ---- Loading Screen ---- */
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    document.getElementById('loader').classList.add('hidden');
+  }, 1600);
+});
+
+/* ---- Cart System ---- */
+var cartCount = 3;
+
+function addToCart(btn) {
+  /* Button animation */
+  btn.classList.add('pulsing');
+  setTimeout(function() { btn.classList.remove('pulsing'); }, 800);
+
+  /* Update badge */
+  cartCount++;
+  var badge = document.getElementById('cartBadge');
+  badge.textContent = cartCount;
+  badge.classList.remove('pop');
+  /* Force reflow to restart animation */
+  void badge.offsetWidth;
+  badge.classList.add('pop');
+}
+
+/* ---- Scroll Reveal (Intersection Observer) ---- */
+(function() {
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+
+/* ---- Smooth scroll for nav links ---- */
+document.querySelectorAll('.nav-links a').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    /* Subtle visual feedback */
+    this.style.opacity = '0.6';
+    var self = this;
+    setTimeout(function() { self.style.opacity = ''; }, 200);
+  });
+});
+
+/* ---- Parallax-lite on hero sneaker (mouse move) ---- */
+(function() {
+  var heroImg = document.querySelector('.hero-img');
+  var sneaker = document.querySelector('.sneaker');
+  if (!heroImg || !sneaker) return;
+
+  document.addEventListener('mousemove', function(e) {
+    var x = (e.clientX / window.innerWidth - 0.5) * 20;
+    var y = (e.clientY / window.innerHeight - 0.5) * 12;
+    sneaker.style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + (x * 0.3) + 'deg)';
+  });
+})();
+</script>
 </body>
 </html>
