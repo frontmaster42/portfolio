@@ -44,6 +44,13 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes slideInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes heroTextReveal{from{opacity:0;transform:translateY(20px) skewY(1deg)}to{opacity:1;transform:translateY(0) skewY(0)}}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes slideOutRight{from{transform:translateX(0)}to{transform:translateX(100%)}}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+@keyframes successPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes cartItemIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes cartItemOut{from{opacity:1;transform:translateX(0);max-height:100px}to{opacity:0;transform:translateX(40px);max-height:0}}
 
 /* ============================================
    SCROLL-REVEAL SYSTEM
@@ -54,6 +61,10 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 .reveal-delay-2{transition-delay:.2s}
 .reveal-delay-3{transition-delay:.3s}
 .reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}
+.reveal-delay-6{transition-delay:.6s}
+.reveal-delay-7{transition-delay:.7s}
+.reveal-delay-8{transition-delay:.8s}
 
 /* ============================================
    HEADER
@@ -66,11 +77,20 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:#6c63ff;border-radius:2px;transition:width .35s cubic-bezier(.22,1,.36,1)}
 .nav-links a:hover{color:#6c63ff}
 .nav-links a:hover::after{width:100%}
+.header-right{display:flex;align-items:center;gap:16px}
+.search-box{position:relative;display:flex;align-items:center}
+.search-box input{border:1px solid #e0e0e0;border-radius:20px;padding:8px 14px 8px 36px;font-size:13px;width:0;opacity:0;transition:width .35s cubic-bezier(.22,1,.36,1),opacity .3s ease,padding .3s ease;outline:none;background:#f8f8f8}
+.search-box input:focus{border-color:#6c63ff;background:#fff;box-shadow:0 0 0 3px rgba(108,99,255,.12)}
+.search-box.open input{width:200px;opacity:1;padding:8px 14px 8px 36px}
+.search-box .search-icon{position:absolute;left:10px;cursor:pointer;font-size:15px;z-index:1;transition:transform .2s}
+.search-box .search-icon:hover{transform:scale(1.15)}
+.search-box.open .search-icon{left:10px}
 .cart-btn{background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;padding:10px 22px;border-radius:24px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;position:relative;transition:transform .25s ease,box-shadow .25s ease;background-size:200% 200%}
 .cart-btn:hover{transform:scale(1.06);box-shadow:0 4px 20px rgba(108,99,255,.4);animation:gradientShift 2s ease infinite}
 .cart-btn:active{transform:scale(.97)}
-.cart-badge{background:#ff4757;color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;position:absolute;top:-6px;right:-6px;animation:cartBadgeBounce .8s ease .8s both;box-shadow:0 2px 8px rgba(255,71,87,.4)}
+.cart-badge{background:#ff4757;color:#fff;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;position:absolute;top:-6px;right:-6px;box-shadow:0 2px 8px rgba(255,71,87,.4);transition:transform .2s}
 .cart-badge.pop{animation:cartBadgeBounce .5s ease}
+.cart-badge.empty{display:none}
 
 /* ============================================
    HERO
@@ -94,15 +114,25 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
    PRODUCTS
    ============================================ */
 .products{padding:50px 40px;max-width:1200px;margin:0 auto}
-.products h2{font-size:30px;margin-bottom:30px;position:relative;display:inline-block}
+.products-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;flex-wrap:wrap;gap:16px}
+.products h2{font-size:30px;position:relative;display:inline-block}
 .products h2::after{content:'';position:absolute;bottom:-6px;left:0;width:50px;height:3px;background:#6c63ff;border-radius:3px;transition:width .4s ease}
 .products h2:hover::after{width:100%}
+
+/* Category Tabs */
+.category-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.category-tab{padding:8px 20px;border-radius:20px;border:1px solid #e0e0e0;background:#fff;color:#555;font-size:13px;font-weight:500;cursor:pointer;transition:all .3s ease}
+.category-tab:hover{border-color:#6c63ff;color:#6c63ff}
+.category-tab.active{background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(108,99,255,.25)}
+
+/* Product Grid */
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.product{background:#fff;border-radius:18px;padding:22px;border:1px solid #eee;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease;position:relative;overflow:hidden}
+.product{background:#fff;border-radius:18px;padding:22px;border:1px solid #eee;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,opacity .4s ease;position:relative;overflow:hidden;cursor:pointer}
 .product::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#6c63ff,#a78bfa);transform:scaleX(0);transform-origin:left;transition:transform .35s ease;border-radius:18px 18px 0 0}
 .product:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 16px 40px rgba(0,0,0,.1)}
 .product:hover::before{transform:scaleX(1)}
 .product:hover .product-img-emoji{transform:rotate(-8deg) scale(1.12)}
+.product.hidden{display:none}
 .product-img{width:100%;height:150px;background:#f5f5f5;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:50px;margin-bottom:14px;position:relative;overflow:hidden;transition:background .3s ease}
 .product:hover .product-img{background:#f0eeff}
 .product-img-emoji{transition:transform .4s cubic-bezier(.22,1,.36,1);filter:drop-shadow(0 4px 8px rgba(0,0,0,.1))}
@@ -114,7 +144,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 .product .price{font-size:19px;font-weight:700;color:#6c63ff}
 .product .old-price{font-size:13px;color:#bbb;background:linear-gradient(to right,#bbb,#bbb) no-repeat left center;background-size:0% 2px;background-position:0 55%;-webkit-background-size:0% 2px;animation:strikethrough .8s ease forwards;animation-delay:1.5s;padding-bottom:2px;position:relative}
 .product .rating{font-size:12px;color:#f59e0b;margin-top:4px}
-.product .add-cart-btn{width:100%;margin-top:14px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;padding:10px 0;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;background-size:200% 200%;opacity:0;transform:translateY(8px)}
+.product .add-cart-btn{width:100%;margin-top:14px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;padding:10px 0;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;background-size:200% 200%;opacity:0;transform:translateY(8px);position:relative}
 .product:hover .add-cart-btn{opacity:1;transform:translateY(0);transition:opacity .3s ease .1s,transform .3s ease .1s,box-shadow .2s ease}
 .add-cart-btn:hover{transform:scale(1.04)!important;box-shadow:0 4px 16px rgba(108,99,255,.35);animation:gradientShift 2s ease infinite}
 .add-cart-btn:active{transform:scale(.96)!important}
@@ -123,6 +153,12 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 .add-cart-btn.pulsing .btn-text{opacity:0}
 .add-cart-btn .btn-added{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
 .add-cart-btn.pulsing .btn-added{opacity:1}
+
+/* No results */
+.no-results{text-align:center;padding:60px 20px;color:#999;display:none}
+.no-results .emoji{font-size:64px;margin-bottom:16px;display:block}
+.no-results h3{font-size:20px;margin-bottom:8px;color:#555}
+.no-results p{font-size:14px}
 
 /* ============================================
    FEATURES
@@ -147,6 +183,102 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 .footer p{color:#666;font-size:13px;margin-top:8px}
 
 /* ============================================
+   OVERLAY (shared)
+   ============================================ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.overlay.active{opacity:1;visibility:visible}
+
+/* ============================================
+   CART SIDEBAR
+   ============================================ */
+.cart-sidebar{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:90vw;background:#fff;z-index:300;transform:translateX(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,.1)}
+.cart-sidebar.open{transform:translateX(0)}
+.cart-header{padding:24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;flex-shrink:0}
+.cart-header h2{font-size:20px;font-weight:700}
+.cart-close{width:36px;height:36px;border-radius:50%;border:none;background:#f0f0f0;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s}
+.cart-close:hover{background:#e0e0e0;transform:scale(1.1)}
+.cart-items{flex:1;overflow-y:auto;padding:16px 24px}
+.cart-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid #f0f0f0;animation:cartItemIn .35s ease both}
+.cart-item.removing{animation:cartItemOut .35s ease both}
+.cart-item-img{width:56px;height:56px;background:#f5f5f5;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-info h4{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-info .cart-item-brand{font-size:11px;color:#999;margin-bottom:4px}
+.cart-item-info .cart-item-price{font-size:15px;font-weight:700;color:#6c63ff}
+.cart-item-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.qty-btn{width:28px;height:28px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.qty-btn:hover{border-color:#6c63ff;color:#6c63ff;background:#f8f7ff}
+.qty-value{font-size:14px;font-weight:600;min-width:20px;text-align:center}
+.cart-item-remove{width:28px;height:28px;border-radius:8px;border:none;background:transparent;cursor:pointer;font-size:14px;color:#ccc;transition:color .2s,background .2s;display:flex;align-items:center;justify-content:center}
+.cart-item-remove:hover{color:#ff4757;background:#fff0f0}
+.cart-empty{text-align:center;padding:60px 20px;animation:fadeIn .4s ease}
+.cart-empty .cart-empty-icon{font-size:72px;margin-bottom:16px;opacity:.5}
+.cart-empty h3{font-size:18px;color:#555;margin-bottom:8px}
+.cart-empty p{font-size:13px;color:#999}
+.cart-footer{padding:20px 24px;border-top:1px solid #eee;flex-shrink:0;background:#fafafa}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.cart-total span{font-size:14px;color:#666}
+.cart-total strong{font-size:22px;color:#1a1a2e}
+.checkout-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s;background-size:200% 200%}
+.checkout-btn:hover{transform:scale(1.02);box-shadow:0 6px 24px rgba(108,99,255,.35);animation:gradientShift 2s ease infinite}
+.checkout-btn:active{transform:scale(.98)}
+.checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;box-shadow:none!important;animation:none!important}
+
+/* ============================================
+   PRODUCT DETAIL MODAL
+   ============================================ */
+.modal{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.modal.active{opacity:1;visibility:visible}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.modal-content{position:relative;background:#fff;border-radius:22px;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;z-index:1;animation:modalIn .4s cubic-bezier(.22,1,.36,1) both;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;z-index:2}
+.modal-close:hover{background:rgba(0,0,0,.12);transform:scale(1.1)}
+.product-modal-img{width:100%;height:260px;background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(108,99,255,.04));display:flex;align-items:center;justify-content:center;font-size:100px;border-radius:22px 22px 0 0;position:relative}
+.product-modal-img .pm-glow{position:absolute;width:160px;height:160px;background:radial-gradient(circle,rgba(108,99,255,.15),transparent 70%);border-radius:50%}
+.product-modal-body{padding:28px 32px 32px}
+.product-modal-body .pm-brand{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:#6c63ff;margin-bottom:6px}
+.product-modal-body .pm-name{font-size:24px;font-weight:700;margin-bottom:10px}
+.product-modal-body .pm-desc{font-size:14px;color:#666;line-height:1.7;margin-bottom:20px}
+.product-modal-body .pm-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
+.product-modal-body .pm-price{font-size:28px;font-weight:800;color:#6c63ff}
+.product-modal-body .pm-old-price{font-size:16px;color:#bbb;text-decoration:line-through}
+.size-label{font-size:13px;font-weight:600;margin-bottom:10px;color:#555}
+.sizes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.size-btn{width:44px;height:40px;border-radius:10px;border:1px solid #e0e0e0;background:#fff;cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.size-btn:hover{border-color:#6c63ff;color:#6c63ff}
+.size-btn.active{background:#6c63ff;color:#fff;border-color:#6c63ff;box-shadow:0 2px 10px rgba(108,99,255,.3)}
+.modal-add-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s;background-size:200% 200%}
+.modal-add-btn:hover{transform:scale(1.02);box-shadow:0 6px 24px rgba(108,99,255,.35);animation:gradientShift 2s ease infinite}
+.modal-add-btn:active{transform:scale(.98)}
+
+/* ============================================
+   CHECKOUT MODAL
+   ============================================ */
+.checkout-modal .modal-content{max-width:480px}
+.checkout-form{padding:28px 32px 32px}
+.checkout-form h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.checkout-form .checkout-subtitle{font-size:13px;color:#999;margin-bottom:24px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#555}
+.form-group input{width:100%;padding:12px 14px;border:1px solid #e0e0e0;border-radius:12px;font-size:14px;transition:border-color .2s,box-shadow .2s;outline:none;background:#fafafa}
+.form-group input:focus{border-color:#6c63ff;background:#fff;box-shadow:0 0 0 3px rgba(108,99,255,.12)}
+.form-group input.error{border-color:#ff4757;box-shadow:0 0 0 3px rgba(255,71,87,.12)}
+.form-group .error-msg{font-size:11px;color:#ff4757;margin-top:4px;display:none}
+.form-group input.error + .error-msg{display:block}
+.checkout-submit{width:100%;padding:14px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s;background-size:200% 200%;margin-top:8px}
+.checkout-submit:hover{transform:scale(1.02);box-shadow:0 6px 24px rgba(108,99,255,.35);animation:gradientShift 2s ease infinite}
+.checkout-submit:active{transform:scale(.98)}
+
+/* Checkout Success */
+.checkout-success{text-align:center;padding:48px 32px;animation:fadeIn .4s ease}
+.checkout-success .success-icon{font-size:72px;animation:successPop .5s cubic-bezier(.22,1,.36,1) both;margin-bottom:20px;display:inline-block}
+.checkout-success h3{font-size:22px;font-weight:700;margin-bottom:8px}
+.checkout-success .order-number{font-size:14px;color:#6c63ff;font-weight:600;margin-bottom:16px}
+.checkout-success p{font-size:13px;color:#999;line-height:1.6;margin-bottom:24px}
+.success-close-btn{padding:12px 32px;background:linear-gradient(135deg,#6c63ff,#8b7fff);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;transition:transform .2s;background-size:200% 200%}
+.success-close-btn:hover{transform:scale(1.04);animation:gradientShift 2s ease infinite}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media(max-width:900px){
@@ -159,11 +291,15 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
   .products{padding:40px 20px}
   .features{padding:40px 20px}
   .nav-links{display:none}
+  .products-header{flex-direction:column;align-items:flex-start}
+  .search-box.open input{width:140px}
 }
 @media(max-width:500px){
   .grid{grid-template-columns:1fr}
   .hero-text h1{font-size:30px}
   .features{flex-direction:column}
+  .cart-sidebar{width:100%}
+  .product-modal-img{height:200px;font-size:70px}
 }
 </style>
 </head>
@@ -184,15 +320,21 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 <div class="header">
   <div class="logo">Sneak<span>Peak</span></div>
   <div class="nav-links">
-    <a href="#">Каталог</a>
+    <a href="#products-section">Каталог</a>
     <a href="#">Новинки</a>
     <a href="#">Бренды</a>
     <a href="#">О нас</a>
   </div>
-  <button class="cart-btn" id="cartBtn">
-    🛒 Корзина
-    <span class="cart-badge" id="cartBadge">3</span>
-  </button>
+  <div class="header-right">
+    <div class="search-box" id="searchBox">
+      <span class="search-icon" id="searchToggle">🔍</span>
+      <input type="text" id="searchInput" placeholder="Поиск кроссовок..." autocomplete="off">
+    </div>
+    <button class="cart-btn" id="cartBtn">
+      🛒 Корзина
+      <span class="cart-badge empty" id="cartBadge">0</span>
+    </button>
+  </div>
 </div>
 
 <!-- ============================================
@@ -203,7 +345,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
     <div class="eyebrow">Новая коллекция</div>
     <h1>Новая коллекция <span>Spring 2026</span></h1>
     <p>Стильные кроссовки от ведущих брендов с быстрой доставкой по всей России. Более 2000 моделей в наличии.</p>
-    <button class="hero-btn">Смотреть каталог →</button>
+    <button class="hero-btn" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Смотреть каталог →</button>
   </div>
   <div class="hero-img">
     <div class="glow"></div>
@@ -214,75 +356,24 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 <!-- ============================================
      PRODUCTS
      ============================================ -->
-<div class="products">
-  <h2 class="reveal">Популярные модели</h2>
-  <div class="grid">
-    <div class="product reveal reveal-delay-1" data-name="Air Max Pulse">
-      <div class="product-img">
-        <span class="shimmer-overlay"></span>
-        <span class="product-img-emoji">👟</span>
-      </div>
-      <h3>Air Max Pulse</h3>
-      <div class="brand">Nike</div>
-      <div class="price-row">
-        <span class="price">12 990 ₽</span>
-        <span class="old-price">15 990 ₽</span>
-      </div>
-      <div class="rating">★★★★★ (124)</div>
-      <button class="add-cart-btn" onclick="addToCart(this)">
-        <span class="btn-text">В корзину</span>
-        <span class="btn-added">✓ Добавлено</span>
-      </button>
+<div class="products" id="products-section">
+  <div class="products-header">
+    <h2 class="reveal">Популярные модели</h2>
+    <div class="category-tabs" id="categoryTabs">
+      <button class="category-tab active" data-category="all">Все</button>
+      <button class="category-tab" data-category="Nike">Nike</button>
+      <button class="category-tab" data-category="Adidas">Adidas</button>
+      <button class="category-tab" data-category="New Balance">New Balance</button>
+      <button class="category-tab" data-category="ASICS">ASICS</button>
     </div>
-    <div class="product reveal reveal-delay-2" data-name="Ultraboost Light">
-      <div class="product-img">
-        <span class="shimmer-overlay"></span>
-        <span class="product-img-emoji">👟</span>
-      </div>
-      <h3>Ultraboost Light</h3>
-      <div class="brand">Adidas</div>
-      <div class="price-row">
-        <span class="price">14 490 ₽</span>
-      </div>
-      <div class="rating">★★★★☆ (89)</div>
-      <button class="add-cart-btn" onclick="addToCart(this)">
-        <span class="btn-text">В корзину</span>
-        <span class="btn-added">✓ Добавлено</span>
-      </button>
-    </div>
-    <div class="product reveal reveal-delay-3" data-name="574 Classic">
-      <div class="product-img">
-        <span class="shimmer-overlay"></span>
-        <span class="product-img-emoji">👟</span>
-      </div>
-      <h3>574 Classic</h3>
-      <div class="brand">New Balance</div>
-      <div class="price-row">
-        <span class="price">9 990 ₽</span>
-        <span class="old-price">11 990 ₽</span>
-      </div>
-      <div class="rating">★★★★★ (201)</div>
-      <button class="add-cart-btn" onclick="addToCart(this)">
-        <span class="btn-text">В корзину</span>
-        <span class="btn-added">✓ Добавлено</span>
-      </button>
-    </div>
-    <div class="product reveal reveal-delay-4" data-name="Gel-Kayano 30">
-      <div class="product-img">
-        <span class="shimmer-overlay"></span>
-        <span class="product-img-emoji">👟</span>
-      </div>
-      <h3>Gel-Kayano 30</h3>
-      <div class="brand">ASICS</div>
-      <div class="price-row">
-        <span class="price">16 990 ₽</span>
-      </div>
-      <div class="rating">★★★★☆ (67)</div>
-      <button class="add-cart-btn" onclick="addToCart(this)">
-        <span class="btn-text">В корзину</span>
-        <span class="btn-added">✓ Добавлено</span>
-      </button>
-    </div>
+  </div>
+  <div class="grid" id="productGrid">
+    <!-- Products are rendered by JS -->
+  </div>
+  <div class="no-results" id="noResults">
+    <span class="emoji">🔍</span>
+    <h3>Ничего не найдено</h3>
+    <p>Попробуйте изменить фильтры или поисковый запрос</p>
   </div>
 </div>
 
@@ -321,36 +412,593 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fafaf
 </div>
 
 <!-- ============================================
+     CART SIDEBAR
+     ============================================ -->
+<div class="overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>🛒 Корзина</h2>
+    <button class="cart-close" id="cartClose">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <!-- Cart items rendered by JS -->
+  </div>
+  <div class="cart-footer" id="cartFooter">
+    <div class="cart-total">
+      <span>Итого:</span>
+      <strong id="cartTotal">0 ₽</strong>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" disabled>Оформить заказ</button>
+  </div>
+</div>
+
+<!-- ============================================
+     PRODUCT DETAIL MODAL
+     ============================================ -->
+<div class="modal" id="productModal">
+  <div class="modal-overlay" id="productModalOverlay"></div>
+  <div class="modal-content">
+    <button class="modal-close" id="productModalClose">✕</button>
+    <div class="product-modal-img">
+      <div class="pm-glow"></div>
+      <span id="pmEmoji">👟</span>
+    </div>
+    <div class="product-modal-body">
+      <div class="pm-brand" id="pmBrand">Nike</div>
+      <div class="pm-name" id="pmName">Air Max Pulse</div>
+      <div class="pm-desc" id="pmDesc">Описание товара</div>
+      <div class="pm-price-row">
+        <span class="pm-price" id="pmPrice">12 990 ₽</span>
+        <span class="pm-old-price" id="pmOldPrice"></span>
+      </div>
+      <div class="size-label">Выберите размер:</div>
+      <div class="sizes" id="pmSizes">
+        <!-- Sizes rendered by JS -->
+      </div>
+      <button class="modal-add-btn" id="pmAddBtn">В корзину</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     CHECKOUT MODAL
+     ============================================ -->
+<div class="modal checkout-modal" id="checkoutModal">
+  <div class="modal-overlay" id="checkoutModalOverlay"></div>
+  <div class="modal-content">
+    <button class="modal-close" id="checkoutModalClose">✕</button>
+    <div id="checkoutFormContainer">
+      <div class="checkout-form">
+        <h2>Оформление заказа</h2>
+        <div class="checkout-subtitle">Заполните данные для доставки</div>
+        <div class="form-group">
+          <label for="coName">Имя *</label>
+          <input type="text" id="coName" placeholder="Иван Иванов">
+          <div class="error-msg">Введите ваше имя</div>
+        </div>
+        <div class="form-group">
+          <label for="coPhone">Телефон *</label>
+          <input type="tel" id="coPhone" placeholder="+7 (999) 123-45-67">
+          <div class="error-msg">Введите корректный номер телефона</div>
+        </div>
+        <div class="form-group">
+          <label for="coEmail">Email *</label>
+          <input type="email" id="coEmail" placeholder="ivan@example.com">
+          <div class="error-msg">Введите корректный email</div>
+        </div>
+        <div class="form-group">
+          <label for="coAddress">Адрес доставки *</label>
+          <input type="text" id="coAddress" placeholder="г. Москва, ул. Примерная, д. 1, кв. 42">
+          <div class="error-msg">Введите адрес доставки</div>
+        </div>
+        <button class="checkout-submit" id="checkoutSubmit">Подтвердить заказ</button>
+      </div>
+    </div>
+    <div id="checkoutSuccessContainer" style="display:none">
+      <div class="checkout-success">
+        <div class="success-icon">🎉</div>
+        <h3>Заказ оформлен!</h3>
+        <div class="order-number" id="orderNumber">Заказ #SP-000000</div>
+        <p>Мы отправим подтверждение на вашу электронную почту. Доставка займёт 1–3 дня.</p>
+        <button class="success-close-btn" id="successCloseBtn">Отлично!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
      JAVASCRIPT
      ============================================ -->
 <script>
-/* ---- Loading Screen ---- */
+/* ==============================================
+   DATA — 8 Products
+   ============================================== */
+var products = [
+  {
+    id: 1, name: 'Air Max Pulse', brand: 'Nike', emoji: '👟',
+    price: 12990, oldPrice: 15990, rating: 5, reviews: 124,
+    desc: 'Легендарные кроссовки Nike Air Max Pulse с обновлённой воздушной подушкой и дышащим верхом из сетки. Идеальны для повседневной носки и активного отдыха. Амортизация Air обеспечивает мягкость каждого шага.'
+  },
+  {
+    id: 2, name: 'Ultraboost Light', brand: 'Adidas', emoji: '👟',
+    price: 14490, oldPrice: null, rating: 4, reviews: 89,
+    desc: 'Adidas Ultraboost Light — одни из самых лёгких кроссовок в линейке. Промежуточная подошва Light BOOST даёт невероятный возврат энергии. Верх Primeknit+ адаптируется к форме стопы.'
+  },
+  {
+    id: 3, name: '574 Classic', brand: 'New Balance', emoji: '👟',
+    price: 9990, oldPrice: 11990, rating: 5, reviews: 201,
+    desc: 'New Balance 574 — бессмертная классика. Сочетание замши и сетки, подписная подошва ENCAP с амортизацией. Универсальный стиль для любого образа, проверенный десятилетиями.'
+  },
+  {
+    id: 4, name: 'Gel-Kayano 30', brand: 'ASICS', emoji: '👟',
+    price: 16990, oldPrice: null, rating: 4, reviews: 67,
+    desc: 'ASICS Gel-Kayano 30 — эталон стабильности для бегунов. Технология 4D Guidance System и FF BLAST PLUS обеспечивают мягкую и контролируемую посадку на любые расстояния.'
+  },
+  {
+    id: 5, name: 'Dunk Low Retro', brand: 'Nike', emoji: '👟',
+    price: 10990, oldPrice: 13490, rating: 5, reviews: 312,
+    desc: 'Nike Dunk Low Retro — икона уличного стиля, вернувшаяся из 80-х. Кожаный верх, мягкая стелька и узнаваемый силуэт делают их незаменимыми в любом гардеробе.'
+  },
+  {
+    id: 6, name: 'Samba OG', brand: 'Adidas', emoji: '👟',
+    price: 11990, oldPrice: null, rating: 5, reviews: 178,
+    desc: 'Adidas Samba OG — самая популярная модель бренда. Классический кожаный верх с фирменными тремя полосками и резиновой подошвой. Культовая модель с 1950 года.'
+  },
+  {
+    id: 7, name: '990v6', brand: 'New Balance', emoji: '👟',
+    price: 21990, oldPrice: 24990, rating: 5, reviews: 94,
+    desc: 'New Balance 990v6 — премиальные кроссовки, сделанные в США. FuelCell и ENCAP для максимального комфорта. Замшево-сетчатый верх высочайшего качества для ценителей.'
+  },
+  {
+    id: 8, name: 'Gel-1130', brand: 'ASICS', emoji: '👟',
+    price: 11490, oldPrice: null, rating: 4, reviews: 55,
+    desc: 'ASICS Gel-1130 — стильные ретро-кроссовки из 2000-х. Гель-амортизация, серебристые вставки и легендарный силуэт. Сочетание технологий и ностальгического дизайна.'
+  }
+];
+
+/* ==============================================
+   STATE
+   ============================================== */
+var cart = [];
+var activeCategory = 'all';
+var searchQuery = '';
+var selectedSize = null;
+var currentProductId = null;
+
+/* ==============================================
+   HELPERS
+   ============================================== */
+function formatPrice(n) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+}
+
+function getStars(r) {
+  return '★'.repeat(r) + '☆'.repeat(5 - r);
+}
+
+function generateOrderNumber() {
+  return 'SP-' + String(Math.floor(100000 + Math.random() * 900000));
+}
+
+/* ==============================================
+   RENDER PRODUCTS
+   ============================================== */
+function renderProducts() {
+  var grid = document.getElementById('productGrid');
+  var noResults = document.getElementById('noResults');
+  var html = '';
+  var visible = 0;
+
+  products.forEach(function(p, i) {
+    var matchesCategory = activeCategory === 'all' || p.brand === activeCategory;
+    var matchesSearch = searchQuery === '' || p.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1 || p.brand.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1;
+    var show = matchesCategory && matchesSearch;
+    if (show) visible++;
+
+    var delayClass = 'reveal-delay-' + ((i % 8) + 1);
+    var hiddenClass = show ? '' : ' hidden';
+
+    html += '<div class="product reveal ' + delayClass + hiddenClass + '" data-id="' + p.id + '" data-brand="' + p.brand + '">' +
+      '<div class="product-img">' +
+        '<span class="shimmer-overlay"></span>' +
+        '<span class="product-img-emoji">' + p.emoji + '</span>' +
+      '</div>' +
+      '<h3>' + p.name + '</h3>' +
+      '<div class="brand">' + p.brand + '</div>' +
+      '<div class="price-row">' +
+        '<span class="price">' + formatPrice(p.price) + '</span>' +
+        (p.oldPrice ? '<span class="old-price">' + formatPrice(p.oldPrice) + '</span>' : '') +
+      '</div>' +
+      '<div class="rating">' + getStars(p.rating) + ' (' + p.reviews + ')</div>' +
+      '<button class="add-cart-btn" data-product-id="' + p.id + '">' +
+        '<span class="btn-text">В корзину</span>' +
+        '<span class="btn-added">✓ Добавлено</span>' +
+      '</button>' +
+    '</div>';
+  });
+
+  grid.innerHTML = html;
+  noResults.style.display = visible === 0 ? 'block' : 'none';
+
+  /* Re-observe for scroll reveal */
+  initScrollReveal();
+
+  /* Attach click handlers */
+  grid.querySelectorAll('.product').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      if (e.target.closest('.add-cart-btn')) return;
+      var id = parseInt(this.dataset.id);
+      openProductModal(id);
+    });
+  });
+
+  grid.querySelectorAll('.add-cart-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var id = parseInt(this.dataset.productId);
+      addToCart(id, this);
+    });
+  });
+}
+
+/* ==============================================
+   CART SYSTEM
+   ============================================== */
+function addToCart(productId, btnEl) {
+  /* Button animation */
+  if (btnEl) {
+    btnEl.classList.add('pulsing');
+    setTimeout(function() { btnEl.classList.remove('pulsing'); }, 800);
+  }
+
+  var product = products.find(function(p) { return p.id === productId; });
+  if (!product) return;
+
+  var existing = cart.find(function(item) { return item.id === productId; });
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ id: product.id, name: product.name, brand: product.brand, price: product.price, emoji: product.emoji, qty: 1 });
+  }
+
+  updateCartBadge();
+  renderCartItems();
+}
+
+function removeFromCart(productId) {
+  var el = document.querySelector('.cart-item[data-id="' + productId + '"]');
+  if (el) {
+    el.classList.add('removing');
+    setTimeout(function() {
+      cart = cart.filter(function(item) { return item.id !== productId; });
+      updateCartBadge();
+      renderCartItems();
+    }, 350);
+  } else {
+    cart = cart.filter(function(item) { return item.id !== productId; });
+    updateCartBadge();
+    renderCartItems();
+  }
+}
+
+function changeQty(productId, delta) {
+  var item = cart.find(function(i) { return i.id === productId; });
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+  renderCartItems();
+  updateCartBadge();
+}
+
+function getCartTotal() {
+  return cart.reduce(function(sum, item) { return sum + item.price * item.qty; }, 0);
+}
+
+function getCartCount() {
+  return cart.reduce(function(sum, item) { return sum + item.qty; }, 0);
+}
+
+function updateCartBadge() {
+  var badge = document.getElementById('cartBadge');
+  var count = getCartCount();
+  badge.textContent = count;
+  if (count === 0) {
+    badge.classList.add('empty');
+  } else {
+    badge.classList.remove('empty');
+  }
+  /* Bounce animation */
+  badge.classList.remove('pop');
+  void badge.offsetWidth;
+  badge.classList.add('pop');
+}
+
+function renderCartItems() {
+  var container = document.getElementById('cartItems');
+  var footer = document.getElementById('cartFooter');
+  var checkoutBtn = document.getElementById('checkoutBtn');
+
+  if (cart.length === 0) {
+    container.innerHTML =
+      '<div class="cart-empty">' +
+        '<div class="cart-empty-icon">🛒</div>' +
+        '<h3>Корзина пуста</h3>' +
+        '<p>Добавьте кроссовки, которые вам понравились</p>' +
+      '</div>';
+    footer.style.display = 'none';
+    return;
+  }
+
+  footer.style.display = 'block';
+  var html = '';
+  cart.forEach(function(item, i) {
+    html += '<div class="cart-item" data-id="' + item.id + '" style="animation-delay:' + (i * 0.05) + 's">' +
+      '<div class="cart-item-img">' + item.emoji + '</div>' +
+      '<div class="cart-item-info">' +
+        '<h4>' + item.name + '</h4>' +
+        '<div class="cart-item-brand">' + item.brand + '</div>' +
+        '<div class="cart-item-price">' + formatPrice(item.price * item.qty) + '</div>' +
+      '</div>' +
+      '<div class="cart-item-actions">' +
+        '<button class="qty-btn" onclick="changeQty(' + item.id + ',-1)">−</button>' +
+        '<span class="qty-value">' + item.qty + '</span>' +
+        '<button class="qty-btn" onclick="changeQty(' + item.id + ',1)">+</button>' +
+        '<button class="cart-item-remove" onclick="removeFromCart(' + item.id + ')" title="Удалить">✕</button>' +
+      '</div>' +
+    '</div>';
+  });
+  container.innerHTML = html;
+  document.getElementById('cartTotal').textContent = formatPrice(getCartTotal());
+  checkoutBtn.disabled = false;
+}
+
+/* ==============================================
+   CART SIDEBAR
+   ============================================== */
+function openCart() {
+  document.getElementById('cartSidebar').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  renderCartItems();
+}
+
+function closeCart() {
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('cartBtn').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+/* ==============================================
+   PRODUCT DETAIL MODAL
+   ============================================== */
+function openProductModal(productId) {
+  var p = products.find(function(prod) { return prod.id === productId; });
+  if (!p) return;
+
+  currentProductId = productId;
+  selectedSize = null;
+
+  document.getElementById('pmEmoji').textContent = p.emoji;
+  document.getElementById('pmBrand').textContent = p.brand;
+  document.getElementById('pmName').textContent = p.name;
+  document.getElementById('pmDesc').textContent = p.desc;
+  document.getElementById('pmPrice').textContent = formatPrice(p.price);
+  var oldPriceEl = document.getElementById('pmOldPrice');
+  if (p.oldPrice) {
+    oldPriceEl.textContent = formatPrice(p.oldPrice);
+    oldPriceEl.style.display = '';
+  } else {
+    oldPriceEl.style.display = 'none';
+  }
+
+  /* Render sizes */
+  var sizesHtml = '';
+  for (var s = 36; s <= 46; s++) {
+    sizesHtml += '<button class="size-btn" data-size="' + s + '">' + s + '</button>';
+  }
+  document.getElementById('pmSizes').innerHTML = sizesHtml;
+
+  /* Size click handlers */
+  document.querySelectorAll('#pmSizes .size-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#pmSizes .size-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      selectedSize = parseInt(this.dataset.size);
+    });
+  });
+
+  document.getElementById('productModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('active');
+  document.body.style.overflow = '';
+  currentProductId = null;
+  selectedSize = null;
+}
+
+document.getElementById('productModalClose').addEventListener('click', closeProductModal);
+document.getElementById('productModalOverlay').addEventListener('click', closeProductModal);
+
+/* Add to cart from modal */
+document.getElementById('pmAddBtn').addEventListener('click', function() {
+  if (!selectedSize) {
+    /* Highlight sizes to prompt selection */
+    document.querySelectorAll('#pmSizes .size-btn').forEach(function(btn) {
+      btn.style.borderColor = '#ff4757';
+      setTimeout(function() { btn.style.borderColor = ''; }, 1000);
+    });
+    return;
+  }
+  if (currentProductId) {
+    addToCart(currentProductId, null);
+    closeProductModal();
+  }
+});
+
+/* ==============================================
+   CHECKOUT MODAL
+   ============================================== */
+function openCheckout() {
+  closeCart();
+  setTimeout(function() {
+    /* Reset form */
+    document.getElementById('checkoutFormContainer').style.display = '';
+    document.getElementById('checkoutSuccessContainer').style.display = 'none';
+    document.querySelectorAll('#checkoutModal input').forEach(function(inp) {
+      inp.classList.remove('error');
+      inp.value = '';
+    });
+    document.getElementById('checkoutModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }, 350);
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
+document.getElementById('checkoutModalClose').addEventListener('click', closeCheckout);
+document.getElementById('checkoutModalOverlay').addEventListener('click', closeCheckout);
+
+/* Phone formatting */
+document.getElementById('coPhone').addEventListener('input', function(e) {
+  var val = this.value.replace(/\D/g, '');
+  if (val.length === 0) { this.value = ''; return; }
+  if (val[0] === '8') val = '7' + val.substring(1);
+  if (val[0] === '7') {
+    var formatted = '+7';
+    if (val.length > 1) formatted += ' (' + val.substring(1, 4);
+    if (val.length >= 4) formatted += ') ' + val.substring(4, 7);
+    if (val.length >= 7) formatted += '-' + val.substring(7, 9);
+    if (val.length >= 9) formatted += '-' + val.substring(9, 11);
+    this.value = formatted;
+  }
+});
+
+/* Checkout validation & submit */
+document.getElementById('checkoutSubmit').addEventListener('click', function() {
+  var valid = true;
+  var name = document.getElementById('coName');
+  var phone = document.getElementById('coPhone');
+  var email = document.getElementById('coEmail');
+  var address = document.getElementById('coAddress');
+
+  /* Name */
+  if (!name.value.trim()) {
+    name.classList.add('error'); valid = false;
+  } else { name.classList.remove('error'); }
+
+  /* Phone: at least 11 digits */
+  var phoneDigits = phone.value.replace(/\D/g, '');
+  if (phoneDigits.length < 11) {
+    phone.classList.add('error'); valid = false;
+  } else { phone.classList.remove('error'); }
+
+  /* Email */
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRe.test(email.value.trim())) {
+    email.classList.add('error'); valid = false;
+  } else { email.classList.remove('error'); }
+
+  /* Address */
+  if (!address.value.trim()) {
+    address.classList.add('error'); valid = false;
+  } else { address.classList.remove('error'); }
+
+  if (!valid) return;
+
+  /* Show success */
+  document.getElementById('orderNumber').textContent = 'Заказ #' + generateOrderNumber();
+  document.getElementById('checkoutFormContainer').style.display = 'none';
+  document.getElementById('checkoutSuccessContainer').style.display = '';
+
+  /* Clear cart */
+  cart = [];
+  updateCartBadge();
+  renderCartItems();
+});
+
+document.getElementById('successCloseBtn').addEventListener('click', function() {
+  closeCheckout();
+});
+
+/* ==============================================
+   CATEGORY FILTERS
+   ============================================== */
+document.querySelectorAll('.category-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.category-tab').forEach(function(t) { t.classList.remove('active'); });
+    this.classList.add('active');
+    activeCategory = this.dataset.category;
+    renderProducts();
+  });
+});
+
+/* ==============================================
+   SEARCH
+   ============================================== */
+var searchToggle = document.getElementById('searchToggle');
+var searchBox = document.getElementById('searchBox');
+var searchInput = document.getElementById('searchInput');
+
+searchToggle.addEventListener('click', function() {
+  searchBox.classList.toggle('open');
+  if (searchBox.classList.contains('open')) {
+    searchInput.focus();
+  } else {
+    searchInput.value = '';
+    searchQuery = '';
+    renderProducts();
+  }
+});
+
+searchInput.addEventListener('input', function() {
+  searchQuery = this.value.trim();
+  renderProducts();
+});
+
+/* Close search on Escape */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('productModal').classList.contains('active')) {
+      closeProductModal();
+    } else if (document.getElementById('checkoutModal').classList.contains('active')) {
+      closeCheckout();
+    } else if (document.getElementById('cartSidebar').classList.contains('open')) {
+      closeCart();
+    } else if (searchBox.classList.contains('open')) {
+      searchBox.classList.remove('open');
+      searchInput.value = '';
+      searchQuery = '';
+      renderProducts();
+    }
+  }
+});
+
+/* ==============================================
+   LOADING SCREEN
+   ============================================== */
 window.addEventListener('load', function() {
   setTimeout(function() {
     document.getElementById('loader').classList.add('hidden');
   }, 1600);
 });
 
-/* ---- Cart System ---- */
-var cartCount = 3;
-
-function addToCart(btn) {
-  /* Button animation */
-  btn.classList.add('pulsing');
-  setTimeout(function() { btn.classList.remove('pulsing'); }, 800);
-
-  /* Update badge */
-  cartCount++;
-  var badge = document.getElementById('cartBadge');
-  badge.textContent = cartCount;
-  badge.classList.remove('pop');
-  /* Force reflow to restart animation */
-  void badge.offsetWidth;
-  badge.classList.add('pop');
-}
-
-/* ---- Scroll Reveal (Intersection Observer) ---- */
-(function() {
+/* ==============================================
+   SCROLL REVEAL (Intersection Observer)
+   ============================================== */
+function initScrollReveal() {
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
@@ -363,23 +1011,34 @@ function addToCart(btn) {
     rootMargin: '0px 0px -40px 0px'
   });
 
-  document.querySelectorAll('.reveal').forEach(function(el) {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(function(el) {
     observer.observe(el);
   });
-})();
+}
 
-/* ---- Smooth scroll for nav links ---- */
+/* ==============================================
+   SMOOTH SCROLL FOR NAV LINKS
+   ============================================== */
 document.querySelectorAll('.nav-links a').forEach(function(link) {
   link.addEventListener('click', function(e) {
     e.preventDefault();
-    /* Subtle visual feedback */
+    var href = this.getAttribute('href');
+    if (href && href !== '#') {
+      var target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
     this.style.opacity = '0.6';
     var self = this;
     setTimeout(function() { self.style.opacity = ''; }, 200);
   });
 });
 
-/* ---- Parallax-lite on hero sneaker (mouse move) ---- */
+/* ==============================================
+   PARALLAX-LITE ON HERO SNEAKER (MOUSE MOVE)
+   ============================================== */
 (function() {
   var heroImg = document.querySelector('.hero-img');
   var sneaker = document.querySelector('.sneaker');
@@ -391,6 +1050,13 @@ document.querySelectorAll('.nav-links a').forEach(function(link) {
     sneaker.style.transform = 'translate(' + x + 'px, ' + y + 'px) rotate(' + (x * 0.3) + 'deg)';
   });
 })();
+
+/* ==============================================
+   INIT
+   ============================================== */
+renderProducts();
+updateCartBadge();
+renderCartItems();
 </script>
 </body>
 </html>

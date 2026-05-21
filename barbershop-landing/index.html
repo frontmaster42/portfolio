@@ -52,6 +52,33 @@
   }
   .header__btn:hover { background: #d4b478; }
 
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px; z-index: 110; background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 26px; height: 2px; background: var(--text);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MOBILE NAV OVERLAY */
+  .mobile-nav {
+    display: none; position: fixed; inset: 0; z-index: 105;
+    background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+    flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+  }
+  .mobile-nav.active { display: flex; }
+  .mobile-nav a {
+    color: var(--text); text-decoration: none; font-size: 22px;
+    letter-spacing: 4px; text-transform: uppercase; font-weight: 600;
+    transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: var(--accent); }
+
   /* HERO */
   .hero {
     min-height: 100vh;
@@ -62,7 +89,7 @@
     padding-top: 80px; position: relative;
   }
   .hero::after {
-    content: '✂'; position: absolute;
+    content: '\2702'; position: absolute;
     right: 5%; top: 50%; transform: translateY(-50%) rotate(-15deg);
     font-size: 400px; opacity: 0.04; color: var(--accent);
   }
@@ -73,7 +100,7 @@
     margin-bottom: 24px; font-weight: 600;
   }
   .hero__small::before, .hero__small::after {
-    content: '—'; margin: 0 12px; opacity: 0.5;
+    content: '\2014'; margin: 0 12px; opacity: 0.5;
   }
   .hero h1 {
     font-size: 84px; line-height: 0.95; margin-bottom: 28px;
@@ -125,11 +152,22 @@
   .service {
     background: var(--bg-card);
     padding: 36px 28px;
-    border: 1px solid var(--line);
-    transition: border-color 0.2s, transform 0.2s;
+    border: 2px solid var(--line);
+    transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s;
     position: relative;
+    cursor: pointer;
   }
   .service:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .service.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 24px rgba(201,168,106,0.15), inset 0 0 24px rgba(201,168,106,0.05);
+  }
+  .service.selected::after {
+    content: '\2713'; position: absolute; top: 16px; right: 16px;
+    width: 28px; height: 28px; background: var(--accent); color: var(--bg);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+  }
   .service__icon { font-size: 40px; margin-bottom: 16px; }
   .service__name { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
   .service__desc { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; min-height: 60px; }
@@ -150,19 +188,92 @@
     gap: 28px;
   }
   .master {
-    text-align: center;
+    text-align: center; cursor: pointer;
   }
   .master__photo {
     width: 100%; aspect-ratio: 3/4;
     background: linear-gradient(135deg, var(--bg-card), var(--bg));
     display: flex; align-items: center; justify-content: center;
     font-size: 100px; margin-bottom: 20px;
-    border: 1px solid var(--line);
-    transition: border-color 0.2s;
+    border: 2px solid var(--line);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
   }
   .master:hover .master__photo { border-color: var(--accent); }
+  .master.selected .master__photo {
+    border-color: var(--accent);
+    box-shadow: 0 0 24px rgba(201,168,106,0.15);
+  }
+  .master.selected .master__photo::after {
+    content: '\2713'; position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px; background: var(--accent); color: var(--bg);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+  }
   .master__name { font-size: 22px; font-weight: 700; margin-bottom: 4px; font-family: Georgia, serif; }
   .master__role { font-size: 13px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* GALLERY */
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .gallery-item {
+    aspect-ratio: 1; background: var(--bg-card);
+    border: 1px solid var(--line); cursor: pointer;
+    overflow: hidden; position: relative;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .gallery-item:hover { border-color: var(--accent); transform: scale(1.03); }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .gallery-item:hover img { transform: scale(1.08); }
+  .gallery-item__placeholder {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px; background: linear-gradient(135deg, var(--bg-card), var(--bg-light));
+    color: var(--accent); opacity: 0.6;
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.95); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox__close {
+    position: absolute; top: 24px; right: 32px;
+    background: none; border: none; color: var(--text);
+    font-size: 36px; cursor: pointer; z-index: 210;
+    transition: color 0.2s; line-height: 1;
+  }
+  .lightbox__close:hover { color: var(--accent); }
+  .lightbox__img {
+    max-width: 85vw; max-height: 85vh; object-fit: contain;
+  }
+  .lightbox__placeholder {
+    width: 80vw; height: 70vh;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 160px; color: var(--accent); opacity: 0.5;
+    background: var(--bg-card); border: 1px solid var(--line);
+  }
+  .lightbox__nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(201,168,106,0.15); border: 1px solid var(--accent);
+    color: var(--accent); width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; cursor: pointer; transition: background 0.2s;
+  }
+  .lightbox__nav:hover { background: var(--accent); color: var(--bg); }
+  .lightbox__prev { left: 24px; }
+  .lightbox__next { right: 24px; }
+  .lightbox__counter {
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    color: var(--text-muted); font-size: 14px; letter-spacing: 2px;
+  }
 
   /* BOOK */
   .book {
@@ -176,18 +287,136 @@
     margin-bottom: 18px;
   }
   .book h2 span { color: var(--accent); font-style: italic; }
-  .book p { color: var(--text-muted); margin-bottom: 36px; font-size: 16px; }
+  .book > p { color: var(--text-muted); margin-bottom: 36px; font-size: 16px; }
   .book__form {
-    display: grid; grid-template-columns: 1fr 1fr auto;
-    gap: 12px; max-width: 700px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; max-width: 700px; margin: 0 auto;
   }
-  .book__form input {
+  .book__form .full-width { grid-column: 1 / -1; }
+  .book__form input,
+  .book__form select {
     background: var(--bg); color: var(--text);
     border: 1px solid var(--line);
     padding: 16px 18px; font-size: 15px; font-family: inherit;
     transition: border-color 0.2s;
+    width: 100%; appearance: none;
   }
-  .book__form input:focus { outline: none; border-color: var(--accent); }
+  .book__form select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a0a0a0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  .book__form input:focus,
+  .book__form select:focus { outline: none; border-color: var(--accent); }
+  .book__form input.error,
+  .book__form select.error { border-color: #e74c3c; }
+  .book__form input::placeholder { color: var(--text-muted); }
+  .book__form select option { background: var(--bg); color: var(--text); }
+  .book__form .btn { width: 100%; padding: 18px; }
+
+  /* DATE PICKER */
+  .datepicker {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 8px; width: 100%;
+  }
+  .datepicker__header {
+    grid-column: 1 / -1; display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 8px;
+  }
+  .datepicker__month {
+    font-size: 16px; font-weight: 600; color: var(--text);
+  }
+  .datepicker__nav-btn {
+    background: none; border: 1px solid var(--line); color: var(--text-muted);
+    width: 36px; height: 36px; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .datepicker__nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .datepicker__dayname {
+    text-align: center; font-size: 11px; color: var(--text-muted);
+    letter-spacing: 1px; text-transform: uppercase; padding: 4px 0;
+  }
+  .datepicker__day {
+    text-align: center; padding: 10px 4px;
+    font-size: 14px; cursor: pointer; border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+  .datepicker__day:hover:not(.unavailable):not(.empty) {
+    border-color: var(--accent); color: var(--accent);
+  }
+  .datepicker__day.selected {
+    background: var(--accent); color: var(--bg); font-weight: 700;
+  }
+  .datepicker__day.unavailable {
+    color: #444; cursor: not-allowed; text-decoration: line-through;
+  }
+  .datepicker__day.empty { cursor: default; }
+  .datepicker__day.today {
+    border-color: var(--accent);
+  }
+
+  /* TIME SLOTS */
+  .timeslots {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; width: 100%;
+  }
+  .timeslot {
+    padding: 10px 8px; text-align: center; font-size: 14px;
+    border: 1px solid var(--line); cursor: pointer;
+    transition: all 0.2s; background: var(--bg);
+  }
+  .timeslot:hover:not(.busy) {
+    border-color: var(--accent); color: var(--accent);
+  }
+  .timeslot.selected {
+    background: var(--accent); color: var(--bg);
+    border-color: var(--accent); font-weight: 700;
+  }
+  .timeslot.busy {
+    color: #444; cursor: not-allowed; text-decoration: line-through;
+    border-color: #1a1a1a; background: #111;
+  }
+
+  /* VALIDATION ERROR */
+  .field-error {
+    color: #e74c3c; font-size: 12px; text-align: left;
+    margin-top: -8px; margin-bottom: 4px; display: none;
+  }
+  .field-error.visible { display: block; }
+
+  /* SUCCESS SCREEN */
+  .booking-success {
+    display: none; text-align: center; padding: 40px 0;
+  }
+  .booking-success.active { display: block; }
+  .booking-success__icon {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: var(--accent); color: var(--bg);
+    font-size: 40px; display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .booking-success h3 {
+    font-size: 28px; font-family: Georgia, serif; margin-bottom: 12px;
+  }
+  .booking-success h3 span { color: var(--accent); }
+  .booking-success__details {
+    background: var(--bg); border: 1px solid var(--line);
+    padding: 28px; max-width: 420px; margin: 24px auto;
+    text-align: left;
+  }
+  .booking-success__row {
+    display: flex; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .booking-success__row:last-child { border-bottom: none; }
+  .booking-success__label { color: var(--text-muted); }
+  .booking-success__value { color: var(--accent); font-weight: 600; }
+  .booking-success__note {
+    color: var(--text-muted); font-size: 14px; margin-top: 16px;
+  }
 
   /* FOOTER */
   .footer {
@@ -216,6 +445,8 @@
   /* RESPONSIVE */
   @media (max-width: 768px) {
     .nav { display: none; }
+    .header__btn { display: none; }
+    .hamburger { display: flex; }
     .hero h1 { font-size: 48px; }
     .section { padding: 70px 0; }
     .section__title { font-size: 32px; }
@@ -223,6 +454,14 @@
     .book { padding: 36px 24px; }
     .book h2 { font-size: 28px; }
     .book__form { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .timeslots { grid-template-columns: repeat(3, 1fr); }
+    .datepicker { grid-template-columns: repeat(7, 1fr); }
+    .datepicker__day { padding: 8px 2px; font-size: 13px; }
+  }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 36px; }
+    .timeslots { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
 </head>
@@ -234,11 +473,24 @@
     <nav class="nav">
       <a href="#services">Услуги</a>
       <a href="#masters">Мастера</a>
+      <a href="#gallery">Галерея</a>
       <a href="#book">Запись</a>
     </nav>
     <a href="#book" class="header__btn">Записаться</a>
+    <button class="hamburger" id="hamburger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#services">Услуги</a>
+  <a href="#masters">Мастера</a>
+  <a href="#gallery">Галерея</a>
+  <a href="#book">Запись</a>
+  <a href="#book" class="btn" style="margin-top: 12px;">Записаться</a>
+</div>
 
 <section class="hero">
   <div class="container hero__content">
@@ -254,8 +506,8 @@
   <div class="container">
     <div class="section__label">Что мы делаем</div>
     <h2 class="section__title">Наши <span>услуги</span></h2>
-    <div class="services">
-      <div class="service">
+    <div class="services" id="servicesGrid">
+      <div class="service" data-service="Мужская стрижка" data-price="2 500 ₽">
         <div class="service__icon">✂️</div>
         <div class="service__name">Мужская стрижка</div>
         <div class="service__desc">Классика, фейд, андеркат, кроп — любая техника от наших мастеров</div>
@@ -264,7 +516,7 @@
           <span class="service__time">~ 60 МИН</span>
         </div>
       </div>
-      <div class="service">
+      <div class="service" data-service="Бритьё опасной бритвой" data-price="2 200 ₽">
         <div class="service__icon">🪒</div>
         <div class="service__name">Бритьё опасной бритвой</div>
         <div class="service__desc">Горячее полотенце, мыло из Шеффилда, идеальное скольжение</div>
@@ -273,7 +525,7 @@
           <span class="service__time">~ 45 МИН</span>
         </div>
       </div>
-      <div class="service">
+      <div class="service" data-service="Моделирование бороды" data-price="1 800 ₽">
         <div class="service__icon">🧔</div>
         <div class="service__name">Моделирование бороды</div>
         <div class="service__desc">Чёткий контур, симметрия и форма под тип лица</div>
@@ -282,7 +534,7 @@
           <span class="service__time">~ 40 МИН</span>
         </div>
       </div>
-      <div class="service">
+      <div class="service" data-service="Премиум-пакет" data-price="5 500 ₽">
         <div class="service__icon">👑</div>
         <div class="service__name">Премиум-пакет</div>
         <div class="service__desc">Стрижка + бритьё + борода + массаж головы и напиток</div>
@@ -299,23 +551,23 @@
   <div class="container">
     <div class="section__label">Команда</div>
     <h2 class="section__title">Наши <span>мастера</span></h2>
-    <div class="masters-grid">
-      <div class="master">
+    <div class="masters-grid" id="mastersGrid">
+      <div class="master" data-master="Андрей">
         <div class="master__photo">👨🏻‍🦰</div>
         <div class="master__name">Андрей</div>
         <div class="master__role">Senior Barber</div>
       </div>
-      <div class="master">
+      <div class="master" data-master="Михаил">
         <div class="master__photo">👨🏽</div>
         <div class="master__name">Михаил</div>
         <div class="master__role">Master Barber</div>
       </div>
-      <div class="master">
+      <div class="master" data-master="Дмитрий">
         <div class="master__photo">👨🏻</div>
         <div class="master__name">Дмитрий</div>
         <div class="master__role">Barber</div>
       </div>
-      <div class="master">
+      <div class="master" data-master="Глеб">
         <div class="master__photo">👨🏼‍🦱</div>
         <div class="master__name">Глеб</div>
         <div class="master__role">Junior Barber</div>
@@ -324,16 +576,99 @@
   </div>
 </section>
 
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section__label">Атмосфера</div>
+    <h2 class="section__title">Наша <span>галерея</span></h2>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-item" data-index="0">
+        <div class="gallery-item__placeholder">✂️</div>
+      </div>
+      <div class="gallery-item" data-index="1">
+        <div class="gallery-item__placeholder">🪒</div>
+      </div>
+      <div class="gallery-item" data-index="2">
+        <div class="gallery-item__placeholder">💈</div>
+      </div>
+      <div class="gallery-item" data-index="3">
+        <div class="gallery-item__placeholder">🧔</div>
+      </div>
+      <div class="gallery-item" data-index="4">
+        <div class="gallery-item__placeholder">🥃</div>
+      </div>
+      <div class="gallery-item" data-index="5">
+        <div class="gallery-item__placeholder">🎭</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox__close" id="lightboxClose">&times;</button>
+  <button class="lightbox__nav lightbox__prev" id="lightboxPrev">&#8249;</button>
+  <div id="lightboxContent"></div>
+  <button class="lightbox__nav lightbox__next" id="lightboxNext">&#8250;</button>
+  <div class="lightbox__counter" id="lightboxCounter"></div>
+</div>
+
 <section class="section" id="book">
   <div class="container">
     <div class="book">
       <h2>Запишись <span>прямо сейчас</span></h2>
-      <p>Оставь номер — мастер перезвонит в течение 10 минут и подберёт удобное время.</p>
-      <form class="book__form" onsubmit="event.preventDefault(); alert('Спасибо! Мастер перезвонит в течение 10 минут ✂'); this.reset();">
-        <input type="text" placeholder="Имя" required>
-        <input type="tel" placeholder="Телефон" required>
-        <button type="submit" class="btn">Записаться</button>
-      </form>
+      <p>Выберите услугу, мастера и удобное время — мы подтвердим запись в течение 10 минут.</p>
+
+      <div id="bookingFormWrap">
+        <form class="book__form" id="bookingForm" novalidate>
+          <input type="text" id="bookName" placeholder="Ваше имя" autocomplete="name">
+          <div class="field-error" id="errName">Введите ваше имя</div>
+
+          <input type="tel" id="bookPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel">
+          <div class="field-error" id="errPhone">Введите корректный номер телефона</div>
+
+          <select id="bookService">
+            <option value="">Выберите услугу</option>
+            <option value="Мужская стрижка">Мужская стрижка — 2 500 ₽</option>
+            <option value="Бритьё опасной бритвой">Бритьё опасной бритвой — 2 200 ₽</option>
+            <option value="Моделирование бороды">Моделирование бороды — 1 800 ₽</option>
+            <option value="Премиум-пакет">Премиум-пакет — 5 500 ₽</option>
+          </select>
+          <div class="field-error" id="errService">Выберите услугу</div>
+
+          <select id="bookMaster">
+            <option value="">Выберите мастера</option>
+            <option value="Андрей">Андрей — Senior Barber</option>
+            <option value="Михаил">Михаил — Master Barber</option>
+            <option value="Дмитрий">Дмитрий — Barber</option>
+            <option value="Глеб">Глеб — Junior Barber</option>
+          </select>
+          <div class="field-error" id="errMaster">Выберите мастера</div>
+
+          <div class="full-width" style="text-align:left;">
+            <label style="font-size:13px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:block;">Дата</label>
+            <div class="datepicker" id="datepicker"></div>
+          </div>
+          <div class="field-error" id="errDate">Выберите дату</div>
+
+          <div class="full-width" style="text-align:left;">
+            <label style="font-size:13px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:block;">Время</label>
+            <div class="timeslots" id="timeslots"></div>
+          </div>
+          <div class="field-error" id="errTime">Выберите время</div>
+
+          <button type="submit" class="btn full-width">Записаться</button>
+        </form>
+      </div>
+
+      <div class="booking-success" id="bookingSuccess">
+        <div class="booking-success__icon">&#10003;</div>
+        <h3>Запись <span>оформлена!</span></h3>
+        <p style="color:var(--text-muted);margin-bottom:8px;">Мы свяжемся с вами для подтверждения.</p>
+        <div class="booking-success__details" id="bookingDetails"></div>
+        <p class="booking-success__note">Мастер перезвонит в течение 10 минут для подтверждения записи.</p>
+        <button class="btn" style="margin-top:24px;" onclick="resetBooking()">Новая запись</button>
+      </div>
+
     </div>
   </div>
 </section>
@@ -363,10 +698,423 @@
       </div>
     </div>
     <div class="footer__bottom">
-      © 2026 BLADE Barbershop. Все права защищены.
+      &copy; 2026 BLADE Barbershop. Все права защищены.
     </div>
   </div>
 </footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===================== DATA =====================
+  const MASTERS = ['Андрей', 'Михаил', 'Дмитрий', 'Глеб'];
+  const SERVICES = ['Мужская стрижка', 'Бритьё опасной бритвой', 'Моделирование бороды', 'Премиум-пакет'];
+  const GALLERY_EMOJIS = ['✂️', '🪒', '💈', '🧔', '🥃', '🎭'];
+  const DAY_NAMES = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+  const MONTH_NAMES = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+
+  let selectedService = null;
+  let selectedMaster = null;
+  let selectedDate = null;
+  let selectedTime = null;
+  let currentMonth = new Date().getMonth();
+  let currentYear = new Date().getFullYear();
+  let lightboxIndex = 0;
+
+  // Generate random unavailable dates (seeded by date so consistent in session)
+  const unavailableDates = new Set();
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  function pseudoRandom(n) { let x = Math.sin(seed + n) * 10000; return x - Math.floor(x); }
+  for (let i = 0; i < 14; i++) {
+    if (pseudoRandom(i * 7 + 3) < 0.2) {
+      const d = new Date(today);
+      d.setDate(d.getDate() + i);
+      unavailableDates.add(d.toDateString());
+    }
+  }
+
+  // Generate random busy time slots per date
+  const busySlotsCache = {};
+  function getBusySlots(dateStr) {
+    if (busySlotsCache[dateStr]) return busySlotsCache[dateStr];
+    const busy = new Set();
+    let hash = 0;
+    for (let i = 0; i < dateStr.length; i++) hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+    for (let h = 9; h < 21; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const slot = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        const idx = (h - 9) * 2 + (m / 30);
+        const v = Math.sin(hash + idx * 1.7) * 10000;
+        if ((v - Math.floor(v)) < 0.25) busy.add(slot);
+      }
+    }
+    busySlotsCache[dateStr] = busy;
+    return busy;
+  }
+
+  // ===================== HAMBURGER =====================
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+  });
+
+  mobileNav.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      hamburger.classList.remove('active');
+      mobileNav.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // ===================== SMOOTH SCROLL =====================
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // ===================== SERVICE SELECTION =====================
+  document.querySelectorAll('.service').forEach(function(card) {
+    card.addEventListener('click', function() {
+      document.querySelectorAll('.service').forEach(function(c) { c.classList.remove('selected'); });
+      this.classList.add('selected');
+      selectedService = this.dataset.service;
+      document.getElementById('bookService').value = selectedService;
+      clearError('errService');
+    });
+  });
+
+  // ===================== MASTER SELECTION =====================
+  document.querySelectorAll('.master').forEach(function(card) {
+    card.addEventListener('click', function() {
+      document.querySelectorAll('.master').forEach(function(c) { c.classList.remove('selected'); });
+      this.classList.add('selected');
+      selectedMaster = this.dataset.master;
+      document.getElementById('bookMaster').value = selectedMaster;
+      clearError('errMaster');
+    });
+  });
+
+  // Keep selects in sync with card selections
+  document.getElementById('bookService').addEventListener('change', function() {
+    selectedService = this.value || null;
+    document.querySelectorAll('.service').forEach(function(c) {
+      c.classList.toggle('selected', c.dataset.service === selectedService);
+    });
+    clearError('errService');
+  });
+  document.getElementById('bookMaster').addEventListener('change', function() {
+    selectedMaster = this.value || null;
+    document.querySelectorAll('.master').forEach(function(c) {
+      c.classList.toggle('selected', c.dataset.master === selectedMaster);
+    });
+    clearError('errMaster');
+  });
+
+  // ===================== PHONE MASK =====================
+  const phoneInput = document.getElementById('bookPhone');
+  phoneInput.addEventListener('input', function(e) {
+    let val = this.value.replace(/\D/g, '');
+    if (val.length === 0) { this.value = ''; return; }
+    if (val[0] === '8') val = '7' + val.slice(1);
+    if (val[0] !== '7') val = '7' + val;
+    let formatted = '+7';
+    if (val.length > 1) formatted += ' (' + val.slice(1, 4);
+    if (val.length > 4) formatted += ') ' + val.slice(4, 7);
+    if (val.length > 7) formatted += '-' + val.slice(7, 9);
+    if (val.length > 9) formatted += '-' + val.slice(9, 11);
+    this.value = formatted;
+    clearError('errPhone');
+  });
+
+  document.getElementById('bookName').addEventListener('input', function() {
+    clearError('errName');
+  });
+
+  // ===================== DATE PICKER =====================
+  function renderDatepicker() {
+    const dp = document.getElementById('datepicker');
+    dp.innerHTML = '';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'datepicker__header';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'datepicker__nav-btn';
+    prevBtn.type = 'button';
+    prevBtn.textContent = '\u2039';
+    prevBtn.addEventListener('click', function() {
+      currentMonth--;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      renderDatepicker();
+    });
+
+    const monthLabel = document.createElement('span');
+    monthLabel.className = 'datepicker__month';
+    monthLabel.textContent = MONTH_NAMES[currentMonth] + ' ' + currentYear;
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'datepicker__nav-btn';
+    nextBtn.type = 'button';
+    nextBtn.textContent = '\u203A';
+    nextBtn.addEventListener('click', function() {
+      currentMonth++;
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderDatepicker();
+    });
+
+    // Disable navigation outside 14-day window
+    const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const maxDate = new Date(minDate);
+    maxDate.setDate(maxDate.getDate() + 13);
+
+    const firstOfMonth = new Date(currentYear, currentMonth, 1);
+    const lastOfMonth = new Date(currentYear, currentMonth + 1, 0);
+    if (firstOfMonth <= minDate) prevBtn.disabled = true;
+    if (lastOfMonth >= maxDate) nextBtn.disabled = true;
+    if (prevBtn.disabled) prevBtn.style.opacity = '0.3';
+    if (nextBtn.disabled) nextBtn.style.opacity = '0.3';
+
+    header.appendChild(prevBtn);
+    header.appendChild(monthLabel);
+    header.appendChild(nextBtn);
+    dp.appendChild(header);
+
+    // Day names
+    DAY_NAMES.forEach(function(dn) {
+      const el = document.createElement('div');
+      el.className = 'datepicker__dayname';
+      el.textContent = dn;
+      dp.appendChild(el);
+    });
+
+    // First day of month (0=Sun, adjust to Mon=0)
+    const firstDay = (firstOfMonth.getDay() + 6) % 7;
+
+    // Empty cells
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'datepicker__day empty';
+      dp.appendChild(el);
+    }
+
+    // Days
+    const daysInMonth = lastOfMonth.getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'datepicker__day';
+      el.textContent = d;
+
+      const thisDate = new Date(currentYear, currentMonth, d);
+      const thisDateStr = thisDate.toDateString();
+      const dayNum = (thisDate.getDay() + 6) % 7; // 0=Mon
+
+      // Check if within 14-day window
+      const isInRange = thisDate >= minDate && thisDate <= maxDate;
+      // Sundays (dayNum === 6) are unavailable, also pseudo-random unavailable
+      const isUnavailable = !isInRange || dayNum === 6 || unavailableDates.has(thisDateStr);
+
+      if (isUnavailable) {
+        el.classList.add('unavailable');
+      } else {
+        if (thisDateStr === today.toDateString()) el.classList.add('today');
+        if (selectedDate && thisDateStr === selectedDate.toDateString()) el.classList.add('selected');
+        el.addEventListener('click', function() {
+          selectedDate = new Date(currentYear, currentMonth, d);
+          selectedTime = null;
+          renderDatepicker();
+          renderTimeslots();
+          clearError('errDate');
+          clearError('errTime');
+        });
+      }
+
+      dp.appendChild(el);
+    }
+  }
+
+  // ===================== TIME SLOTS =====================
+  function renderTimeslots() {
+    const container = document.getElementById('timeslots');
+    container.innerHTML = '';
+
+    if (!selectedDate) {
+      const msg = document.createElement('div');
+      msg.style.cssText = 'grid-column:1/-1;color:var(--text-muted);font-size:14px;padding:20px;';
+      msg.textContent = 'Сначала выберите дату';
+      container.appendChild(msg);
+      return;
+    }
+
+    const dateStr = selectedDate.toDateString();
+    const busy = getBusySlots(dateStr);
+    const now = new Date();
+
+    for (let h = 9; h < 21; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        const slot = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        const el = document.createElement('div');
+        el.className = 'timeslot';
+        el.textContent = slot;
+
+        const isBusy = busy.has(slot);
+        const isPast = selectedDate.toDateString() === today.toDateString() &&
+          (h < now.getHours() || (h === now.getHours() && m <= now.getMinutes()));
+
+        if (isBusy || isPast) {
+          el.classList.add('busy');
+        } else {
+          if (selectedTime === slot) el.classList.add('selected');
+          el.addEventListener('click', function() {
+            selectedTime = slot;
+            renderTimeslots();
+            clearError('errTime');
+          });
+        }
+
+        container.appendChild(el);
+      }
+    }
+  }
+
+  // ===================== VALIDATION =====================
+  function showError(id) {
+    document.getElementById(id).classList.add('visible');
+  }
+  function clearError(id) {
+    document.getElementById(id).classList.remove('visible');
+  }
+  function clearAllErrors() {
+    document.querySelectorAll('.field-error').forEach(function(e) { e.classList.remove('visible'); });
+    document.querySelectorAll('.book__form input, .book__form select').forEach(function(e) { e.classList.remove('error'); });
+  }
+
+  // ===================== FORM SUBMIT =====================
+  document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearAllErrors();
+    let valid = true;
+
+    const name = document.getElementById('bookName').value.trim();
+    const phone = document.getElementById('bookPhone').value.trim();
+    const service = document.getElementById('bookService').value;
+    const master = document.getElementById('bookMaster').value;
+
+    if (!name) { showError('errName'); document.getElementById('bookName').classList.add('error'); valid = false; }
+    if (phone.replace(/\D/g, '').length < 11) { showError('errPhone'); document.getElementById('bookPhone').classList.add('error'); valid = false; }
+    if (!service) { showError('errService'); document.getElementById('bookService').classList.add('error'); valid = false; }
+    if (!master) { showError('errMaster'); document.getElementById('bookMaster').classList.add('error'); valid = false; }
+    if (!selectedDate) { showError('errDate'); valid = false; }
+    if (!selectedTime) { showError('errTime'); valid = false; }
+
+    if (!valid) return;
+
+    // Build success details
+    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    const dateFormatted = selectedDate.getDate() + ' ' + months[selectedDate.getMonth()];
+
+    const servicePrices = {
+      'Мужская стрижка': '2 500 ₽',
+      'Бритьё опасной бритвой': '2 200 ₽',
+      'Моделирование бороды': '1 800 ₽',
+      'Премиум-пакет': '5 500 ₽'
+    };
+
+    const details = document.getElementById('bookingDetails');
+    details.innerHTML =
+      '<div class="booking-success__row"><span class="booking-success__label">Имя</span><span class="booking-success__value">' + name + '</span></div>' +
+      '<div class="booking-success__row"><span class="booking-success__label">Телефон</span><span class="booking-success__value">' + phone + '</span></div>' +
+      '<div class="booking-success__row"><span class="booking-success__label">Услуга</span><span class="booking-success__value">' + service + '</span></div>' +
+      '<div class="booking-success__row"><span class="booking-success__label">Мастер</span><span class="booking-success__value">' + master + '</span></div>' +
+      '<div class="booking-success__row"><span class="booking-success__label">Дата</span><span class="booking-success__value">' + dateFormatted + '</span></div>' +
+      '<div class="booking-success__row"><span class="booking-success__label">Время</span><span class="booking-success__value">' + selectedTime + '</span></div>' +
+      '<div class="booking-success__row"><span class="booking-success__label">Стоимость</span><span class="booking-success__value">' + (servicePrices[service] || '') + '</span></div>';
+
+    document.getElementById('bookingFormWrap').style.display = 'none';
+    document.getElementById('bookingSuccess').classList.add('active');
+  });
+
+  // ===================== RESET BOOKING =====================
+  window.resetBooking = function() {
+    document.getElementById('bookingFormWrap').style.display = '';
+    document.getElementById('bookingSuccess').classList.remove('active');
+    document.getElementById('bookingForm').reset();
+    selectedService = null;
+    selectedMaster = null;
+    selectedDate = null;
+    selectedTime = null;
+    document.querySelectorAll('.service').forEach(function(c) { c.classList.remove('selected'); });
+    document.querySelectorAll('.master').forEach(function(c) { c.classList.remove('selected'); });
+    renderDatepicker();
+    renderTimeslots();
+    clearAllErrors();
+  };
+
+  // ===================== GALLERY LIGHTBOX =====================
+  document.querySelectorAll('.gallery-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      lightboxIndex = parseInt(this.dataset.index);
+      openLightbox();
+    });
+  });
+
+  function openLightbox() {
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateLightbox();
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function updateLightbox() {
+    const content = document.getElementById('lightboxContent');
+    content.innerHTML = '<div class="lightbox__placeholder">' + GALLERY_EMOJIS[lightboxIndex] + '</div>';
+    document.getElementById('lightboxCounter').textContent = (lightboxIndex + 1) + ' / ' + GALLERY_EMOJIS.length;
+  }
+
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+  document.getElementById('lightboxPrev').addEventListener('click', function(e) {
+    e.stopPropagation();
+    lightboxIndex = (lightboxIndex - 1 + GALLERY_EMOJIS.length) % GALLERY_EMOJIS.length;
+    updateLightbox();
+  });
+  document.getElementById('lightboxNext').addEventListener('click', function(e) {
+    e.stopPropagation();
+    lightboxIndex = (lightboxIndex + 1) % GALLERY_EMOJIS.length;
+    updateLightbox();
+  });
+
+  // Keyboard nav for lightbox
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') { lightboxIndex = (lightboxIndex - 1 + GALLERY_EMOJIS.length) % GALLERY_EMOJIS.length; updateLightbox(); }
+    if (e.key === 'ArrowRight') { lightboxIndex = (lightboxIndex + 1) % GALLERY_EMOJIS.length; updateLightbox(); }
+  });
+
+  // ===================== INIT =====================
+  renderDatepicker();
+  renderTimeslots();
+
+})();
+</script>
 
 </body>
 </html>

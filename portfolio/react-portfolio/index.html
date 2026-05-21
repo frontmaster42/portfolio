@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Портфолио — React Next.js</title>
 <style>
+/* ============================================
+   CSS VARIABLES / THEME
+   ============================================ */
+:root {
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --bg-nav: rgba(10,10,10,0.8);
+  --border: #1e1e1e;
+  --border-light: #1a1a1a;
+  --text: #e5e5e5;
+  --text-dim: #888;
+  --text-muted: #444;
+  --accent: #22d3ee;
+  --accent-dim: #06b6d4;
+  --tag-bg: #1a1a1a;
+  --tag-text: #aaa;
+  --code-bg: #111;
+  --loader-bg: #0a0a0a;
+  --modal-overlay: rgba(0,0,0,0.7);
+  --card-hover-shadow: rgba(0,0,0,0.3);
+  --glow-opacity: 0.07;
+}
+[data-theme="light"] {
+  --bg: #f8f9fa;
+  --bg2: #ffffff;
+  --bg-nav: rgba(248,249,250,0.85);
+  --border: #e2e8f0;
+  --border-light: #edf2f7;
+  --text: #1a202c;
+  --text-dim: #718096;
+  --text-muted: #a0aec0;
+  --accent: #0891b2;
+  --accent-dim: #06b6d4;
+  --tag-bg: #edf2f7;
+  --tag-text: #4a5568;
+  --code-bg: #1e293b;
+  --loader-bg: #f8f9fa;
+  --modal-overlay: rgba(0,0,0,0.5);
+  --card-hover-shadow: rgba(0,0,0,0.1);
+  --glow-opacity: 0.04;
+}
+
 /* ============================================
    RESET & BASE
    ============================================ */
@@ -12,10 +54,11 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: #0a0a0a;
-  color: #e5e5e5;
+  background: var(--bg);
+  color: var(--text);
   overflow-x: hidden;
   cursor: none;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
 /* ============================================
@@ -25,7 +68,7 @@ body {
   position: fixed;
   width: 8px;
   height: 8px;
-  background: #22d3ee;
+  background: var(--accent);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
@@ -41,17 +84,16 @@ body {
   pointer-events: none;
   z-index: 9998;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(34,211,238,0.07) 0%, rgba(34,211,238,0.02) 40%, transparent 70%);
+  background: radial-gradient(circle, rgba(34,211,238,var(--glow-opacity)) 0%, rgba(34,211,238,0.02) 40%, transparent 70%);
   transition: opacity 0.3s;
 }
 body:hover .cursor-dot { opacity: 1; }
 body:hover .cursor-glow { opacity: 1; }
-a:hover ~ .cursor-dot,
 .cursor-dot.hovering {
   width: 40px;
   height: 40px;
   background: rgba(34,211,238,0.15);
-  border: 2px solid #22d3ee;
+  border: 2px solid var(--accent);
 }
 
 /* ============================================
@@ -60,7 +102,7 @@ a:hover ~ .cursor-dot,
 .loader {
   position: fixed;
   inset: 0;
-  background: #0a0a0a;
+  background: var(--loader-bg);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -81,7 +123,7 @@ a:hover ~ .cursor-dot,
   overflow: hidden;
   white-space: nowrap;
 }
-.loader-logo span { color: #22d3ee; }
+.loader-logo span { color: var(--accent); }
 .loader-logo::after {
   content: '';
   position: absolute;
@@ -89,7 +131,7 @@ a:hover ~ .cursor-dot,
   top: 0;
   width: 3px;
   height: 100%;
-  background: #22d3ee;
+  background: var(--accent);
   animation: blink 0.8s step-end infinite;
 }
 .loader-logo.typing::after {
@@ -113,7 +155,7 @@ a:hover ~ .cursor-dot,
 .loader-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #22d3ee, #06b6d4);
+  background: linear-gradient(90deg, var(--accent), var(--accent-dim));
   border-radius: 2px;
   transition: width 0.1s linear;
 }
@@ -136,7 +178,7 @@ a:hover ~ .cursor-dot,
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(10,10,10,0.8);
+  background: var(--bg-nav);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid transparent;
@@ -144,25 +186,32 @@ a:hover ~ .cursor-dot,
   opacity: 0;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
               opacity 0.6s ease,
-              border-color 0.3s ease;
+              border-color 0.3s ease,
+              background 0.4s ease;
 }
 .nav.visible {
   transform: translateY(0);
   opacity: 1;
 }
 .nav.scrolled {
-  border-bottom-color: #1a1a1a;
+  border-bottom-color: var(--border-light);
 }
 .logo {
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text);
   letter-spacing: -0.5px;
+  transition: color 0.4s ease;
 }
-.logo span { color: #22d3ee; }
+.logo span { color: var(--accent); }
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 .nav-links { display: flex; gap: 28px; }
 .nav-links a {
-  color: #888;
+  color: var(--text-dim);
   text-decoration: none;
   font-size: 14px;
   position: relative;
@@ -176,14 +225,110 @@ a:hover ~ .cursor-dot,
   left: 0;
   width: 0;
   height: 1.5px;
-  background: #22d3ee;
+  background: var(--accent);
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nav-links a:hover {
-  color: #22d3ee;
+  color: var(--accent);
 }
 .nav-links a:hover::after {
   width: 100%;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--border);
+  border: none;
+  cursor: none;
+  position: relative;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-theme="light"] .theme-toggle::after {
+  transform: translateX(20px);
+}
+.theme-toggle-icons {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: none;
+  padding: 4px;
+  z-index: 200;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile nav overlay */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 99;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.mobile-nav.open {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover {
+  color: var(--accent);
 }
 
 /* ============================================
@@ -236,9 +381,9 @@ a:hover ~ .cursor-dot,
   transform: translateY(0);
 }
 .hero h1 .accent {
-  color: #22d3ee;
+  color: var(--accent);
   position: relative;
-  background: linear-gradient(90deg, #22d3ee, #06b6d4, #22d3ee);
+  background: linear-gradient(90deg, var(--accent), var(--accent-dim), var(--accent));
   background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -250,7 +395,7 @@ a:hover ~ .cursor-dot,
   100% { background-position: 200% center; }
 }
 .hero p {
-  color: #888;
+  color: var(--text-dim);
   font-size: 18px;
   max-width: 520px;
   line-height: 1.7;
@@ -269,7 +414,7 @@ a:hover ~ .cursor-dot,
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #22d3ee;
+  background: var(--accent);
   color: #0a0a0a;
   padding: 14px 32px;
   border-radius: 28px;
@@ -330,26 +475,63 @@ a:hover ~ .cursor-dot,
 .projects {
   padding: 40px 60px 80px;
 }
+.projects-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
 .projects h2 {
   font-size: 28px;
-  margin-bottom: 40px;
   letter-spacing: -0.5px;
 }
+
+/* Filter Buttons */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: none;
+  transition: all 0.3s ease;
+}
+.filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.filter-btn.active {
+  background: var(--accent);
+  color: #0a0a0a;
+  border-color: var(--accent);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 .project {
-  background: #111111;
+  background: var(--bg2);
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #1e1e1e;
+  border: 1px solid var(--border);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.4s ease,
-              box-shadow 0.4s ease;
+              box-shadow 0.4s ease,
+              opacity 0.4s ease;
   opacity: 0;
   transform: translateY(30px);
+  cursor: none;
 }
 .project.visible {
   opacity: 1;
@@ -361,8 +543,11 @@ a:hover ~ .cursor-dot,
 }
 .project:hover {
   transform: translateY(-8px);
-  border-color: #22d3ee;
-  box-shadow: 0 0 40px rgba(34,211,238,0.1), 0 20px 40px rgba(0,0,0,0.3);
+  border-color: var(--accent);
+  box-shadow: 0 0 40px rgba(34,211,238,0.1), 0 20px 40px var(--card-hover-shadow);
+}
+.project.hidden-by-filter {
+  display: none;
 }
 .project-img {
   height: 200px;
@@ -416,6 +601,22 @@ a:hover ~ .cursor-dot,
   background-size: 200% 200%;
   animation: gradientShift 3s ease infinite;
 }
+.project-img.orange {
+  background: linear-gradient(135deg, #fb923c08, #fb923c04);
+}
+.project-img.orange::after {
+  background: linear-gradient(135deg, rgba(251,146,60,0.12), rgba(251,146,60,0.04), rgba(249,115,22,0.1));
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+.project-img.rose {
+  background: linear-gradient(135deg, #fb718508, #fb718504);
+}
+.project-img.rose::after {
+  background: linear-gradient(135deg, rgba(251,113,133,0.12), rgba(251,113,133,0.04), rgba(244,63,94,0.1));
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
 @keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -423,21 +624,160 @@ a:hover ~ .cursor-dot,
 
 .project-info { padding: 24px; }
 .project-info h3 { font-size: 16px; margin-bottom: 8px; font-weight: 600; }
-.project-info p { font-size: 13px; color: #888; line-height: 1.5; margin-bottom: 16px; }
+.project-info p { font-size: 13px; color: var(--text-dim); line-height: 1.5; margin-bottom: 16px; }
 .tags { display: flex; gap: 6px; flex-wrap: wrap; }
 .tag {
   font-size: 11px;
   padding: 4px 10px;
   border-radius: 12px;
-  background: #1a1a1a;
-  color: #aaa;
+  background: var(--tag-bg);
+  color: var(--tag-text);
   transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 .tag.react { color: #22d3ee; background: #22d3ee15; }
 .tag.next { color: #a855f7; background: #a855f715; }
 .tag.tw { color: #34d399; background: #34d39915; }
+.tag.ts { color: #3b82f6; background: #3b82f615; }
+.tag.node { color: #fb923c; background: #fb923c15; }
 .tag:hover {
   box-shadow: 0 0 12px rgba(34,211,238,0.2);
+}
+
+/* ============================================
+   PROJECT DETAIL MODAL
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, color 0.3s, transform 0.3s;
+  z-index: 2;
+}
+.modal-close:hover {
+  background: var(--accent);
+  color: #0a0a0a;
+  transform: rotate(90deg);
+}
+.modal-emoji {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+  overflow: hidden;
+}
+.modal-emoji::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+}
+.modal-emoji.cyan { background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(34,211,238,0.03)); }
+.modal-emoji.purple { background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(168,85,247,0.03)); }
+.modal-emoji.green { background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(52,211,153,0.03)); }
+.modal-emoji.orange { background: linear-gradient(135deg, rgba(251,146,60,0.08), rgba(251,146,60,0.03)); }
+.modal-emoji.rose { background: linear-gradient(135deg, rgba(251,113,133,0.08), rgba(251,113,133,0.03)); }
+.modal-body {
+  padding: 28px 32px 32px;
+}
+.modal-body h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.modal-body .modal-desc {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.modal-tech-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.modal-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.modal-demo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #0a0a0a;
+  padding: 12px 28px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+.modal-demo-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 30px rgba(34,211,238,0.4);
+}
+.modal-demo-btn .btn-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.modal-demo-btn:hover .btn-arrow {
+  transform: translateX(4px);
 }
 
 /* ============================================
@@ -458,8 +798,8 @@ a:hover ~ .cursor-dot,
   justify-content: center;
 }
 .about-code-block {
-  background: #111;
-  border: 1px solid #1e1e1e;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
   font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
@@ -509,7 +849,7 @@ a:hover ~ .cursor-dot,
   letter-spacing: -0.5px;
 }
 .about-text p {
-  color: #888;
+  color: var(--text-dim);
   font-size: 15px;
   line-height: 1.8;
   margin-bottom: 16px;
@@ -517,8 +857,8 @@ a:hover ~ .cursor-dot,
 .skills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
 .skill {
   padding: 8px 18px;
-  background: #111;
-  border: 1px solid #1e1e1e;
+  background: var(--bg2);
+  border: 1px solid var(--border);
   border-radius: 20px;
   font-size: 13px;
   color: #ccc;
@@ -526,16 +866,53 @@ a:hover ~ .cursor-dot,
   transform: translateY(15px) scale(0.9);
   transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
               border-color 0.3s, box-shadow 0.3s, background 0.3s, color 0.3s;
+  position: relative;
+  cursor: none;
 }
 .skill.visible {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 .skill:hover {
-  border-color: #22d3ee;
+  border-color: var(--accent);
   box-shadow: 0 0 20px rgba(34,211,238,0.15);
-  background: #22d3ee10;
-  color: #22d3ee;
+  background: rgba(34,211,238,0.06);
+  color: var(--accent);
+}
+
+/* Skill Tooltip */
+.skill-tooltip {
+  position: fixed;
+  background: var(--bg2);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--text);
+  max-width: 240px;
+  line-height: 1.5;
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 0 20px rgba(34,211,238,0.15), 0 8px 24px rgba(0,0,0,0.3);
+}
+.skill-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.skill-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: var(--bg2);
+  border-left: 1px solid var(--accent);
+  border-top: 1px solid var(--accent);
 }
 
 /* ============================================
@@ -557,7 +934,7 @@ a:hover ~ .cursor-dot,
   position: absolute;
   width: 2px;
   height: 2px;
-  background: #22d3ee;
+  background: var(--accent);
   border-radius: 50%;
   opacity: 0;
   animation: particleFloat linear infinite;
@@ -590,7 +967,7 @@ a:hover ~ .cursor-dot,
   pointer-events: none;
 }
 .contact-gradient.one {
-  background: #22d3ee;
+  background: var(--accent);
   top: -100px;
   right: -100px;
 }
@@ -612,7 +989,7 @@ a:hover ~ .cursor-dot,
   letter-spacing: -1px;
 }
 .contact p {
-  color: #888;
+  color: var(--text-dim);
   font-size: 16px;
   margin-bottom: 36px;
   position: relative;
@@ -623,23 +1000,24 @@ a:hover ~ .cursor-dot,
   align-items: center;
   gap: 8px;
   background: transparent;
-  color: #22d3ee;
+  color: var(--accent);
   padding: 16px 40px;
   border-radius: 32px;
   font-size: 16px;
   font-weight: 600;
   text-decoration: none;
-  border: 2px solid #22d3ee;
+  border: 2px solid var(--accent);
   position: relative;
   z-index: 2;
   overflow: hidden;
   transition: color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: none;
 }
 .contact-btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: #22d3ee;
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -662,17 +1040,171 @@ a:hover ~ .cursor-dot,
 }
 
 /* ============================================
+   CONTACT FORM MODAL
+   ============================================ */
+.form-modal .modal {
+  max-width: 480px;
+}
+.form-modal .modal-body {
+  padding: 32px;
+}
+.form-modal .modal-body h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.form-modal .modal-subtitle {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  cursor: none;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(34,211,238,0.1);
+}
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+}
+.form-group .error-msg {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 6px;
+  display: none;
+}
+.form-group .error-msg.show {
+  display: block;
+}
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.form-submit {
+  width: 100%;
+  padding: 14px;
+  border-radius: 28px;
+  border: none;
+  background: var(--accent);
+  color: #0a0a0a;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  margin-top: 8px;
+}
+.form-submit:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 30px rgba(34,211,238,0.4);
+}
+.form-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Form Success */
+.form-success {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+.form-success.active {
+  display: flex;
+}
+.success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(34,211,238,0.1);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+  animation: successPop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes successPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.success-check {
+  width: 32px;
+  height: 32px;
+}
+.success-check path {
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: drawCheck 0.6s ease 0.3s forwards;
+}
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+.form-success h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  animation: fadeUp 0.5s ease 0.4s both;
+}
+.form-success p {
+  color: var(--text-dim);
+  font-size: 14px;
+  animation: fadeUp 0.5s ease 0.5s both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 .footer {
   padding: 28px 60px;
-  border-top: 1px solid #1a1a1a;
+  border-top: 1px solid var(--border-light);
   text-align: center;
-  color: #444;
+  color: var(--text-muted);
   font-size: 13px;
+  transition: border-color 0.4s ease;
 }
 .footer a {
-  color: #22d3ee;
+  color: var(--accent);
   text-decoration: none;
   transition: opacity 0.3s;
 }
@@ -689,10 +1221,20 @@ a:hover ~ .cursor-dot,
   .nav { padding: 16px 24px; }
   .footer { padding: 24px; }
 }
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .nav-links { display: none; }
+  .mobile-nav { display: flex; }
+  .projects-header { flex-direction: column; align-items: flex-start; }
+  .filter-bar { width: 100%; }
+  .modal { margin: 16px; border-radius: 16px; }
+  .modal-body { padding: 20px 24px 24px; }
+}
 @media (max-width: 640px) {
   .hero h1 { font-size: 36px; letter-spacing: -1px; }
   .hero p { font-size: 16px; }
-  .nav-links { gap: 16px; }
+  .about-text h2 { font-size: 26px; }
+  .about-code-block { font-size: 11px; padding: 18px; }
 }
 
 /* ============================================
@@ -705,12 +1247,18 @@ a:hover ~ .cursor-dot,
 }
 
 /* Ensure interactive elements have cursor pointer override */
-a, button, .project, .skill, .tag {
+a, button, .project, .skill, .tag, .filter-btn, .theme-toggle, .hamburger {
   cursor: none;
 }
 @media (hover: none) and (pointer: coarse) {
-  a, button, .project, .skill, .tag { cursor: auto; }
+  a, button, .project, .skill, .tag, .filter-btn, .theme-toggle, .hamburger { cursor: auto; }
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 </style>
 </head>
 <body>
@@ -718,6 +1266,9 @@ a, button, .project, .skill, .tag {
 <!-- CURSOR -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- SKILL TOOLTIP -->
+<div class="skill-tooltip" id="skillTooltip"></div>
 
 <!-- LOADING SCREEN -->
 <div class="loader" id="loader">
@@ -730,12 +1281,31 @@ a, button, .project, .skill, .tag {
 <!-- NAV -->
 <nav class="nav" id="nav">
   <div class="logo">dev<span>.</span>portfolio</div>
-  <div class="nav-links">
-    <a href="#projects">Проекты</a>
-    <a href="#about">Обо мне</a>
-    <a href="#contact">Контакты</a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#projects">Проекты</a>
+      <a href="#about">Обо мне</a>
+      <a href="#contact">Контакты</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+      <span class="theme-toggle-icons">
+        <span>🌙</span><span>☀️</span>
+      </span>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Меню">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#projects" class="mobile-link">Проекты</a>
+  <a href="#about" class="mobile-link">Обо мне</a>
+  <a href="#contact" class="mobile-link">Контакты</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="hero">
@@ -750,9 +1320,21 @@ a, button, .project, .skill, .tag {
 
 <!-- PROJECTS -->
 <section class="projects reveal-section" id="projects">
-  <h2>Проекты</h2>
-  <div class="grid">
-    <div class="project" data-delay="0">
+  <div class="projects-header">
+    <h2>Проекты</h2>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">Все</button>
+      <button class="filter-btn" data-filter="react">React</button>
+      <button class="filter-btn" data-filter="next">Next.js</button>
+      <button class="filter-btn" data-filter="tw">Tailwind</button>
+    </div>
+  </div>
+  <div class="grid" id="projectGrid">
+
+    <div class="project" data-delay="0" data-tags="react,next,tw"
+         data-title="Dashboard аналитики"
+         data-desc="Полноценная панель управления с real-time графиками, интерактивными виджетами, уведомлениями и экспортом отчётов. Реализована авторизация, роли пользователей и адаптивный дашборд с перетаскиваемыми блоками."
+         data-url="https://analytics-dashboard.demo.dev">
       <div class="project-img cyan">
         <span class="emoji">📊</span>
       </div>
@@ -766,7 +1348,11 @@ a, button, .project, .skill, .tag {
         </div>
       </div>
     </div>
-    <div class="project" data-delay="1">
+
+    <div class="project" data-delay="1" data-tags="react,next,tw"
+         data-title="Интернет-магазин"
+         data-desc="E-commerce платформа с корзиной, каталогом товаров, системой фильтрации, избранным и интеграцией платёжной системы. Поддержка SSR для SEO-оптимизации и lazy-load изображений."
+         data-url="https://ecommerce-store.demo.dev">
       <div class="project-img purple">
         <span class="emoji">🛒</span>
       </div>
@@ -780,7 +1366,11 @@ a, button, .project, .skill, .tag {
         </div>
       </div>
     </div>
-    <div class="project" data-delay="2">
+
+    <div class="project" data-delay="2" data-tags="react,next,tw"
+         data-title="SaaS платформа"
+         data-desc="Лендинг и кабинет пользователя для SaaS-сервиса. Тарифные планы, форма подписки, биллинг, дашборд с метриками. Интеграция Stripe и система управления подписками."
+         data-url="https://saas-platform.demo.dev">
       <div class="project-img green">
         <span class="emoji">📱</span>
       </div>
@@ -794,6 +1384,58 @@ a, button, .project, .skill, .tag {
         </div>
       </div>
     </div>
+
+    <div class="project" data-delay="3" data-tags="react,ts"
+         data-title="Чат-приложение"
+         data-desc="Real-time мессенджер с комнатами, приватными чатами, статусами онлайн, индикаторами набора и обменом файлами. WebSocket-соединение и уведомления на рабочем столе."
+         data-url="https://chat-app.demo.dev">
+      <div class="project-img orange">
+        <span class="emoji">💬</span>
+      </div>
+      <div class="project-info">
+        <h3>Чат-приложение</h3>
+        <p>Real-time мессенджер с комнатами и уведомлениями</p>
+        <div class="tags">
+          <span class="tag react">React</span>
+          <span class="tag ts">TypeScript</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" data-delay="4" data-tags="react,tw"
+         data-title="Погода App"
+         data-desc="Стильное погодное приложение с геолокацией, почасовым и недельным прогнозом, анимированными иконками и фоновыми градиентами в зависимости от погоды."
+         data-url="https://weather-app.demo.dev">
+      <div class="project-img cyan">
+        <span class="emoji">🌤️</span>
+      </div>
+      <div class="project-info">
+        <h3>Погода App</h3>
+        <p>Прогноз погоды с геолокацией и анимациями</p>
+        <div class="tags">
+          <span class="tag react">React</span>
+          <span class="tag tw">Tailwind</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project" data-delay="5" data-tags="next,tw"
+         data-title="Блог-платформа"
+         data-desc="Блог с MDX-статьями, подсветкой кода, системой тегов, поиском и RSS. ISR для мгновенных обновлений, оптимизированные изображения через next/image."
+         data-url="https://blog-platform.demo.dev">
+      <div class="project-img rose">
+        <span class="emoji">✍️</span>
+      </div>
+      <div class="project-info">
+        <h3>Блог-платформа</h3>
+        <p>MDX-блог с подсветкой кода и тегами</p>
+        <div class="tags">
+          <span class="tag next">Next.js</span>
+          <span class="tag tw">Tailwind</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -816,12 +1458,12 @@ a, button, .project, .skill, .tag {
     <p>Разрабатываю современные веб-приложения с акцентом на производительность, доступность и пользовательский опыт. Каждый проект — чистый код, адаптивный дизайн и быстрая загрузка.</p>
     <p>Использую React 18, Next.js 14, TypeScript и Tailwind CSS — стек, который обеспечивает максимальную скорость разработки и качество результата.</p>
     <div class="skills">
-      <span class="skill">React 18</span>
-      <span class="skill">Next.js 14</span>
-      <span class="skill">TypeScript</span>
-      <span class="skill">Tailwind CSS</span>
-      <span class="skill">Framer Motion</span>
-      <span class="skill">REST API</span>
+      <span class="skill" data-tip="Библиотека для создания UI-компонентов с декларативным подходом и виртуальным DOM">React 18</span>
+      <span class="skill" data-tip="Фреймворк на базе React с SSR, ISR и маршрутизацией на основе файловой системы">Next.js 14</span>
+      <span class="skill" data-tip="Типизированный JavaScript — статическая проверка типов для надёжного и масштабируемого кода">TypeScript</span>
+      <span class="skill" data-tip="Utility-first CSS-фреймворк для быстрой стилизации без написания кастомного CSS">Tailwind CSS</span>
+      <span class="skill" data-tip="Библиотека анимаций для React с декларативным API и жестами">Framer Motion</span>
+      <span class="skill" data-tip="Проектирование и интеграция RESTful API, работа с Axios, Fetch и обработка ошибок">REST API</span>
     </div>
   </div>
 </section>
@@ -834,17 +1476,84 @@ a, button, .project, .skill, .tag {
   </div>
   <h2>Есть проект?</h2>
   <p>Давайте обсудим вашу задачу и найдём лучшее решение</p>
-  <a href="#" class="contact-btn">
+  <button class="contact-btn" id="contactBtn">
     Написать <span class="btn-arrow">→</span>
-  </a>
+  </button>
 </section>
 
 <!-- FOOTER -->
 <div class="footer">© 2026 <a href="#">dev.portfolio</a> — React + Next.js</div>
 
+<!-- PROJECT DETAIL MODAL -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <button class="modal-close" id="projectModalClose">✕</button>
+    <div class="modal-emoji" id="modalEmoji"></div>
+    <div class="modal-body">
+      <h2 id="modalTitle"></h2>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-tech-label">Технологии</div>
+      <div class="modal-tags" id="modalTags"></div>
+      <a href="#" class="modal-demo-btn" id="modalDemoBtn" target="_blank" rel="noopener">
+        Смотреть демо <span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT FORM MODAL -->
+<div class="modal-overlay form-modal" id="formModal">
+  <div class="modal">
+    <button class="modal-close" id="formModalClose">✕</button>
+    <div class="modal-body" id="formBody">
+      <h2>Написать мне</h2>
+      <p class="modal-subtitle">Заполните форму и я свяжусь с вами в ближайшее время</p>
+      <form id="contactForm" novalidate>
+        <div class="form-group">
+          <label for="formName">Имя</label>
+          <input type="text" id="formName" placeholder="Ваше имя" autocomplete="name">
+          <div class="error-msg" id="nameError">Пожалуйста, введите ваше имя</div>
+        </div>
+        <div class="form-group">
+          <label for="formEmail">Email</label>
+          <input type="email" id="formEmail" placeholder="your@email.com" autocomplete="email">
+          <div class="error-msg" id="emailError">Пожалуйста, введите корректный email</div>
+        </div>
+        <div class="form-group">
+          <label for="formMessage">Сообщение</label>
+          <textarea id="formMessage" placeholder="Опишите ваш проект или задачу..." rows="4"></textarea>
+          <div class="error-msg" id="messageError">Пожалуйста, введите сообщение</div>
+        </div>
+        <button type="submit" class="form-submit" id="formSubmit">Отправить сообщение</button>
+      </form>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <div class="success-icon">
+        <svg class="success-check" viewBox="0 0 32 32">
+          <path d="M8 17l6 6 12-12"/>
+        </svg>
+      </div>
+      <h3>Сообщение отправлено!</h3>
+      <p>Спасибо, я свяжусь с вами в ближайшее время</p>
+    </div>
+  </div>
+</div>
+
 <script>
 (function() {
   'use strict';
+
+  // ==========================================
+  // PROJECT DATA (for modal)
+  // ==========================================
+  const projectData = {
+    0: { colorClass: 'cyan', emoji: '📊' },
+    1: { colorClass: 'purple', emoji: '🛒' },
+    2: { colorClass: 'green', emoji: '📱' },
+    3: { colorClass: 'orange', emoji: '💬' },
+    4: { colorClass: 'cyan', emoji: '🌤️' },
+    5: { colorClass: 'rose', emoji: '✍️' }
+  };
 
   // ==========================================
   // CUSTOM CURSOR
@@ -861,13 +1570,11 @@ a, button, .project, .skill, .tag {
   });
 
   function animateCursor() {
-    // Smooth follow for dot
     dotX += (mouseX - dotX) * 0.15;
     dotY += (mouseY - dotY) * 0.15;
     dot.style.left = dotX + 'px';
     dot.style.top = dotY + 'px';
 
-    // Slower follow for glow
     glowX += (mouseX - glowX) * 0.08;
     glowY += (mouseY - glowY) * 0.08;
     glow.style.left = glowX + 'px';
@@ -877,12 +1584,14 @@ a, button, .project, .skill, .tag {
   }
   animateCursor();
 
-  // Cursor expand on interactive elements
-  const interactiveEls = document.querySelectorAll('a, button, .project, .skill, .tag');
-  interactiveEls.forEach(el => {
-    el.addEventListener('mouseenter', () => dot.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => dot.classList.remove('hovering'));
-  });
+  function bindCursorEvents() {
+    const interactiveEls = document.querySelectorAll('a, button, .project, .skill, .tag, .filter-btn, .theme-toggle, .hamburger, .modal-close, .modal-demo-btn, .form-submit, input, textarea');
+    interactiveEls.forEach(el => {
+      el.addEventListener('mouseenter', () => dot.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => dot.classList.remove('hovering'));
+    });
+  }
+  bindCursorEvents();
 
   // ==========================================
   // LOADING SCREEN
@@ -899,7 +1608,6 @@ a, button, .project, .skill, .tag {
   function typeLoader() {
     if (charIndex <= loaderText.length) {
       const partial = loaderText.slice(0, charIndex);
-      // Color the dot after "dev"
       const colored = partial.replace('dev.', 'dev<span style="color:#22d3ee">.</span>');
       loaderLogo.innerHTML = colored + '<span style="color:#22d3ee;animation:blink 0.8s step-end infinite">|</span>';
       charIndex++;
@@ -907,10 +1615,8 @@ a, button, .project, .skill, .tag {
     } else {
       loaderLogo.classList.remove('typing');
       loaderLogo.classList.add('done');
-      // Remove cursor, show final logo
       const final = loaderText.replace('dev.', 'dev<span>.</span>');
       loaderLogo.innerHTML = final;
-      // Show progress bar
       loaderBar.classList.add('active');
       animateBar();
     }
@@ -933,19 +1639,16 @@ a, button, .project, .skill, .tag {
     }, 30);
   }
 
-  // Start the loading sequence
   setTimeout(typeLoader, 400);
 
   // ==========================================
   // PAGE ANIMATION SEQUENCE
   // ==========================================
   function startPageAnimation() {
-    // 1. Nav slides down
     setTimeout(() => {
       document.getElementById('nav').classList.add('visible');
     }, 100);
 
-    // 2. Hero title word-by-word reveal
     setTimeout(() => {
       const words = document.querySelectorAll('#heroTitle .word');
       const h1 = document.getElementById('heroTitle');
@@ -956,12 +1659,10 @@ a, button, .project, .skill, .tag {
         }, i * 150);
       });
 
-      // 3. Subtitle
       setTimeout(() => {
         document.getElementById('heroSub').classList.add('visible');
       }, words.length * 150 + 200);
 
-      // 4. Button
       setTimeout(() => {
         document.getElementById('heroBtn').classList.add('visible');
       }, words.length * 150 + 400);
@@ -998,7 +1699,7 @@ a, button, .project, .skill, .tag {
   // ==========================================
   // PROJECT CARDS - SCROLL REVEAL WITH STAGGER
   // ==========================================
-  const projects = document.querySelectorAll('.project');
+  const projectCards = document.querySelectorAll('.project');
   const projectObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -1011,7 +1712,7 @@ a, button, .project, .skill, .tag {
     });
   }, { threshold: 0.2 });
 
-  projects.forEach(p => projectObserver.observe(p));
+  projectCards.forEach(p => projectObserver.observe(p));
 
   // ==========================================
   // SKILLS - STAGGER ON SCROLL
@@ -1058,7 +1759,6 @@ a, button, .project, .skill, .tag {
   // ==========================================
   const contactBg = document.querySelector('.contact-bg');
   if (contactBg) {
-    // Create particles
     for (let i = 0; i < 30; i++) {
       const particle = document.createElement('div');
       particle.classList.add('particle');
@@ -1076,19 +1776,296 @@ a, button, .project, .skill, .tag {
   // ==========================================
   // SMOOTH SCROLL FOR NAV LINKS
   // ==========================================
+  function smoothScrollTo(targetSelector) {
+    const target = document.querySelector(targetSelector);
+    if (target) {
+      const navHeight = document.getElementById('nav').offsetHeight;
+      const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
+
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        const navHeight = document.getElementById('nav').offsetHeight;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
+      smoothScrollTo(this.getAttribute('href'));
+    });
+  });
+
+  // ==========================================
+  // 1. PROJECT DETAIL MODAL
+  // ==========================================
+  const projectModal = document.getElementById('projectModal');
+  const projectModalClose = document.getElementById('projectModalClose');
+  const modalEmoji = document.getElementById('modalEmoji');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalTags = document.getElementById('modalTags');
+  const modalDemoBtn = document.getElementById('modalDemoBtn');
+
+  function openProjectModal(projectEl) {
+    const title = projectEl.dataset.title;
+    const desc = projectEl.dataset.desc;
+    const url = projectEl.dataset.url;
+    const tags = projectEl.dataset.tags;
+    const delayIdx = projectEl.dataset.delay;
+    const info = projectData[delayIdx] || projectData[0];
+
+    modalEmoji.className = 'modal-emoji ' + info.colorClass;
+    modalEmoji.textContent = info.emoji;
+    modalTitle.textContent = title;
+    modalDesc.textContent = desc;
+    modalDemoBtn.href = url;
+
+    // Build tags
+    modalTags.innerHTML = '';
+    const tagMap = {
+      react: { label: 'React', cls: 'react' },
+      next: { label: 'Next.js', cls: 'next' },
+      tw: { label: 'Tailwind', cls: 'tw' },
+      ts: { label: 'TypeScript', cls: 'ts' },
+      node: { label: 'Node.js', cls: 'node' }
+    };
+    tags.split(',').forEach(t => {
+      const info = tagMap[t];
+      if (info) {
+        const span = document.createElement('span');
+        span.className = 'tag ' + info.cls;
+        span.textContent = info.label;
+        modalTags.appendChild(span);
       }
     });
+
+    projectModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProjectModal() {
+    projectModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  projectCards.forEach(card => {
+    card.addEventListener('click', () => openProjectModal(card));
+  });
+  projectModalClose.addEventListener('click', closeProjectModal);
+  projectModal.addEventListener('click', (e) => {
+    if (e.target === projectModal) closeProjectModal();
+  });
+
+  // ==========================================
+  // 2. CONTACT FORM MODAL
+  // ==========================================
+  const formModal = document.getElementById('formModal');
+  const formModalClose = document.getElementById('formModalClose');
+  const contactBtn = document.getElementById('contactBtn');
+  const contactForm = document.getElementById('contactForm');
+  const formBody = document.getElementById('formBody');
+  const formSuccess = document.getElementById('formSuccess');
+  const formName = document.getElementById('formName');
+  const formEmail = document.getElementById('formEmail');
+  const formMessage = document.getElementById('formMessage');
+  const nameError = document.getElementById('nameError');
+  const emailError = document.getElementById('emailError');
+  const messageError = document.getElementById('messageError');
+  const formSubmitBtn = document.getElementById('formSubmit');
+
+  function openFormModal() {
+    formBody.style.display = '';
+    formSuccess.classList.remove('active');
+    contactForm.reset();
+    clearFormErrors();
+    formModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFormModal() {
+    formModal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function clearFormErrors() {
+    [formName, formEmail, formMessage].forEach(el => el.classList.remove('error'));
+    [nameError, emailError, messageError].forEach(el => el.classList.remove('show'));
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  contactBtn.addEventListener('click', openFormModal);
+  formModalClose.addEventListener('click', closeFormModal);
+  formModal.addEventListener('click', (e) => {
+    if (e.target === formModal) closeFormModal();
+  });
+
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearFormErrors();
+    let valid = true;
+
+    if (!formName.value.trim()) {
+      formName.classList.add('error');
+      nameError.classList.add('show');
+      valid = false;
+    }
+    if (!validateEmail(formEmail.value.trim())) {
+      formEmail.classList.add('error');
+      emailError.classList.add('show');
+      valid = false;
+    }
+    if (!formMessage.value.trim()) {
+      formMessage.classList.add('error');
+      messageError.classList.add('show');
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Simulate sending
+    formSubmitBtn.disabled = true;
+    formSubmitBtn.textContent = 'Отправка...';
+
+    setTimeout(() => {
+      formBody.style.display = 'none';
+      formSuccess.classList.add('active');
+      formSubmitBtn.disabled = false;
+      formSubmitBtn.textContent = 'Отправить сообщение';
+      bindCursorEvents();
+    }, 1200);
+  });
+
+  // Clear error on input
+  [formName, formEmail, formMessage].forEach(input => {
+    input.addEventListener('input', () => {
+      input.classList.remove('error');
+      const errEl = input.parentElement.querySelector('.error-msg');
+      if (errEl) errEl.classList.remove('show');
+    });
+  });
+
+  // ==========================================
+  // 3. SKILLS HOVER TOOLTIP
+  // ==========================================
+  const tooltip = document.getElementById('skillTooltip');
+
+  skills.forEach(skill => {
+    skill.addEventListener('mouseenter', function(e) {
+      const tip = this.dataset.tip;
+      if (!tip) return;
+      tooltip.textContent = tip;
+      tooltip.classList.add('visible');
+      positionTooltip(e);
+    });
+
+    skill.addEventListener('mousemove', positionTooltip);
+
+    skill.addEventListener('mouseleave', function() {
+      tooltip.classList.remove('visible');
+    });
+  });
+
+  function positionTooltip(e) {
+    const rect = tooltip.getBoundingClientRect();
+    const tipW = rect.width || 200;
+    const tipH = rect.height || 40;
+    let left = e.clientX - tipW / 2;
+    let top = e.clientY - tipH - 16;
+
+    // Keep in viewport
+    if (left < 8) left = 8;
+    if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
+    if (top < 8) {
+      top = e.clientY + 20;
+    }
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+  }
+
+  // ==========================================
+  // 4. PROJECT FILTER
+  // ==========================================
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectGrid = document.getElementById('projectGrid');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      const filter = this.dataset.filter;
+      const cards = projectGrid.querySelectorAll('.project');
+
+      cards.forEach(card => {
+        const tags = (card.dataset.tags || '').split(',');
+        if (filter === 'all' || tags.includes(filter)) {
+          card.classList.remove('hidden-by-filter');
+        } else {
+          card.classList.add('hidden-by-filter');
+        }
+      });
+    });
+  });
+
+  // ==========================================
+  // 5. MOBILE HAMBURGER
+  // ==========================================
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+
+  hamburger.addEventListener('click', function() {
+    this.classList.toggle('active');
+    mobileNav.classList.toggle('open');
+    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+  });
+
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      hamburger.classList.remove('active');
+      mobileNav.classList.remove('open');
+      document.body.style.overflow = '';
+      const href = this.getAttribute('href');
+      setTimeout(() => smoothScrollTo(href), 300);
+    });
+  });
+
+  // ==========================================
+  // 6. THEME TOGGLE
+  // ==========================================
+  const themeToggle = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('portfolio-theme');
+  if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+
+  themeToggle.addEventListener('click', function() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('portfolio-theme', next);
+  });
+
+  // ==========================================
+  // KEYBOARD: ESC TO CLOSE MODALS
+  // ==========================================
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (projectModal.classList.contains('open')) closeProjectModal();
+      if (formModal.classList.contains('open')) closeFormModal();
+      if (mobileNav.classList.contains('open')) {
+        hamburger.classList.remove('active');
+        mobileNav.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
   });
 
 })();

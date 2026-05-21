@@ -22,7 +22,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 /* ===== NAV ===== */
 .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 60px;position:fixed;top:0;left:0;right:0;z-index:100;transition:background .4s ease,box-shadow .4s ease,backdrop-filter .4s ease,padding .3s ease}
 .nav.scrolled{background:rgba(255,255,255,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 24px rgba(108,99,255,.08);padding:12px 60px}
-.logo{font-size:22px;font-weight:800;color:#6c63ff;letter-spacing:-.5px;transition:transform .3s ease}
+.logo{font-size:22px;font-weight:800;color:#6c63ff;letter-spacing:-.5px;transition:transform .3s ease;cursor:pointer}
 .logo:hover{transform:scale(1.05)}
 .nav-links{display:flex;gap:28px;align-items:center}
 .nav-links a{color:#555;text-decoration:none;font-size:14px;position:relative;transition:color .3s ease}
@@ -34,6 +34,20 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 .btn-try:hover::before{opacity:1}
 .btn-try:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 6px 24px rgba(108,99,255,.35)}
 .btn-try span{position:relative;z-index:1}
+
+/* ===== HAMBURGER ===== */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:110;background:none;border:none}
+.hamburger span{display:block;width:24px;height:2px;background:#6c63ff;border-radius:2px;transition:transform .3s ease,opacity .3s ease}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* ===== MOBILE NAV ===== */
+.mobile-nav{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:90px 32px 32px;z-index:99;transform:translateY(-100%);transition:transform .4s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 32px rgba(108,99,255,.1)}
+.mobile-nav.open{transform:translateY(0)}
+.mobile-nav a{display:block;color:#1a1a2e;text-decoration:none;font-size:18px;padding:16px 0;border-bottom:1px solid #f0f0f0;transition:color .3s ease,padding-left .3s ease}
+.mobile-nav a:hover{color:#6c63ff;padding-left:8px}
+.mobile-nav .btn-try{margin-top:20px;width:100%;text-align:center;padding:14px;font-size:16px}
 
 /* ===== HERO ===== */
 .hero{text-align:center;padding:140px 60px 60px;position:relative;overflow:hidden}
@@ -76,9 +90,23 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 /* ===== FEATURES ===== */
 .features{padding:80px 60px;background:#f8f9ff;position:relative}
 .features::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#6c63ff15,transparent)}
-.features h2{text-align:center;font-size:36px;margin-bottom:48px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.features h2{text-align:center;font-size:36px;margin-bottom:24px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .features h2.revealed{opacity:1;transform:translateY(0)}
+
+/* Feature Tabs */
+.feature-tabs{display:flex;justify-content:center;gap:8px;margin-bottom:36px;flex-wrap:wrap}
+.feature-tab{padding:10px 24px;border-radius:24px;border:2px solid #eee;background:#fff;color:#555;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s ease}
+.feature-tab:hover{border-color:#6c63ff88;color:#6c63ff}
+.feature-tab.active{background:linear-gradient(135deg,#6c63ff,#7c73ff);color:#fff;border-color:transparent;box-shadow:0 4px 16px rgba(108,99,255,.3)}
+
+.feature-tabs-wrap{position:relative;overflow:hidden;max-width:1100px;margin:0 auto}
 .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:1100px;margin:0 auto}
+.feature-tab-content{display:none;opacity:0}
+.feature-tab-content.active{display:block;animation:tabSlideIn .45s cubic-bezier(.22,1,.36,1) forwards}
+.feature-tab-content.exiting{display:block;animation:tabSlideOut .25s ease forwards}
+@keyframes tabSlideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes tabSlideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-30px)}}
+
 .feature{background:#fff;border-radius:16px;padding:32px 28px;border:1px solid #eee;opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease,border-color .35s ease,box-shadow .35s ease,transform .35s ease}
 .feature.revealed{opacity:1;transform:translateY(0)}
 .feature:hover{transform:translateY(-8px)!important;border-color:#6c63ff55;box-shadow:0 12px 40px rgba(108,99,255,.12)}
@@ -94,8 +122,20 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 
 /* ===== PRICING ===== */
 .pricing{padding:80px 60px;text-align:center}
-.pricing h2{font-size:36px;margin-bottom:48px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.pricing h2{font-size:36px;margin-bottom:32px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .pricing h2.revealed{opacity:1;transform:translateY(0)}
+
+/* Pricing Toggle */
+.pricing-toggle-wrap{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:40px}
+.pricing-toggle-wrap span{font-size:14px;color:#888;font-weight:500;transition:color .3s ease}
+.pricing-toggle-wrap span.active-label{color:#6c63ff;font-weight:700}
+.pricing-toggle{width:52px;height:28px;background:#ddd;border-radius:28px;cursor:pointer;position:relative;transition:background .3s ease}
+.pricing-toggle.active{background:linear-gradient(135deg,#6c63ff,#a855f7)}
+.pricing-toggle .toggle-knob{position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .3s cubic-bezier(.22,1,.36,1);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.pricing-toggle.active .toggle-knob{transform:translateX(24px)}
+.savings-badge{display:inline-block;background:#34d39918;color:#34d399;font-size:12px;font-weight:700;padding:4px 12px;border-radius:12px;margin-left:6px;opacity:0;transform:scale(.8);transition:opacity .3s ease,transform .3s ease;white-space:nowrap}
+.savings-badge.visible{opacity:1;transform:scale(1)}
+
 .plans{display:flex;gap:24px;justify-content:center;align-items:stretch}
 .plan{background:#fff;border:2px solid #eee;border-radius:20px;padding:36px 32px;width:300px;opacity:0;transform:translateY(30px) scale(.97);transition:opacity .6s ease,transform .6s ease,border-color .35s ease,box-shadow .35s ease}
 .plan.revealed{opacity:1;transform:translateY(0) scale(1)}
@@ -104,11 +144,27 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 .plan.popular::before{content:'Популярный';position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#6c63ff,#a855f7);color:#fff;font-size:12px;font-weight:600;padding:5px 16px;border-radius:12px;animation:popularPulse 2.5s ease-in-out infinite;box-shadow:0 4px 16px rgba(108,99,255,.3)}
 @keyframes popularPulse{0%,100%{box-shadow:0 4px 16px rgba(108,99,255,.3);transform:translateX(-50%) scale(1)}50%{box-shadow:0 4px 24px rgba(108,99,255,.5);transform:translateX(-50%) scale(1.06)}}
 .plan h3{font-size:20px;margin-bottom:8px;color:#1a1a2e}
-.plan .price{font-size:38px;font-weight:800;color:#6c63ff;margin-bottom:4px;letter-spacing:-1px}
-.plan .period{font-size:13px;color:#888;margin-bottom:22px}
+.plan .price-wrap{min-height:60px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;position:relative}
+.plan .price{font-size:38px;font-weight:800;color:#6c63ff;margin-bottom:4px;letter-spacing:-1px;transition:opacity .3s ease,transform .3s ease}
+.plan .price.changing{opacity:0;transform:translateY(-10px) scale(.9)}
+.plan .period{font-size:13px;color:#888;margin-bottom:22px;width:100%;transition:opacity .3s ease}
 .plan ul{list-style:none;text-align:left;margin-bottom:28px}
 .plan li{font-size:14px;padding:9px 0;border-bottom:1px solid #f5f5f5;color:#555}
 .plan li::before{content:'✓';color:#6c63ff;font-weight:700;margin-right:8px}
+
+/* ===== FAQ ===== */
+.faq{padding:80px 60px;max-width:800px;margin:0 auto}
+.faq h2{text-align:center;font-size:36px;margin-bottom:40px;opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.faq h2.revealed{opacity:1;transform:translateY(0)}
+.faq-item{border:1px solid #eee;border-radius:14px;margin-bottom:12px;overflow:hidden;transition:border-color .3s ease,box-shadow .3s ease}
+.faq-item:hover{border-color:#6c63ff44}
+.faq-item.open{border-color:#6c63ff88;box-shadow:0 4px 20px rgba(108,99,255,.08)}
+.faq-question{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;cursor:pointer;font-size:16px;font-weight:600;color:#1a1a2e;background:#fff;transition:color .3s ease;user-select:none}
+.faq-question:hover{color:#6c63ff}
+.faq-question .faq-icon{width:28px;height:28px;border-radius:50%;background:#6c63ff11;display:flex;align-items:center;justify-content:center;font-size:14px;color:#6c63ff;transition:transform .4s cubic-bezier(.22,1,.36,1),background .3s ease;flex-shrink:0}
+.faq-item.open .faq-question .faq-icon{transform:rotate(45deg);background:#6c63ff;color:#fff}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.22,1,.36,1)}
+.faq-answer-inner{padding:0 24px 20px;font-size:14px;line-height:1.7;color:#666}
 
 /* ===== CTA ===== */
 .cta{position:relative;color:#fff;padding:90px 60px;text-align:center;overflow:hidden}
@@ -122,6 +178,99 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 /* ===== FOOTER ===== */
 .footer{padding:28px 60px;text-align:center;color:#999;font-size:13px;border-top:1px solid #f0f0f0}
 
+/* ===== MODALS ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,26,46,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;padding:24px}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{background:#fff;border-radius:24px;max-width:540px;width:100%;max-height:90vh;overflow-y:auto;transform:translateY(30px) scale(.95);transition:transform .4s cubic-bezier(.22,1,.36,1);position:relative}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:#f5f5f5;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:#888;transition:background .3s ease,color .3s ease,transform .3s ease;z-index:1}
+.modal-close:hover{background:#6c63ff15;color:#6c63ff;transform:rotate(90deg)}
+
+/* Demo Modal */
+.demo-modal .modal{max-width:680px}
+.demo-mockup{width:calc(100% - 48px);height:280px;background:linear-gradient(135deg,#f0eeff,#e8e5ff);border-radius:16px;margin:24px 24px 16px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.demo-mockup *{box-sizing:border-box}
+.mockup-app{width:92%;height:88%;background:#fff;border-radius:10px;box-shadow:0 4px 20px rgba(108,99,255,.12);display:grid;grid-template-columns:48px 1fr;grid-template-rows:36px 1fr;overflow:hidden;opacity:0;transform:scale(.92);transition:opacity .5s ease,transform .5s ease}
+.mockup-app.visible{opacity:1;transform:scale(1)}
+.mockup-sidebar{grid-row:1/3;background:#6c63ff;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.mockup-sidebar-dot{width:8px;height:8px;border-radius:50%;opacity:.5;transition:opacity .3s ease,transform .3s ease}
+.mockup-sidebar-dot.active{opacity:1;transform:scale(1.3)}
+.mockup-sidebar-dot:nth-child(1){background:#fff}
+.mockup-sidebar-dot:nth-child(2){background:rgba(255,255,255,.6)}
+.mockup-sidebar-dot:nth-child(3){background:rgba(255,255,255,.6)}
+.mockup-sidebar-dot:nth-child(4){background:rgba(255,255,255,.6)}
+.mockup-sidebar-dot:nth-child(5){background:rgba(255,255,255,.3);margin-top:auto}
+.mockup-header{background:#fafaff;border-bottom:1px solid #eee;display:flex;align-items:center;padding:0 14px;gap:8px}
+.mockup-header-bar{height:8px;border-radius:4px;background:#6c63ff20;transition:width .5s ease}
+.mockup-header-bar.short{width:60px}
+.mockup-header-bar.medium{width:100px}
+.mockup-header-spacer{flex:1}
+.mockup-header-avatar{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#a855f7);margin-left:8px}
+.mockup-body{padding:12px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.mockup-card{background:#f8f9ff;border-radius:8px;padding:10px 12px;border:1px solid #eee;opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .4s ease}
+.mockup-card.visible{opacity:1;transform:translateY(0)}
+.mockup-card-title{height:8px;border-radius:4px;background:#6c63ff30;width:50%;margin-bottom:6px}
+.mockup-card-bar{height:5px;border-radius:3px;background:#6c63ff15;margin-bottom:4px}
+.mockup-card-bar.w80{width:80%}
+.mockup-card-bar.w60{width:60%}
+.mockup-card-bar.w90{width:90%}
+.mockup-card-bar.accent{background:#34d39930}
+.mockup-progress{height:6px;border-radius:3px;background:#eee;margin-top:4px;overflow:hidden}
+.mockup-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6c63ff,#a855f7);width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
+.mockup-play-btn{position:absolute;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#a855f7);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:transform .3s ease,box-shadow .3s ease,opacity .4s ease;box-shadow:0 8px 24px rgba(108,99,255,.4)}
+.mockup-play-btn:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(108,99,255,.5)}
+.mockup-play-btn::after{content:'';width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;margin-left:4px}
+.mockup-play-btn.hidden{opacity:0;pointer-events:none;transform:scale(.8)}
+.demo-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 24px 12px}
+.demo-feature{display:flex;align-items:center;gap:8px;font-size:13px;color:#555}
+.demo-feature .check{color:#6c63ff;font-weight:700;font-size:16px}
+.demo-cta-wrap{padding:8px 24px 28px;text-align:center}
+.demo-cta-wrap .btn-primary{width:100%;transform:none}
+
+/* Signup Modal */
+.signup-modal .modal{padding:40px 36px 36px}
+.signup-modal h3{font-size:24px;font-weight:800;color:#1a1a2e;margin-bottom:6px}
+.signup-modal .signup-subtitle{font-size:14px;color:#888;margin-bottom:28px}
+.form-group{margin-bottom:18px;position:relative}
+.form-group label{display:block;font-size:13px;font-weight:600;color:#555;margin-bottom:6px}
+.form-group input{width:100%;padding:12px 16px;border:2px solid #eee;border-radius:12px;font-size:15px;outline:none;transition:border-color .3s ease,box-shadow .3s ease;font-family:inherit}
+.form-group input:focus{border-color:#6c63ff;box-shadow:0 0 0 4px rgba(108,99,255,.1)}
+.form-group input.valid{border-color:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.1)}
+.form-group input.error{border-color:#ef4444;box-shadow:0 0 0 4px rgba(239,68,68,.1)}
+.form-group .error-msg{font-size:12px;color:#ef4444;margin-top:4px;display:none;transition:opacity .3s ease}
+.form-group input.error + .error-msg{display:block}
+.form-group .valid-icon{position:absolute;right:14px;top:38px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:#34d399;font-size:16px;font-weight:700;opacity:0;transform:scale(0);transition:opacity .3s ease,transform .3s ease}
+.form-group input.valid ~ .valid-icon{opacity:1;transform:scale(1)}
+.signup-btn{width:100%;padding:15px;border:none;border-radius:30px;background:linear-gradient(135deg,#6c63ff,#7c73ff);color:#fff;font-size:16px;font-weight:600;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease,opacity .3s ease;position:relative;overflow:hidden}
+.signup-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#7c73ff,#a855f7);opacity:0;transition:opacity .3s ease}
+.signup-btn:hover::before{opacity:1}
+.signup-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,99,255,.35)}
+.signup-btn span{position:relative;z-index:1}
+.signup-btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important;box-shadow:none!important}
+
+/* Success Screen */
+.signup-success{display:none;text-align:center;padding:20px 0 8px}
+.signup-success.show{display:block;animation:successFadeIn .5s ease forwards}
+@keyframes successFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.signup-success .success-icon{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#34d399,#6ee7b7);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;animation:successPop .5s cubic-bezier(.22,1,.36,1) .2s both}
+@keyframes successPop{from{transform:scale(0)}to{transform:scale(1)}}
+.signup-success h3{font-size:22px;font-weight:800;color:#1a1a2e;margin-bottom:8px}
+.signup-success p{font-size:14px;color:#888;margin-bottom:24px}
+
+/* Confetti */
+.confetti-container{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.confetti-piece{position:absolute;border-radius:2px;animation:confettiFall var(--duration,1.5s) ease forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(400px) rotate(720deg) scale(.3)}}
+@keyframes confettiSway{0%{transform:translateX(0)}25%{transform:translateX(20px)}75%{transform:translateX(-20px)}100%{transform:translateX(0)}}
+
+/* ===== TOAST ===== */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{background:#fff;border-radius:14px;padding:16px 22px;box-shadow:0 8px 32px rgba(0,0,0,.12);display:flex;align-items:center;gap:12px;font-size:14px;color:#1a1a2e;transform:translateX(120%);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s ease;pointer-events:auto;border-left:4px solid #6c63ff;max-width:340px}
+.toast.show{transform:translateX(0)}
+.toast.hide{opacity:0;transform:translateX(120%)}
+.toast-icon{font-size:20px;flex-shrink:0}
+.toast-text{line-height:1.4}
+
 /* ===== SCROLL REVEAL ===== */
 .sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
 .sr.revealed{opacity:1;transform:translateY(0)}
@@ -130,7 +279,9 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 @media(max-width:900px){
   .nav{padding:14px 24px}
   .nav.scrolled{padding:10px 24px}
-  .nav-links{gap:16px}
+  .nav-links{display:none!important}
+  .hamburger{display:flex}
+  .mobile-nav{display:block}
   .hero{padding:120px 24px 50px}
   .hero h1{font-size:36px}
   .stats{gap:28px;padding:40px 24px;flex-wrap:wrap}
@@ -140,8 +291,17 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
   .pricing{padding:60px 24px}
   .plans{flex-direction:column;align-items:center}
   .plan{width:100%;max-width:360px}
+  .faq{padding:60px 24px}
   .cta{padding:60px 24px}
   .footer{padding:20px 24px}
+  .demo-mockup{height:200px}
+  .demo-features{padding:0 20px 12px;grid-template-columns:1fr}
+  .demo-cta-wrap{padding:8px 20px 24px}
+  .signup-modal .modal{padding:32px 24px 28px}
+  .modal{margin:16px}
+  .hero-buttons{flex-direction:column;align-items:center}
+  .toast-container{bottom:16px;right:16px;left:16px}
+  .toast{max-width:100%}
 }
 
 /* ===== UTILITY ===== */
@@ -160,17 +320,32 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
   <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
 </div>
 
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toast-container"></div>
+
 <!-- ===== NAV ===== -->
 <nav class="nav" id="nav">
-  <div class="logo">FlowSync</div>
+  <div class="logo" onclick="scrollToSection('hero')">FlowSync</div>
   <div class="nav-links">
     <a href="#features">Возможности</a>
     <a href="#pricing">Цены</a>
-    <a href="#">Документация</a>
-    <a href="#">Блог</a>
-    <button class="btn-try"><span>Начать бесплатно</span></button>
+    <a href="#faq">FAQ</a>
+    <a href="#" onclick="event.preventDefault();openDemoModal()">Смотреть демо</a>
+    <button class="btn-try" onclick="openSignupModal()"><span>Начать бесплатно</span></button>
   </div>
+  <button class="hamburger" id="hamburger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- ===== MOBILE NAV ===== -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="#features" onclick="closeMobileNav()">Возможности</a>
+  <a href="#pricing" onclick="closeMobileNav()">Цены</a>
+  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+  <a href="#" onclick="event.preventDefault();closeMobileNav();openDemoModal()">Смотреть демо</a>
+  <button class="btn-try" onclick="closeMobileNav();openSignupModal()"><span>Начать бесплатно</span></button>
+</div>
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="hero">
@@ -178,8 +353,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
   <h1 id="hero-title"></h1>
   <p>Автоматизируйте рутину, отслеживайте прогресс и сотрудничайте с командой в реальном времени</p>
   <div class="hero-buttons">
-    <button class="btn-primary"><span>Попробовать бесплатно</span></button>
-    <button class="btn-outline">Смотреть демо</button>
+    <button class="btn-primary" onclick="openSignupModal()"><span>Попробовать бесплатно</span></button>
+    <button class="btn-outline" onclick="openDemoModal()">Смотреть демо</button>
   </div>
 </section>
 
@@ -206,36 +381,66 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 <!-- ===== FEATURES ===== -->
 <section class="features" id="features">
   <h2 class="sr">Возможности</h2>
-  <div class="feature-grid">
-    <div class="feature" data-delay="0">
-      <div class="icon blue">📊</div>
-      <h3>Аналитика</h3>
-      <p>Детальные отчёты и дашборды для принятия решений на основе данных</p>
+  <div class="feature-tabs">
+    <button class="feature-tab active" data-tab="analytics" onclick="switchFeatureTab('analytics')">📊 Аналитика</button>
+    <button class="feature-tab" data-tab="automation" onclick="switchFeatureTab('automation')">⚡ Автоматизация</button>
+    <button class="feature-tab" data-tab="collaboration" onclick="switchFeatureTab('collaboration')">👥 Сотрудничество</button>
+  </div>
+  <div class="feature-tab-content active" id="tab-analytics">
+    <div class="feature-grid">
+      <div class="feature" data-delay="0">
+        <div class="icon blue">📊</div>
+        <h3>Аналитика</h3>
+        <p>Детальные отчёты и дашборды для принятия решений на основе данных</p>
+      </div>
+      <div class="feature" data-delay="80">
+        <div class="icon purple">🔗</div>
+        <h3>Интеграции</h3>
+        <p>Подключайте Slack, GitHub, Jira и более 100 сервисов для единой аналитики</p>
+      </div>
+      <div class="feature" data-delay="160">
+        <div class="icon blue">🔒</div>
+        <h3>Безопасность</h3>
+        <p>Шифрование данных, 2FA и соответствие стандартам GDPR для защиты информации</p>
+      </div>
     </div>
-    <div class="feature" data-delay="80">
-      <div class="icon green">⚡</div>
-      <h3>Автоматизация</h3>
-      <p>Настройте автоматические правила и триггеры для рутинных задач</p>
+  </div>
+  <div class="feature-tab-content" id="tab-automation">
+    <div class="feature-grid">
+      <div class="feature" data-delay="0">
+        <div class="icon green">⚡</div>
+        <h3>Автоматизация</h3>
+        <p>Настройте автоматические правила и триггеры для рутинных задач</p>
+      </div>
+      <div class="feature" data-delay="80">
+        <div class="icon purple">🤖</div>
+        <h3>ИИ-помощник</h3>
+        <p>Интеллектуальные подсказки и автозаполнение задач на основе машинного обучения</p>
+      </div>
+      <div class="feature" data-delay="160">
+        <div class="icon green">⏱</div>
+        <h3>Отслеживание времени</h3>
+        <p>Автоматический учёт времени, затраченного на задачи, с детальными отчётами</p>
+      </div>
     </div>
-    <div class="feature" data-delay="160">
-      <div class="icon orange">👥</div>
-      <h3>Сотрудничество</h3>
-      <p>Работайте в реальном времени с командой, комментариями и уведомлениями</p>
-    </div>
-    <div class="feature" data-delay="240">
-      <div class="icon purple">🔗</div>
-      <h3>Интеграции</h3>
-      <p>Подключайте Slack, GitHub, Jira и более 100 сервисов</p>
-    </div>
-    <div class="feature" data-delay="320">
-      <div class="icon blue">🔒</div>
-      <h3>Безопасность</h3>
-      <p>Шифрование данных, 2FA и соответствие стандартам GDPR</p>
-    </div>
-    <div class="feature" data-delay="400">
-      <div class="icon green">📱</div>
-      <h3>Мобильное приложение</h3>
-      <p>Управляйте проектами из любой точки мира с любого устройства</p>
+  </div>
+  <div class="feature-tab-content" id="tab-collaboration">
+    <div class="feature-grid">
+      <div class="feature" data-delay="0">
+        <div class="icon orange">👥</div>
+        <h3>Сотрудничество</h3>
+        <p>Работайте в реальном времени с командой, комментариями и уведомлениями</p>
+      </div>
+      <div class="feature" data-delay="80">
+        <div class="icon green">📱</div>
+        <h3>Мобильное приложение</h3>
+        <p>Управляйте проектами из любой точки мира с любого устройства</p>
+      </div>
+      <div class="feature" data-delay="160">
+        <div class="icon orange">💬</div>
+        <h3>Чат и комментарии</h3>
+        <p>Обсуждайте задачи прямо в контексте проекта с мгновенными уведомлениями</p>
+      </div>
     </div>
   </div>
 </section>
@@ -243,23 +448,36 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
 <!-- ===== PRICING ===== -->
 <section class="pricing" id="pricing">
   <h2 class="sr">Тарифы</h2>
+  <div class="pricing-toggle-wrap">
+    <span id="label-monthly" class="active-label">Ежемесячно</span>
+    <div class="pricing-toggle" id="pricing-toggle" onclick="togglePricing()" role="switch" aria-checked="false" tabindex="0">
+      <div class="toggle-knob"></div>
+    </div>
+    <span id="label-yearly">Ежегодно</span>
+    <span class="savings-badge" id="savings-badge">Экономия 15 552 ₽</span>
+  </div>
   <div class="plans">
     <div class="plan" data-delay="0">
       <h3>Старт</h3>
-      <div class="price">0 ₽</div>
-      <div class="period">навсегда</div>
+      <div class="price-wrap">
+        <div class="price" data-monthly="0" data-yearly="0">0 ₽</div>
+      </div>
+      <div class="period" id="period-start">навсегда бесплатно</div>
       <ul>
         <li>До 5 проектов</li>
         <li>3 участника</li>
         <li>1 ГБ хранилище</li>
         <li>Базовая аналитика</li>
       </ul>
-      <button class="btn-outline" style="width:100%">Начать</button>
+      <button class="btn-outline" style="width:100%" onclick="openSignupModal()">Начать</button>
     </div>
     <div class="plan popular" data-delay="120">
       <h3>Бизнес</h3>
-      <div class="price">1 490 ₽</div>
-      <div class="period">в месяц</div>
+      <div class="price-wrap">
+        <div class="price" data-monthly="1490" data-yearly="1192">1 490 ₽</div>
+        <span class="savings-badge" id="savings-business">Экономия 3 576 ₽</span>
+      </div>
+      <div class="period" id="period-business">в месяц</div>
       <ul>
         <li>Безлимит проектов</li>
         <li>20 участников</li>
@@ -267,12 +485,15 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
         <li>Продвинутая аналитика</li>
         <li>Автоматизация</li>
       </ul>
-      <button class="btn-primary" style="width:100%"><span>Попробовать</span></button>
+      <button class="btn-primary" style="width:100%" onclick="openSignupModal()"><span>Попробовать</span></button>
     </div>
     <div class="plan" data-delay="240">
       <h3>Корпорация</h3>
-      <div class="price">4 990 ₽</div>
-      <div class="period">в месяц</div>
+      <div class="price-wrap">
+        <div class="price" data-monthly="4990" data-yearly="3992">4 990 ₽</div>
+        <span class="savings-badge" id="savings-corp">Экономия 11 976 ₽</span>
+      </div>
+      <div class="period" id="period-corp">в месяц</div>
       <ul>
         <li>Всё из Бизнес</li>
         <li>Безлимит участников</li>
@@ -280,21 +501,167 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#fff;c
         <li>SSO и аудит</li>
         <li>Приоритетная поддержка</li>
       </ul>
-      <button class="btn-outline" style="width:100%">Связаться</button>
+      <button class="btn-outline" style="width:100%" onclick="openSignupModal()">Связаться</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq" id="faq">
+  <h2 class="sr">Часто задаваемые вопросы</h2>
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Как начать работать с FlowSync?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Зарегистрируйтесь бесплатно — это занимает менее минуты. После регистрации вы попадёте на дашборд, где сможете создать первый проект, пригласить участников и настроить рабочие процессы. У нас также есть интерактивный тур для новых пользователей.</div>
+    </div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Можно ли отменить подписку в любой момент?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Да, вы можете отменить подписку в любой момент из настроек аккаунта. После отмены вы сохраните доступ до конца оплаченного периода. Данные вашего аккаунта хранятся 30 дней после окончания подписки — вы всегда сможете вернуться.</div>
+    </div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Есть ли бесплатный тариф?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Да! Тариф «Старт» полностью бесплатный и не имеет ограничений по времени. В него входят до 5 проектов, 3 участника и 1 ГБ хранилища. Это отличный способ познакомиться с FlowSync перед переходом на платный тариф.</div>
+    </div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Какие способы оплаты поддерживаются?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Мы принимаем банковские карты Visa, Mastercard и МИР, а также платежи через СБП и ЮKassa. Для корпоративных клиентов доступна оплата по счёту с НДС. Все платежи защищены шифрованием по стандарту PCI DSS.</div>
+    </div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-question" onclick="toggleFaq(this)">
+      <span>Могу ли я перенести данные из другого сервиса?</span>
+      <div class="faq-icon">+</div>
+    </div>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">Конечно! FlowSync поддерживает импорт данных из Trello, Asana, Jira, Basecamp и Notion. Процесс миграции полностью автоматизирован — ваши проекты, задачи и файлы будут перенесены за несколько минут с сохранением всей структуры.</div>
     </div>
   </div>
 </section>
 
 <!-- ===== CTA ===== -->
-<section class="cta">
+<section class="cta" id="cta">
   <div class="cta-bg"></div>
   <h2 class="sr">Готовы начать?</h2>
   <p class="sr">Присоединяйтесь к 10 000+ командам, которые уже используют FlowSync</p>
-  <button class="btn-white sr"><span>Начать бесплатно</span></button>
+  <button class="btn-white sr" onclick="openSignupModal()"><span>Начать бесплатно</span></button>
 </section>
 
 <!-- ===== FOOTER ===== -->
 <footer class="footer">© 2026 FlowSync. React + Next.js + Tailwind CSS</footer>
+
+<!-- ===== DEMO MODAL ===== -->
+<div class="modal-overlay demo-modal" id="demo-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeDemoModal()">✕</button>
+    <div class="demo-mockup" id="demo-mockup">
+      <div class="mockup-play-btn" id="mockup-play-btn" onclick="startDemoAnimation()"></div>
+      <div class="mockup-app" id="mockup-app">
+        <div class="mockup-sidebar">
+          <div class="mockup-sidebar-dot active"></div>
+          <div class="mockup-sidebar-dot"></div>
+          <div class="mockup-sidebar-dot"></div>
+          <div class="mockup-sidebar-dot"></div>
+          <div class="mockup-sidebar-dot"></div>
+        </div>
+        <div class="mockup-header">
+          <div class="mockup-header-bar short"></div>
+          <div class="mockup-header-bar medium"></div>
+          <div class="mockup-header-spacer"></div>
+          <div class="mockup-header-avatar"></div>
+        </div>
+        <div class="mockup-body">
+          <div class="mockup-card" id="mcard-1">
+            <div class="mockup-card-title"></div>
+            <div class="mockup-card-bar w80"></div>
+            <div class="mockup-card-bar w60 accent"></div>
+            <div class="mockup-progress"><div class="mockup-progress-fill" id="mprogress-1"></div></div>
+          </div>
+          <div class="mockup-card" id="mcard-2">
+            <div class="mockup-card-title"></div>
+            <div class="mockup-card-bar w90"></div>
+            <div class="mockup-card-bar w60"></div>
+            <div class="mockup-progress"><div class="mockup-progress-fill" id="mprogress-2"></div></div>
+          </div>
+          <div class="mockup-card" id="mcard-3">
+            <div class="mockup-card-title"></div>
+            <div class="mockup-card-bar w60 accent"></div>
+            <div class="mockup-progress"><div class="mockup-progress-fill" id="mprogress-3"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 24px 8px">
+      <h3 style="font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:4px">FlowSync в действии</h3>
+      <p style="font-size:13px;color:#888;margin-bottom:16px">Посмотрите, как легко управлять проектами</p>
+    </div>
+    <div class="demo-features">
+      <div class="demo-feature"><span class="check">✓</span> Канбан-доски и диаграммы Ганта</div>
+      <div class="demo-feature"><span class="check">✓</span> Автоматические отчёты</div>
+      <div class="demo-feature"><span class="check">✓</span> Реальное время сотрудничества</div>
+      <div class="demo-feature"><span class="check">✓</span> 100+ интеграций</div>
+    </div>
+    <div class="demo-cta-wrap">
+      <button class="btn-primary" onclick="closeDemoModal();setTimeout(openSignupModal,300)"><span>Начать бесплатно</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SIGNUP MODAL ===== -->
+<div class="modal-overlay signup-modal" id="signup-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSignupModal()">✕</button>
+    <div class="confetti-container" id="confetti-container"></div>
+    <div id="signup-form-view">
+      <h3>Начните бесплатно</h3>
+      <p class="signup-subtitle">Создайте аккаунт — это займёт меньше минуты</p>
+      <form id="signup-form" onsubmit="handleSignup(event)" novalidate>
+        <div class="form-group">
+          <label for="signup-name">Имя</label>
+          <input type="text" id="signup-name" placeholder="Ваше имя" autocomplete="name">
+          <div class="valid-icon">✓</div>
+          <div class="error-msg">Введите ваше имя</div>
+        </div>
+        <div class="form-group">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" placeholder="you@company.com" autocomplete="email" required>
+          <div class="valid-icon">✓</div>
+          <div class="error-msg">Введите корректный email</div>
+        </div>
+        <div class="form-group">
+          <label for="signup-company">Компания</label>
+          <input type="text" id="signup-company" placeholder="Название компании" autocomplete="organization">
+          <div class="valid-icon">✓</div>
+          <div class="error-msg">Введите название компании</div>
+        </div>
+        <button type="submit" class="signup-btn" id="signup-submit-btn"><span>Начать бесплатно</span></button>
+      </form>
+    </div>
+    <div class="signup-success" id="signup-success">
+      <div class="success-icon">✓</div>
+      <h3>Добро пожаловать!</h3>
+      <p>Проверьте почту для подтверждения аккаунта</p>
+      <button class="btn-primary" style="width:100%;transform:none" onclick="closeSignupModal()"><span>Отлично!</span></button>
+    </div>
+  </div>
+</div>
 
 <script>
 /* ===== LOADER ===== */
@@ -314,13 +681,11 @@ function animateHero() {
   let html = '';
   let wordIndex = 0;
 
-  // Line 1
   line1.split(' ').forEach(word => {
     html += `<span class="word" style="animation-delay:${0.3 + wordIndex * 0.1}s">${word}</span> `;
     wordIndex++;
   });
 
-  // Line 2 (gradient)
   html += '<br>';
   line2.split(' ').forEach(word => {
     html += `<span class="word gradient-text" style="animation-delay:${0.3 + wordIndex * 0.1}s">${word}</span> `;
@@ -332,29 +697,489 @@ function animateHero() {
 
 /* ===== NAV SCROLL EFFECT ===== */
 const nav = document.getElementById('nav');
-let lastScroll = 0;
 window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  if (y > 40) {
-    nav.classList.add('scrolled');
-  } else {
-    nav.classList.remove('scrolled');
-  }
-  lastScroll = y;
+  nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
 /* ===== SMOOTH SCROLL ===== */
+function scrollToSection(id) {
+  const target = document.getElementById(id);
+  if (target) {
+    const top = target.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href === '#') return;
     e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
+    const target = document.querySelector(href);
     if (target) {
-      const offset = 80;
-      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      closeMobileNav();
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top, behavior: 'smooth' });
     }
   });
 });
+
+/* ===== HAMBURGER MENU ===== */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobile-nav');
+
+hamburger.addEventListener('click', () => {
+  const isOpen = hamburger.classList.toggle('active');
+  mobileNav.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+function closeMobileNav() {
+  hamburger.classList.remove('active');
+  mobileNav.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ===== FEATURE TABS ===== */
+let currentTab = 'analytics';
+let tabSwitching = false;
+
+function switchFeatureTab(tabName) {
+  if (tabName === currentTab || tabSwitching) return;
+  tabSwitching = true;
+
+  // Update tab buttons
+  document.querySelectorAll('.feature-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabName);
+  });
+
+  const oldContent = document.getElementById('tab-' + currentTab);
+  const newContent = document.getElementById('tab-' + tabName);
+
+  // Exit animation on old tab
+  if (oldContent) {
+    oldContent.classList.remove('active');
+    oldContent.classList.add('exiting');
+  }
+
+  setTimeout(() => {
+    if (oldContent) {
+      oldContent.classList.remove('exiting');
+      oldContent.style.display = '';
+    }
+
+    // Enter animation on new tab
+    if (newContent) {
+      newContent.classList.add('active');
+      newContent.querySelectorAll('.feature').forEach(el => {
+        el.classList.remove('revealed');
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        featureObserver.observe(el);
+      });
+    }
+
+    currentTab = tabName;
+    tabSwitching = false;
+  }, 250);
+}
+
+/* ===== PRICING TOGGLE ===== */
+let isYearly = false;
+
+function togglePricing() {
+  isYearly = !isYearly;
+  const toggle = document.getElementById('pricing-toggle');
+  const labelMonthly = document.getElementById('label-monthly');
+  const labelYearly = document.getElementById('label-yearly');
+  const savingsBadge = document.getElementById('savings-badge');
+  const savingsBusiness = document.getElementById('savings-business');
+  const savingsCorp = document.getElementById('savings-corp');
+
+  toggle.classList.toggle('active', isYearly);
+  toggle.setAttribute('aria-checked', isYearly);
+  labelMonthly.classList.toggle('active-label', !isYearly);
+  labelYearly.classList.toggle('active-label', isYearly);
+  savingsBadge.classList.toggle('visible', isYearly);
+
+  // Animate price changes with number counting
+  document.querySelectorAll('.plan .price').forEach(priceEl => {
+    const monthly = parseInt(priceEl.dataset.monthly);
+    const yearly = parseInt(priceEl.dataset.yearly);
+    const from = isYearly ? monthly : yearly;
+    const to = isYearly ? yearly : monthly;
+
+    priceEl.classList.add('changing');
+    setTimeout(() => {
+      if (from === to) {
+        priceEl.textContent = formatPrice(to);
+      } else {
+        animatePrice(priceEl, from, to);
+      }
+      priceEl.classList.remove('changing');
+    }, 250);
+  });
+
+  // Update periods and savings badges
+  const periodBusiness = document.getElementById('period-business');
+  const periodCorp = document.getElementById('period-corp');
+
+  if (isYearly) {
+    periodBusiness.textContent = 'в месяц (при оплате за год)';
+    periodCorp.textContent = 'в месяц (при оплате за год)';
+    savingsBusiness.classList.add('visible');
+    savingsCorp.classList.add('visible');
+  } else {
+    periodBusiness.textContent = 'в месяц';
+    periodCorp.textContent = 'в месяц';
+    savingsBusiness.classList.remove('visible');
+    savingsCorp.classList.remove('visible');
+  }
+}
+
+// Keyboard support for toggle
+document.getElementById('pricing-toggle').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    togglePricing();
+  }
+});
+
+function animatePrice(el, from, to) {
+  const duration = 500;
+  const start = performance.now();
+
+  function update(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(from + (to - from) * eased);
+    el.textContent = formatPrice(current);
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = formatPrice(to);
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+function formatPrice(value) {
+  if (value === 0) return '0 ₽';
+  return value.toLocaleString('ru-RU') + ' ₽';
+}
+
+/* ===== DEMO MODAL ===== */
+let demoAnimTimers = [];
+
+function openDemoModal() {
+  const modal = document.getElementById('demo-modal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Reset mockup state
+  resetDemoMockup();
+}
+
+function resetDemoMockup() {
+  // Clear any running timers
+  demoAnimTimers.forEach(t => clearTimeout(t));
+  demoAnimTimers = [];
+
+  const playBtn = document.getElementById('mockup-play-btn');
+  const app = document.getElementById('mockup-app');
+
+  playBtn.classList.remove('hidden');
+  app.classList.remove('visible');
+
+  // Reset cards
+  ['mcard-1','mcard-2','mcard-3'].forEach(id => {
+    const card = document.getElementById(id);
+    if (card) card.classList.remove('visible');
+  });
+
+  // Reset progress bars
+  ['mprogress-1','mprogress-2','mprogress-3'].forEach(id => {
+    const bar = document.getElementById(id);
+    if (bar) bar.style.width = '0';
+  });
+
+  // Reset sidebar
+  document.querySelectorAll('.mockup-sidebar-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === 0);
+  });
+}
+
+function startDemoAnimation() {
+  const playBtn = document.getElementById('mockup-play-btn');
+  const app = document.getElementById('mockup-app');
+
+  playBtn.classList.add('hidden');
+
+  // Show app shell
+  demoAnimTimers.push(setTimeout(() => {
+    app.classList.add('visible');
+  }, 200));
+
+  // Show cards sequentially
+  demoAnimTimers.push(setTimeout(() => {
+    const c1 = document.getElementById('mcard-1');
+    if (c1) c1.classList.add('visible');
+  }, 600));
+
+  demoAnimTimers.push(setTimeout(() => {
+    const c2 = document.getElementById('mcard-2');
+    if (c2) c2.classList.add('visible');
+  }, 800));
+
+  demoAnimTimers.push(setTimeout(() => {
+    const c3 = document.getElementById('mcard-3');
+    if (c3) c3.classList.add('visible');
+  }, 1000));
+
+  // Animate progress bars
+  demoAnimTimers.push(setTimeout(() => {
+    const p1 = document.getElementById('mprogress-1');
+    if (p1) p1.style.width = '72%';
+  }, 1200));
+
+  demoAnimTimers.push(setTimeout(() => {
+    const p2 = document.getElementById('mprogress-2');
+    if (p2) p2.style.width = '45%';
+  }, 1400));
+
+  demoAnimTimers.push(setTimeout(() => {
+    const p3 = document.getElementById('mprogress-3');
+    if (p3) p3.style.width = '88%';
+  }, 1600));
+
+  // Cycle sidebar active dot
+  let dotIndex = 0;
+  const dots = document.querySelectorAll('.mockup-sidebar-dot');
+  demoAnimTimers.push(setTimeout(() => {
+    const interval = setInterval(() => {
+      dots.forEach(d => d.classList.remove('active'));
+      dotIndex = (dotIndex + 1) % dots.length;
+      dots[dotIndex].classList.add('active');
+    }, 1200);
+    demoAnimTimers.push(interval);
+  }, 2000));
+}
+
+function closeDemoModal() {
+  const modal = document.getElementById('demo-modal');
+  modal.classList.remove('open');
+  demoAnimTimers.forEach(t => { clearTimeout(t); clearInterval(t); });
+  demoAnimTimers = [];
+  if (!document.getElementById('signup-modal').classList.contains('open')) {
+    document.body.style.overflow = '';
+  }
+}
+
+/* ===== SIGNUP MODAL ===== */
+function openSignupModal() {
+  const modal = document.getElementById('signup-modal');
+  // Reset to form view
+  document.getElementById('signup-form-view').style.display = '';
+  const success = document.getElementById('signup-success');
+  success.classList.remove('show');
+  success.style.display = '';
+  document.getElementById('signup-form').reset();
+  document.querySelectorAll('#signup-form input').forEach(inp => {
+    inp.classList.remove('error', 'valid');
+  });
+  document.getElementById('confetti-container').innerHTML = '';
+  document.getElementById('signup-submit-btn').disabled = false;
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('signup-name').focus(), 400);
+}
+
+function closeSignupModal() {
+  document.getElementById('signup-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    document.getElementById('confetti-container').innerHTML = '';
+  }, 400);
+}
+
+// Real-time validation on inputs
+document.querySelectorAll('#signup-form input').forEach(inp => {
+  inp.addEventListener('input', () => {
+    inp.classList.remove('error');
+    const val = inp.value.trim();
+
+    if (inp.id === 'signup-name') {
+      inp.classList.toggle('valid', val.length >= 2);
+    } else if (inp.id === 'signup-email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      inp.classList.toggle('valid', emailRegex.test(val));
+    } else if (inp.id === 'signup-company') {
+      inp.classList.toggle('valid', val.length >= 2);
+    }
+  });
+
+  inp.addEventListener('focus', () => inp.classList.remove('error'));
+});
+
+function handleSignup(e) {
+  e.preventDefault();
+  let valid = true;
+
+  const name = document.getElementById('signup-name');
+  const email = document.getElementById('signup-email');
+  const company = document.getElementById('signup-company');
+
+  // Reset
+  [name, email, company].forEach(inp => inp.classList.remove('error', 'valid'));
+
+  // Validate name
+  if (!name.value.trim() || name.value.trim().length < 2) {
+    name.classList.add('error');
+    valid = false;
+  } else {
+    name.classList.add('valid');
+  }
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
+    email.classList.add('error');
+    valid = false;
+  } else {
+    email.classList.add('valid');
+  }
+
+  // Validate company
+  if (!company.value.trim() || company.value.trim().length < 2) {
+    company.classList.add('error');
+    valid = false;
+  } else {
+    company.classList.add('valid');
+  }
+
+  if (!valid) {
+    // Shake the form briefly
+    const form = document.getElementById('signup-form');
+    form.style.animation = 'none';
+    form.offsetHeight; // trigger reflow
+    form.style.animation = 'shake 0.4s ease';
+    return;
+  }
+
+  // Disable button and show loading
+  const btn = document.getElementById('signup-submit-btn');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Создание аккаунта...';
+
+  // Simulate API call
+  setTimeout(() => {
+    document.getElementById('signup-form-view').style.display = 'none';
+    const success = document.getElementById('signup-success');
+    success.classList.add('show');
+    launchConfetti();
+    showToast('🎉', 'Аккаунт создан! Добро пожаловать в FlowSync.');
+  }, 800);
+}
+
+function launchConfetti() {
+  const container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  const colors = ['#6c63ff', '#a855f7', '#34d399', '#fb923c', '#f472b6', '#fbbf24', '#60a5fa', '#ef4444', '#8b5cf6'];
+  const count = 80;
+
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = (10 + Math.random() * 80) + '%';
+    piece.style.top = '-10px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    const size = 4 + Math.random() * 10;
+    piece.style.width = size + 'px';
+    piece.style.height = size * (0.4 + Math.random() * 0.6) + 'px';
+    const duration = 1.2 + Math.random() * 1.8;
+    piece.style.setProperty('--duration', duration + 's');
+    piece.style.animationDelay = (Math.random() * 0.6) + 's';
+    if (Math.random() > 0.5) piece.style.borderRadius = '50%';
+    // Add sway
+    piece.style.animationName = 'confettiFall';
+    const swayAmt = -30 + Math.random() * 60;
+    piece.style.setProperty('--sway', swayAmt + 'px');
+    container.appendChild(piece);
+  }
+
+  setTimeout(() => { container.innerHTML = ''; }, 4000);
+}
+
+// Close modals on overlay click
+document.getElementById('demo-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeDemoModal();
+});
+document.getElementById('signup-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeSignupModal();
+});
+
+// Close modals on Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeDemoModal();
+    closeSignupModal();
+    closeMobileNav();
+  }
+});
+
+/* ===== TOAST SYSTEM ===== */
+function showToast(icon, text, duration = 4000) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-text">${text}</span>`;
+  container.appendChild(toast);
+
+  // Trigger animation
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      toast.classList.add('show');
+    });
+  });
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 400);
+  }, duration);
+}
+
+/* ===== FAQ ACCORDION ===== */
+function toggleFaq(questionEl) {
+  const item = questionEl.parentElement;
+  const answer = item.querySelector('.faq-answer');
+  const inner = answer.querySelector('.faq-answer-inner');
+  const isOpen = item.classList.contains('open');
+
+  // Close all other items
+  document.querySelectorAll('.faq-item.open').forEach(openItem => {
+    if (openItem !== item) {
+      openItem.classList.remove('open');
+      openItem.querySelector('.faq-answer').style.maxHeight = '0';
+    }
+  });
+
+  if (isOpen) {
+    item.classList.remove('open');
+    answer.style.maxHeight = '0';
+  } else {
+    item.classList.add('open');
+    answer.style.maxHeight = (inner.scrollHeight + 24) + 'px';
+  }
+}
+
+/* ===== SHAKE ANIMATION ===== */
+const shakeStyle = document.createElement('style');
+shakeStyle.textContent = `@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}`;
+document.head.appendChild(shakeStyle);
 
 /* ===== INTERSECTION OBSERVER — SCROLL REVEAL ===== */
 const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
@@ -378,6 +1203,8 @@ const featureObserver = new IntersectionObserver((entries) => {
       const delay = parseInt(entry.target.dataset.delay) || 0;
       setTimeout(() => {
         entry.target.classList.add('revealed');
+        entry.target.style.opacity = '';
+        entry.target.style.transform = '';
       }, delay);
       featureObserver.unobserve(entry.target);
     }
@@ -391,9 +1218,7 @@ const planObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const delay = parseInt(entry.target.dataset.delay) || 0;
-      setTimeout(() => {
-        entry.target.classList.add('revealed');
-      }, delay);
+      setTimeout(() => entry.target.classList.add('revealed'), delay);
       planObserver.unobserve(entry.target);
     }
   });
@@ -417,6 +1242,13 @@ const statObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.stat').forEach(el => statObserver.observe(el));
 
+// FAQ items
+document.querySelectorAll('.faq-item').forEach((el, i) => {
+  el.classList.add('sr');
+  el.style.transitionDelay = (i * 80) + 'ms';
+  srObserver.observe(el);
+});
+
 /* ===== COUNTER ANIMATION ===== */
 function animateCounter(el) {
   const target = parseFloat(el.dataset.target);
@@ -428,7 +1260,6 @@ function animateCounter(el) {
   function update(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
     const eased = 1 - Math.pow(1 - progress, 3);
     const current = target * eased;
 
@@ -441,11 +1272,7 @@ function animateCounter(el) {
     if (progress < 1) {
       requestAnimationFrame(update);
     } else {
-      if (decimals > 0) {
-        el.textContent = target.toFixed(decimals) + suffix;
-      } else {
-        el.textContent = target + suffix;
-      }
+      el.textContent = decimals > 0 ? target.toFixed(decimals) + suffix : target + suffix;
     }
   }
 

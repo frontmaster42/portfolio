@@ -17,7 +17,9 @@
   body {
     font-family: Georgia, "Times New Roman", serif;
     color: var(--text); background: var(--bg); line-height: 1.6;
+    overflow-x: hidden;
   }
+  body.no-scroll { overflow: hidden; }
   .container { max-width: 1100px; margin: 0 auto; padding: 0 30px; }
 
   /* HEADER */
@@ -27,6 +29,7 @@
     background: rgba(250,248,245,0.95);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line);
+    transition: padding 0.3s;
   }
   .header__inner { display: flex; justify-content: space-between; align-items: center; }
   .logo {
@@ -41,8 +44,55 @@
     font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
     font-family: -apple-system, sans-serif; font-weight: 400;
     transition: color 0.3s;
+    position: relative;
+  }
+  .nav a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
   }
   .nav a:hover { color: var(--accent); }
+  .nav a:hover::after { width: 100%; }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none; border: none; cursor: pointer;
+    padding: 8px; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MOBILE NAV */
+  .mobile-nav {
+    display: none;
+    position: fixed; inset: 0; z-index: 105;
+    background: rgba(250,248,245,0.98);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 30px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .mobile-nav.open { opacity: 1; pointer-events: all; }
+  .mobile-nav a {
+    color: var(--text); text-decoration: none;
+    font-size: 22px; letter-spacing: 3px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 400;
+    transition: color 0.3s;
+  }
+  .mobile-nav a:hover { color: var(--accent); }
 
   /* HERO */
   .hero {
@@ -98,6 +148,27 @@
   }
   .section__title em { color: var(--accent); font-style: italic; }
 
+  /* FILTER */
+  .filter {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    margin-bottom: 40px;
+  }
+  .filter__btn {
+    background: transparent; border: 1px solid var(--line);
+    padding: 10px 24px;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 400;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    border-radius: 0;
+  }
+  .filter__btn:hover,
+  .filter__btn.active {
+    background: var(--text); color: var(--bg);
+    border-color: var(--text);
+  }
+
   /* PORTFOLIO GRID */
   .portfolio {
     display: grid;
@@ -113,7 +184,7 @@
     text-transform: uppercase;
     font-family: -apple-system, sans-serif; font-weight: 500;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s, opacity 0.4s;
     position: relative;
     overflow: hidden;
   }
@@ -121,15 +192,28 @@
     content: '';
     position: absolute; inset: 0;
     background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+    transition: opacity 0.3s;
   }
   .photo span { position: relative; z-index: 2; }
   .photo:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+  .photo.hidden {
+    opacity: 0; pointer-events: none;
+    position: absolute; visibility: hidden;
+  }
   .photo--1 { background: linear-gradient(135deg, #d4a574, #8a6240); }
   .photo--2 { background: linear-gradient(135deg, #a8b8a0, #5a6a52); }
   .photo--3 { background: linear-gradient(135deg, #c8a0a0, #7a4f4f); }
   .photo--4 { background: linear-gradient(135deg, #a0a8c8, #4f5a7a); }
   .photo--5 { background: linear-gradient(135deg, #d4c4a8, #8a7860); }
   .photo--6 { background: linear-gradient(135deg, #e0d4c0, #a0907a); }
+  .photo__emoji {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 64px; z-index: 1;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+  }
+  .photo:hover .photo__emoji { opacity: 0.5; }
 
   /* SERVICES */
   .services {
@@ -158,6 +242,15 @@
   .service__price {
     font-size: 22px; color: var(--accent);
     font-family: -apple-system, sans-serif; font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+    display: inline-block;
+    padding: 4px 0;
+    border-bottom: 1px dashed var(--accent);
+  }
+  .service__price:hover {
+    color: var(--text);
+    text-shadow: 0 0 1px var(--accent);
   }
 
   /* ABOUT */
@@ -215,9 +308,192 @@
   }
   .footer a { color: var(--accent); text-decoration: none; }
 
+  /* ========== LIGHTBOX ========== */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,10,10,0.95);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+  .lightbox__inner {
+    position: relative;
+    width: 90%; max-width: 800px;
+    display: flex; flex-direction: column;
+    align-items: center;
+  }
+  .lightbox__image {
+    width: 100%; aspect-ratio: 3/4;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 120px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+  }
+  .lightbox__info {
+    text-align: center; color: white;
+  }
+  .lightbox__category {
+    font-size: 13px; letter-spacing: 4px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  .lightbox__desc {
+    font-size: 16px; color: rgba(255,255,255,0.7);
+    line-height: 1.7; max-width: 500px;
+  }
+  .lightbox__close {
+    position: absolute; top: -50px; right: 0;
+    background: none; border: none; cursor: pointer;
+    color: white; font-size: 32px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.3s, transform 0.3s;
+    font-family: -apple-system, sans-serif;
+  }
+  .lightbox__close:hover { color: var(--accent); transform: rotate(90deg); }
+  .lightbox__arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    color: white; font-size: 24px;
+    width: 52px; height: 52px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border-radius: 50%;
+    transition: background 0.3s, border-color 0.3s;
+    font-family: -apple-system, sans-serif;
+  }
+  .lightbox__arrow:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: var(--accent);
+  }
+  .lightbox__arrow--prev { left: -80px; }
+  .lightbox__arrow--next { right: -80px; }
+  .lightbox__counter {
+    position: absolute; top: -50px; left: 0;
+    color: rgba(255,255,255,0.5);
+    font-size: 14px; font-family: -apple-system, sans-serif;
+    letter-spacing: 2px;
+  }
+
+  /* ========== MODALS ========== */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,10,10,0.6);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+    padding: 20px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--bg);
+    max-width: 520px; width: 100%;
+    padding: 50px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.4s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal__close {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 24px;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.3s, transform 0.3s;
+    font-family: -apple-system, sans-serif;
+  }
+  .modal__close:hover { color: var(--text); transform: rotate(90deg); }
+  .modal__title {
+    font-size: 32px; font-weight: 400;
+    margin-bottom: 8px; line-height: 1.2;
+  }
+  .modal__title em { color: var(--accent); font-style: italic; }
+  .modal__subtitle {
+    color: var(--text-muted); font-size: 14px;
+    margin-bottom: 30px;
+    font-family: -apple-system, sans-serif;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    background: white;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    color: var(--text);
+    transition: border-color 0.3s;
+    outline: none;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--accent);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-group .error-msg {
+    font-size: 12px; color: #c05050;
+    font-family: -apple-system, sans-serif;
+    margin-top: 6px;
+    display: none;
+  }
+  .form-group.has-error input,
+  .form-group.has-error textarea,
+  .form-group.has-error select {
+    border-color: #c05050;
+  }
+  .form-group.has-error .error-msg { display: block; }
+  .form-submit {
+    width: 100%;
+    background: var(--text); color: var(--bg);
+    padding: 18px 40px;
+    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+    font-family: -apple-system, sans-serif; font-weight: 500;
+    border: 1px solid var(--text);
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    margin-top: 10px;
+  }
+  .form-submit:hover { background: transparent; color: var(--text); }
+
+  /* SUCCESS SCREEN */
+  .success-screen {
+    text-align: center; padding: 30px 0;
+    display: none;
+  }
+  .success-screen.show { display: block; }
+  .success-screen__icon {
+    font-size: 64px; margin-bottom: 20px;
+  }
+  .success-screen__title {
+    font-size: 28px; font-weight: 400; margin-bottom: 12px;
+  }
+  .success-screen__text {
+    color: var(--text-muted); font-size: 15px;
+    line-height: 1.7; margin-bottom: 30px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
     .nav { display: none; }
+    .hamburger { display: flex; }
+    .mobile-nav { display: flex; }
     .hero h1 { font-size: 46px; }
     .section { padding: 70px 0; }
     .section__title { font-size: 32px; }
@@ -227,6 +503,12 @@
     .cta { padding: 60px 30px; }
     .cta h2 { font-size: 32px; }
     .btn--outline { margin-left: 0; margin-top: 12px; }
+    .lightbox__arrow--prev { left: 10px; }
+    .lightbox__arrow--next { right: 10px; }
+    .lightbox__arrow { width: 40px; height: 40px; font-size: 18px; }
+    .modal { padding: 30px; }
+    .filter { gap: 8px; }
+    .filter__btn { padding: 8px 16px; font-size: 11px; }
   }
 </style>
 </head>
@@ -241,8 +523,18 @@
       <a href="#about">Обо мне</a>
       <a href="#contact">Контакты</a>
     </nav>
+    <button class="hamburger" id="hamburger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<nav class="mobile-nav" id="mobileNav">
+  <a href="#portfolio">Работы</a>
+  <a href="#services">Услуги</a>
+  <a href="#about">Обо мне</a>
+  <a href="#contact">Контакты</a>
+</nav>
 
 <section class="hero">
   <div class="container hero__content">
@@ -258,18 +550,44 @@
   <div class="container">
     <div class="section__label">— Избранное</div>
     <h2 class="section__title">Недавние <em>работы</em></h2>
-    <div class="portfolio">
-      <div class="photo photo--1"><span>Семейная съёмка</span></div>
-      <div class="photo photo--2"><span>Портрет на природе</span></div>
-      <div class="photo photo--3"><span>Свадьба · Анна и Илья</span></div>
-      <div class="photo photo--4"><span>Lookbook · бренд OAK</span></div>
-      <div class="photo photo--5"><span>Студия · Москва</span></div>
-      <div class="photo photo--6"><span>Детская фотосессия</span></div>
+    <div class="filter" id="filter">
+      <button class="filter__btn active" data-filter="all">Все</button>
+      <button class="filter__btn" data-filter="family">Семейная</button>
+      <button class="filter__btn" data-filter="portrait">Портрет</button>
+      <button class="filter__btn" data-filter="wedding">Свадьба</button>
+      <button class="filter__btn" data-filter="lookbook">Lookbook</button>
+      <button class="filter__btn" data-filter="studio">Студия</button>
+    </div>
+    <div class="portfolio" id="portfolioGrid">
+      <div class="photo photo--1" data-category="family" data-idx="0">
+        <span class="photo__emoji">👨‍👩‍👧</span>
+        <span>Семейная съёмка</span>
+      </div>
+      <div class="photo photo--2" data-category="portrait" data-idx="1">
+        <span class="photo__emoji">🧑‍🎨</span>
+        <span>Портрет на природе</span>
+      </div>
+      <div class="photo photo--3" data-category="wedding" data-idx="2">
+        <span class="photo__emoji">💍</span>
+        <span>Свадьба · Анна и Илья</span>
+      </div>
+      <div class="photo photo--4" data-category="lookbook" data-idx="3">
+        <span class="photo__emoji">👗</span>
+        <span>Lookbook · бренд OAK</span>
+      </div>
+      <div class="photo photo--5" data-category="studio" data-idx="4">
+        <span class="photo__emoji">💡</span>
+        <span>Студия · Москва</span>
+      </div>
+      <div class="photo photo--6" data-category="family" data-idx="5">
+        <span class="photo__emoji">👶</span>
+        <span>Детская фотосессия</span>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section services">
+<section class="section services" id="services">
   <div class="container">
     <div class="section__label">— Что я снимаю</div>
     <h2 class="section__title">Услуги и <em>цены</em></h2>
@@ -278,19 +596,19 @@
         <div class="service__num">— 01</div>
         <div class="service__name">Семейная съёмка</div>
         <div class="service__desc">2 часа съёмки на природе или в студии. До 40 обработанных фото в высоком разрешении.</div>
-        <div class="service__price">15 000 ₽</div>
+        <div class="service__price" data-service="Семейная съёмка">15 000 ₽</div>
       </div>
       <div class="service">
         <div class="service__num">— 02</div>
         <div class="service__name">Портретная съёмка</div>
         <div class="service__desc">1.5 часа индивидуальной работы. Помогу с локацией и образом. До 30 фото в обработке.</div>
-        <div class="service__price">12 000 ₽</div>
+        <div class="service__price" data-service="Портретная съёмка">12 000 ₽</div>
       </div>
       <div class="service">
         <div class="service__num">— 03</div>
         <div class="service__name">Свадебная съёмка</div>
         <div class="service__desc">Полный день, от утренних сборов до банкета. От 200 фото + плёнка в подарок.</div>
-        <div class="service__price">45 000 ₽</div>
+        <div class="service__price" data-service="Свадебная съёмка">45 000 ₽</div>
       </div>
     </div>
   </div>
@@ -316,7 +634,7 @@
     <div class="cta">
       <h2>Давайте <em>познакомимся</em></h2>
       <p>Расскажите о своей идее — я отвечу в течение дня</p>
-      <a href="mailto:hello@sokolova-photo.ru" class="btn">Написать</a>
+      <button class="btn" id="ctaContactBtn">Написать</button>
     </div>
   </div>
 </section>
@@ -327,5 +645,412 @@
   </div>
 </footer>
 
+<!-- ========== LIGHTBOX ========== -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox__inner">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Закрыть">✕</button>
+    <div class="lightbox__counter" id="lightboxCounter"></div>
+    <div class="lightbox__image" id="lightboxImage"></div>
+    <div class="lightbox__info">
+      <div class="lightbox__category" id="lightboxCategory"></div>
+      <div class="lightbox__desc" id="lightboxDesc"></div>
+    </div>
+    <button class="lightbox__arrow lightbox__arrow--prev" id="lightboxPrev" aria-label="Назад">‹</button>
+    <button class="lightbox__arrow lightbox__arrow--next" id="lightboxNext" aria-label="Вперёд">›</button>
+  </div>
+</div>
+
+<!-- ========== BOOKING MODAL ========== -->
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div id="bookingForm">
+      <h2 class="modal__title">Забронировать <em>съёмку</em></h2>
+      <p class="modal__subtitle">Заполните форму — я свяжусь с вами в течение часа</p>
+      <div class="form-group" data-field="name">
+        <label for="bookName">Ваше имя</label>
+        <input type="text" id="bookName" placeholder="Анна Иванова">
+        <div class="error-msg">Пожалуйста, введите имя</div>
+      </div>
+      <div class="form-group" data-field="phone">
+        <label for="bookPhone">Телефон</label>
+        <input type="tel" id="bookPhone" placeholder="+7 (___) ___-__-__">
+        <div class="error-msg">Введите корректный номер телефона</div>
+      </div>
+      <div class="form-group" data-field="email">
+        <label for="bookEmail">Email</label>
+        <input type="email" id="bookEmail" placeholder="anna@example.com">
+        <div class="error-msg">Введите корректный email</div>
+      </div>
+      <div class="form-group" data-field="service">
+        <label for="bookService">Тип съёмки</label>
+        <select id="bookService">
+          <option value="">Выберите услугу</option>
+          <option value="Семейная съёмка">Семейная съёмка — 15 000 ₽</option>
+          <option value="Портретная съёмка">Портретная съёмка — 12 000 ₽</option>
+          <option value="Свадебная съёмка">Свадебная съёмка — 45 000 ₽</option>
+        </select>
+        <div class="error-msg">Выберите тип съёмки</div>
+      </div>
+      <div class="form-group" data-field="date">
+        <label for="bookDate">Желаемая дата</label>
+        <input type="date" id="bookDate">
+        <div class="error-msg">Выберите дату</div>
+      </div>
+      <div class="form-group" data-field="message">
+        <label for="bookMessage">Сообщение</label>
+        <textarea id="bookMessage" placeholder="Расскажите о вашей идее..." rows="3"></textarea>
+        <div class="error-msg">Введите сообщение</div>
+      </div>
+      <button class="form-submit" id="bookSubmit">Отправить заявку</button>
+    </div>
+    <div class="success-screen" id="bookingSuccess">
+      <div class="success-screen__icon">✓</div>
+      <h3 class="success-screen__title">Заявка отправлена!</h3>
+      <p class="success-screen__text">Спасибо за доверие! Я свяжусь с вами в течение часа, чтобы обсудить детали съёмки.</p>
+      <button class="btn" onclick="closeModal('bookingModal')">Хорошо</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CONTACT MODAL ========== -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+    <div id="contactForm">
+      <h2 class="modal__title">Написать <em>мне</em></h2>
+      <p class="modal__subtitle">Расскажите о вашей идее — я отвечу в течение дня</p>
+      <div class="form-group" data-field="name">
+        <label for="contactName">Ваше имя</label>
+        <input type="text" id="contactName" placeholder="Анна Иванова">
+        <div class="error-msg">Пожалуйста, введите имя</div>
+      </div>
+      <div class="form-group" data-field="email">
+        <label for="contactEmail">Email</label>
+        <input type="email" id="contactEmail" placeholder="anna@example.com">
+        <div class="error-msg">Введите корректный email</div>
+      </div>
+      <div class="form-group" data-field="message">
+        <label for="contactMessage">Сообщение</label>
+        <textarea id="contactMessage" placeholder="Расскажите о вашей идее..." rows="5"></textarea>
+        <div class="error-msg">Введите сообщение</div>
+      </div>
+      <button class="form-submit" id="contactSubmit">Отправить</button>
+    </div>
+    <div class="success-screen" id="contactSuccess">
+      <div class="success-screen__icon">✓</div>
+      <h3 class="success-screen__title">Сообщение отправлено!</h3>
+      <p class="success-screen__text">Спасибо за ваш отклик! Я отвечу в течение дня на указанный email.</p>
+      <button class="btn" onclick="closeModal('contactModal')">Хорошо</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========== DATA ========== */
+const photos = [
+  {
+    category: 'family',
+    categoryLabel: 'Семейная',
+    title: 'Семейная съёмка',
+    desc: 'Тёплая семейная фотосессия на природе. Естественные эмоции, искренние улыбки и моменты, которые хочется сохранить навсегда.',
+    emoji: '👨‍👩‍👧',
+    gradient: 'linear-gradient(135deg, #d4a574, #8a6240)'
+  },
+  {
+    category: 'portrait',
+    categoryLabel: 'Портрет',
+    title: 'Портрет на природе',
+    desc: 'Индивидуальная портретная съёмка в естественной среде. Мягкий свет, живые эмоции и акцент на вашу уникальность.',
+    emoji: '🧑‍🎨',
+    gradient: 'linear-gradient(135deg, #a8b8a0, #5a6a52)'
+  },
+  {
+    category: 'wedding',
+    categoryLabel: 'Свадьба',
+    title: 'Свадьба · Анна и Илья',
+    desc: 'Свадебный день от утренних сборов до вечернего банкета. Нежные кадры, полные любви и счастья.',
+    emoji: '💍',
+    gradient: 'linear-gradient(135deg, #c8a0a0, #7a4f4f)'
+  },
+  {
+    category: 'lookbook',
+    categoryLabel: 'Lookbook',
+    title: 'Lookbook · бренд OAK',
+    desc: 'Фэшн-съёмка для бренда одежды. Стильные кадры, передающие эстетику и настроение коллекции.',
+    emoji: '👗',
+    gradient: 'linear-gradient(135deg, #a0a8c8, #4f5a7a)'
+  },
+  {
+    category: 'studio',
+    categoryLabel: 'Студия',
+    title: 'Студия · Москва',
+    desc: 'Студийная съёмка с контролируемым светом. Минималистичный фон, акцент на деталях и композиции.',
+    emoji: '💡',
+    gradient: 'linear-gradient(135deg, #d4c4a8, #8a7860)'
+  },
+  {
+    category: 'family',
+    categoryLabel: 'Семейная',
+    title: 'Детская фотосессия',
+    desc: 'Нежная детская съёмка, полная искренности и чудес. Сохраняем самые трогательные моменты детства.',
+    emoji: '👶',
+    gradient: 'linear-gradient(135deg, #e0d4c0, #a0907a)'
+  }
+];
+
+/* ========== HAMBURGER MENU ========== */
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileNav.classList.toggle('open');
+  document.body.classList.toggle('no-scroll');
+});
+
+mobileNav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    mobileNav.classList.remove('open');
+    document.body.classList.remove('no-scroll');
+  });
+});
+
+/* ========== CATEGORY FILTER ========== */
+const filterBtns = document.querySelectorAll('.filter__btn');
+const photoCards = document.querySelectorAll('.photo');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+
+    photoCards.forEach(card => {
+      if (filter === 'all' || card.dataset.category === filter) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+
+/* ========== LIGHTBOX ========== */
+const lightbox = document.getElementById('lightbox');
+const lightboxImage = document.getElementById('lightboxImage');
+const lightboxCategory = document.getElementById('lightboxCategory');
+const lightboxDesc = document.getElementById('lightboxDesc');
+const lightboxCounter = document.getElementById('lightboxCounter');
+let currentLightboxIdx = 0;
+let visiblePhotos = [];
+
+function getVisiblePhotos() {
+  return Array.from(photoCards).filter(c => !c.classList.contains('hidden'));
+}
+
+function openLightbox(idx) {
+  visiblePhotos = getVisiblePhotos();
+  const card = visiblePhotos[idx];
+  if (!card) return;
+  const realIdx = parseInt(card.dataset.idx);
+  currentLightboxIdx = idx;
+  const photo = photos[realIdx];
+
+  lightboxImage.style.background = photo.gradient;
+  lightboxImage.textContent = photo.emoji;
+  lightboxCategory.textContent = photo.categoryLabel;
+  lightboxDesc.textContent = photo.desc;
+  lightboxCounter.textContent = (idx + 1) + ' / ' + visiblePhotos.length;
+
+  lightbox.classList.add('open');
+  document.body.classList.add('no-scroll');
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.classList.remove('no-scroll');
+}
+
+function lightboxNav(dir) {
+  let newIdx = currentLightboxIdx + dir;
+  if (newIdx < 0) newIdx = visiblePhotos.length - 1;
+  if (newIdx >= visiblePhotos.length) newIdx = 0;
+  openLightbox(newIdx);
+}
+
+photoCards.forEach(card => {
+  card.addEventListener('click', () => {
+    visiblePhotos = getVisiblePhotos();
+    const idx = visiblePhotos.indexOf(card);
+    if (idx !== -1) openLightbox(idx);
+  });
+});
+
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+document.getElementById('lightboxPrev').addEventListener('click', () => lightboxNav(-1));
+document.getElementById('lightboxNext').addEventListener('click', () => lightboxNav(1));
+
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) closeLightbox();
+});
+
+/* ========== PHONE MASK ========== */
+function phoneMask(input) {
+  input.addEventListener('input', () => {
+    let val = input.value.replace(/\D/g, '');
+    if (val.length === 0) { input.value = ''; return; }
+    if (val[0] === '8') val = '7' + val.slice(1);
+    if (val[0] !== '7') val = '7' + val;
+
+    let formatted = '+7';
+    if (val.length > 1) formatted += ' (' + val.slice(1, 4);
+    if (val.length > 4) formatted += ') ' + val.slice(4, 7);
+    if (val.length > 7) formatted += '-' + val.slice(7, 9);
+    if (val.length > 9) formatted += '-' + val.slice(9, 11);
+    input.value = formatted;
+  });
+}
+phoneMask(document.getElementById('bookPhone'));
+
+/* ========== MODAL HELPERS ========== */
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.classList.add('no-scroll');
+}
+function closeModal(id) {
+  const overlay = document.getElementById(id);
+  overlay.classList.remove('open');
+  document.body.classList.remove('no-scroll');
+
+  // Reset form state
+  const form = overlay.querySelector('[id$="Form"]');
+  const success = overlay.querySelector('.success-screen');
+  if (form) form.style.display = '';
+  if (success) success.classList.remove('show');
+  overlay.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
+  overlay.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.type === 'date' || el.tagName === 'SELECT') {
+      el.selectedIndex = el.tagName === 'SELECT' ? 0 : undefined;
+      if (el.type === 'date') el.value = '';
+    } else {
+      el.value = '';
+    }
+  });
+}
+
+// Close buttons
+document.querySelectorAll('[data-close]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const modal = btn.closest('.modal-overlay');
+    closeModal(modal.id);
+  });
+});
+
+// Click outside modal
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+
+/* ========== FORM VALIDATION ========== */
+function validateField(group, condition) {
+  if (!condition) {
+    group.classList.add('has-error');
+    return false;
+  }
+  group.classList.remove('has-error');
+  return true;
+}
+
+/* ========== BOOKING FORM ========== */
+document.getElementById('bookSubmit').addEventListener('click', () => {
+  const form = document.getElementById('bookingForm');
+  let valid = true;
+
+  const name = form.querySelector('[data-field="name"]');
+  const phone = form.querySelector('[data-field="phone"]');
+  const email = form.querySelector('[data-field="email"]');
+  const service = form.querySelector('[data-field="service"]');
+  const date = form.querySelector('[data-field="date"]');
+  const message = form.querySelector('[data-field="message"]');
+
+  if (!validateField(name, name.querySelector('input').value.trim().length >= 2)) valid = false;
+  const phoneDigits = phone.querySelector('input').value.replace(/\D/g, '');
+  if (!validateField(phone, phoneDigits.length >= 11)) valid = false;
+  const emailVal = email.querySelector('input').value.trim();
+  if (!validateField(email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal))) valid = false;
+  if (!validateField(service, service.querySelector('select').value !== '')) valid = false;
+  if (!validateField(date, date.querySelector('input').value !== '')) valid = false;
+  if (!validateField(message, message.querySelector('textarea').value.trim().length >= 3)) valid = false;
+
+  if (valid) {
+    form.style.display = 'none';
+    document.getElementById('bookingSuccess').classList.add('show');
+  }
+});
+
+/* ========== CONTACT FORM ========== */
+document.getElementById('contactSubmit').addEventListener('click', () => {
+  const form = document.getElementById('contactForm');
+  let valid = true;
+
+  const name = form.querySelector('[data-field="name"]');
+  const email = form.querySelector('[data-field="email"]');
+  const message = form.querySelector('[data-field="message"]');
+
+  if (!validateField(name, name.querySelector('input').value.trim().length >= 2)) valid = false;
+  const emailVal = email.querySelector('input').value.trim();
+  if (!validateField(email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal))) valid = false;
+  if (!validateField(message, message.querySelector('textarea').value.trim().length >= 3)) valid = false;
+
+  if (valid) {
+    form.style.display = 'none';
+    document.getElementById('contactSuccess').classList.add('show');
+  }
+});
+
+/* ========== OPEN TRIGGERS ========== */
+// CTA "Написать" -> contact modal
+document.getElementById('ctaContactBtn').addEventListener('click', () => openModal('contactModal'));
+
+// Service prices -> booking modal (pre-select service)
+document.querySelectorAll('.service__price').forEach(el => {
+  el.addEventListener('click', () => {
+    const serviceName = el.dataset.service;
+    openModal('bookingModal');
+    const select = document.getElementById('bookService');
+    for (let i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === serviceName) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+  });
+});
+
+/* ========== KEYBOARD NAVIGATION ========== */
+document.addEventListener('keydown', (e) => {
+  // Lightbox open
+  if (lightbox.classList.contains('open')) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+    return;
+  }
+  // Any modal open
+  const openModals = document.querySelectorAll('.modal-overlay.open');
+  if (openModals.length && e.key === 'Escape') {
+    openModals.forEach(m => closeModal(m.id));
+  }
+});
+
+/* ========== SET MIN DATE TO TODAY ========== */
+const dateInput = document.getElementById('bookDate');
+const today = new Date().toISOString().split('T')[0];
+dateInput.setAttribute('min', today);
+</script>
 </body>
 </html>
