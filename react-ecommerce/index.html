@@ -174,10 +174,10 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafafa; colo
 <div class="header">
   <div class="logo">Sneak<span>Peak</span></div>
   <div class="nav-links">
-    <a onclick="scrollToProducts()">Каталог</a>
-    <a onclick="filterNew()">Новинки</a>
-    <a onclick="scrollToProducts()">Бренды</a>
-    <a onclick="scrollToFeatures()">О нас</a>
+    <a href="javascript:void(0)" onclick="scrollToProducts()">Каталог</a>
+    <a href="javascript:void(0)" onclick="filterNew()">Новинки</a>
+    <a href="javascript:void(0)" onclick="scrollToProducts()">Бренды</a>
+    <a href="javascript:void(0)" onclick="scrollToFeatures()">О нас</a>
   </div>
   <button class="cart-btn" onclick="openCart()">🛒 Корзина<span class="cart-count hidden" id="cartCount">0</span></button>
 </div>
@@ -210,7 +210,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafafa; colo
 <!-- ===== FOOTER ===== -->
 <div class="footer">
   <div class="logo">Sneak<span>Peak</span></div>
-  <p>&copy; 2026 SneakPeak. React + Next.js + Tailwind CSS</p>
+  <p>&copy; 2026 SneakPeak. Все права защищены.</p>
 </div>
 
 <!-- ===== CART OVERLAY ===== -->
@@ -307,6 +307,7 @@ function formatPrice(p) {
 }
 
 function stars(r) {
+  r = Math.max(0, Math.min(5, Math.round(r)));
   return '★'.repeat(r) + '☆'.repeat(5 - r);
 }
 
@@ -388,8 +389,11 @@ function addToCart(productId, selectedSize) {
     btn.textContent = '✓ Добавлено';
     btn.classList.add('added');
     setTimeout(() => {
-      btn.textContent = 'В корзину';
-      btn.classList.remove('added');
+      const currentBtn = document.getElementById(`addBtn${productId}`);
+      if (currentBtn) {
+        currentBtn.textContent = 'В корзину';
+        currentBtn.classList.remove('added');
+      }
     }, 1200);
   }
 
@@ -399,8 +403,11 @@ function addToCart(productId, selectedSize) {
     modalBtn.textContent = '✓ Добавлено';
     modalBtn.style.background = '#22c55e';
     setTimeout(() => {
-      modalBtn.textContent = 'В корзину';
-      modalBtn.style.background = '#6c63ff';
+      const currentModalBtn = document.getElementById(`modalAddBtn${productId}`);
+      if (currentModalBtn) {
+        currentModalBtn.textContent = 'В корзину';
+        currentModalBtn.style.background = '#6c63ff';
+      }
     }, 1200);
   }
 }
@@ -574,6 +581,12 @@ function submitOrder() {
 
   if (!name || !phone || !email || !address) {
     alert('Пожалуйста, заполните все поля.');
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    alert('Пожалуйста, введите корректный email адрес.');
     return;
   }
 

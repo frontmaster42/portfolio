@@ -197,8 +197,7 @@
   .photo span { position: relative; z-index: 2; }
   .photo:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
   .photo.hidden {
-    opacity: 0; pointer-events: none;
-    position: absolute; visibility: hidden;
+    display: none;
   }
   .photo--1 { background: linear-gradient(135deg, #d4a574, #8a6240); }
   .photo--2 { background: linear-gradient(135deg, #a8b8a0, #5a6a52); }
@@ -931,9 +930,8 @@ function closeModal(id) {
   if (success) success.classList.remove('show');
   overlay.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
   overlay.querySelectorAll('input, textarea, select').forEach(el => {
-    if (el.type === 'date' || el.tagName === 'SELECT') {
-      el.selectedIndex = el.tagName === 'SELECT' ? 0 : undefined;
-      if (el.type === 'date') el.value = '';
+    if (el.tagName === 'SELECT') {
+      el.selectedIndex = 0;
     } else {
       el.value = '';
     }

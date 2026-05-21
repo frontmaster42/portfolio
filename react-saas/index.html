@@ -63,7 +63,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; colo
 .faq-arrow { font-size: 20px; transition: transform 0.3s; color: #6c63ff; }
 .faq-item.active .faq-arrow { transform: rotate(180deg); }
 .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; padding: 0 24px; }
-.faq-item.active .faq-answer { max-height: 300px; padding: 0 24px 20px; }
+.faq-item.active .faq-answer { max-height: 800px; padding: 0 24px 20px; }
 .faq-answer p { font-size: 15px; color: #666; line-height: 1.7; }
 
 /* === PRICING === */
@@ -169,10 +169,10 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; colo
 <div class="nav">
   <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">FlowSync</div>
   <div class="nav-links">
-    <a onclick="smoothScroll('features')">Возможности</a>
-    <a onclick="smoothScroll('pricing')">Цены</a>
-    <a onclick="smoothScroll('faq')">Документация</a>
-    <a onclick="smoothScroll('cta')">Блог</a>
+    <a href="javascript:void(0)" onclick="smoothScroll('features')" role="button" tabindex="0">Возможности</a>
+    <a href="javascript:void(0)" onclick="smoothScroll('pricing')" role="button" tabindex="0">Цены</a>
+    <a href="javascript:void(0)" onclick="smoothScroll('faq')" role="button" tabindex="0">Документация</a>
+    <a href="javascript:void(0)" onclick="smoothScroll('cta')" role="button" tabindex="0">Блог</a>
     <button class="btn-try" onclick="openModal('reg')">Начать бесплатно</button>
   </div>
 </div>
@@ -361,7 +361,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; colo
 </div>
 
 <!-- ===== FOOTER ===== -->
-<div class="footer">&copy; 2026 FlowSync. React + Next.js + Tailwind CSS</div>
+<div class="footer">&copy; 2026 FlowSync. HTML5 + CSS3 + JavaScript</div>
 
 <!-- ===== REGISTRATION MODAL ===== -->
 <div class="modal-overlay" id="reg-overlay" onclick="closeOnOverlay(event, 'reg')">
@@ -370,7 +370,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; colo
     <div id="reg-form-state">
       <h2>Создать аккаунт</h2>
       <p class="modal-subtitle">Начните использовать FlowSync бесплатно</p>
-      <form onsubmit="handleRegister(event)">
+      <form onsubmit="handleRegister(event)" novalidate>
         <div class="form-group">
           <label for="reg-name">Имя</label>
           <input type="text" id="reg-name" placeholder="Ваше имя" required>

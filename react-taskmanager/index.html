@@ -132,9 +132,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f2f5; colo
 @keyframes taskIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .task-new { animation: taskIn 0.25s ease; }
 
-/* Hide column filtering */
-.column.hidden { display: none; }
-.task.hidden { display: none; }
+/* Dead CSS rules removed — JS uses inline style.display instead of .hidden class */
 
 /* Responsive tweaks */
 @media (max-width: 900px) {
@@ -410,6 +408,11 @@ function updateCounts() {
     colTodo.style.display = 'none';
     colIp.style.display = 'none';
   }
+
+  // Update grid columns based on visible columns
+  const columnsEl = document.querySelector('.columns');
+  const visibleCols = document.querySelectorAll('.column:not([style*="display: none"])');
+  columnsEl.style.gridTemplateColumns = visibleCols.length === 1 ? '1fr' : 'repeat(3, 1fr)';
 }
 
 // ========== TASK EVENTS ==========

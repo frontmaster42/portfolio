@@ -39,11 +39,10 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
 .filter-btn.active { background: #22d3ee; color: #0a0a0a; border-color: #22d3ee; font-weight: 600; }
 
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.project { background: #1a1a1a; border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s, opacity 0.4s, max-height 0.5s; cursor: pointer; opacity: 1; }
+.project { background: #1a1a1a; border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s, opacity 0.4s; cursor: pointer; opacity: 1; }
 .project:hover { transform: translateY(-6px); border-color: #22d3ee; }
-.project.hidden { opacity: 0; pointer-events: none; position: absolute; visibility: hidden; }
-.project.fade-out { opacity: 0; transform: scale(0.95); }
-.project.fade-in { opacity: 1; transform: scale(1); }
+.project.hidden { display: none; }
+
 .project-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 48px; transition: background 0.3s; }
 .project-img.cyan { background: linear-gradient(135deg, #22d3ee15, #22d3ee08); }
 .project-img.purple { background: linear-gradient(135deg, #a855f715, #a855f708); }
@@ -128,7 +127,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
 .form-success.visible { display: block; }
 .form-success .success-icon { font-size: 48px; margin-bottom: 16px; }
 .form-success h3 { font-size: 22px; margin-bottom: 8px; color: #22d3ee; }
-.form-success p { color: #888; font-size: 15px; }
+.form-success p { color: #888; font-size: 15px; margin-bottom: 20px; }
+.form-success .btn-reset { display: inline-block; padding: 10px 28px; border-radius: 20px; border: 1px solid #2a2a2a; background: transparent; color: #ccc; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.form-success .btn-reset:hover { border-color: #22d3ee; color: #22d3ee; }
 
 /* ===== BACK TO TOP ===== */
 .back-to-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; border-radius: 50%; background: #1a1a1a; border: 1px solid #2a2a2a; color: #888; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 90; opacity: 0; pointer-events: none; transform: translateY(10px); transition: all 0.3s; }
@@ -149,10 +150,23 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
   .contact { padding: 48px 24px; }
   .footer { padding: 20px 24px; }
 }
+/* Hamburger */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; z-index: 110; }
+.hamburger span { display: block; width: 24px; height: 2px; background: #e5e5e5; border-radius: 2px; transition: all 0.3s; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-nav-overlay { display: none; position: fixed; inset: 0; top: 0; background: rgba(10,10,10,0.97); z-index: 105; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+.mobile-nav-overlay.open { display: flex; }
+.mobile-nav-overlay a { color: #ccc; text-decoration: none; font-size: 22px; font-weight: 500; transition: color 0.2s; }
+.mobile-nav-overlay a:hover { color: #22d3ee; }
+
 @media (max-width: 600px) {
   .grid { grid-template-columns: 1fr; }
-  .nav-links { gap: 16px; }
-  .nav-links a { font-size: 13px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav-overlay { display: none; }
+  .mobile-nav-overlay.open { display: flex; }
 }
 </style>
 </head>
@@ -166,6 +180,16 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
     <a href="#about" data-section="about">Обо мне</a>
     <a href="#contact" data-section="contact">Контакты</a>
   </div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Меню">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</div>
+<div class="mobile-nav-overlay" id="mobileNav">
+  <a href="#projects">Проекты</a>
+  <a href="#about">Обо мне</a>
+  <a href="#contact">Контакты</a>
 </div>
 
 <!-- ===== HERO ===== -->
@@ -310,6 +334,7 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
     <div class="success-icon">✅</div>
     <h3>Сообщение отправлено!</h3>
     <p>Спасибо за обращение. Я свяжусь с вами в ближайшее время.</p>
+    <button class="btn-reset" onclick="resetContactForm()">Отправить ещё</button>
   </div>
 </div>
 
@@ -475,18 +500,10 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
         const matches = filter === 'all' || tags.includes(filter);
 
         if (matches) {
-          card.classList.remove('fade-out', 'hidden');
-          card.classList.add('fade-in');
+          card.classList.remove('hidden');
           card.style.display = '';
         } else {
-          card.classList.remove('fade-in');
-          card.classList.add('fade-out');
-          setTimeout(() => {
-            if (card.classList.contains('fade-out')) {
-              card.classList.add('hidden');
-              card.style.display = 'none';
-            }
-          }, 350);
+          card.classList.add('hidden');
         }
       });
     });
@@ -661,6 +678,32 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
   window.addEventListener('scroll', toggleBackToTop, { passive: true });
   toggleBackToTop();
 
+  // ========== HAMBURGER MENU ==========
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+
+  hamburgerBtn.addEventListener('click', () => {
+    hamburgerBtn.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+  });
+
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      hamburgerBtn.classList.remove('open');
+      mobileNav.classList.remove('open');
+      document.body.style.overflow = '';
+      const targetId = link.getAttribute('href').substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        const navHeight = navbar.offsetHeight;
+        const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    });
+  });
+
   // ========== CONTACT FORM ==========
   const contactForm = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
@@ -753,6 +796,16 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
       submitBtn.textContent = 'Отправить';
     }, 1500);
   });
+
+  function resetContactForm() {
+    contactForm.reset();
+    contactForm.style.display = '';
+    formSuccess.classList.remove('visible');
+    [nameInput, emailInput, messageInput].forEach(input => input.classList.remove('error'));
+    [nameError, emailError, messageError].forEach(el => el.classList.remove('visible'));
+  }
+
+  window.resetContactForm = resetContactForm;
 
 })();
 </script>
