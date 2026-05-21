@@ -3,143 +3,505 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FutureCode_Lab — Портфолио</title>
+<title>Артём — фронтенд-разработчик (FutureCode_Lab)</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0f0f1a; color: #e5e5e5; min-height: 100vh; }
-.container { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
-h1 { font-size: 36px; margin-bottom: 8px; }
-h1 span { color: #818cf8; }
-.subtitle { color: #888; font-size: 16px; margin-bottom: 48px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-.card { background: #1a1a2e; border-radius: 16px; overflow: hidden; border: 1px solid #2a2a3e; transition: transform 0.2s, border-color 0.2s; text-decoration: none; color: inherit; display: block; }
-.card:hover { transform: translateY(-4px); border-color: #818cf8; }
-.card-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 48px; }
-.card-img.coffee { background: linear-gradient(135deg, #92400e33, #d9770622); }
-.card-img.barber { background: linear-gradient(135deg, #1e1e1e, #33333388); }
-.card-img.photo { background: linear-gradient(135deg, #7c3aed22, #a855f722); }
-.card-img.cookie { background: linear-gradient(135deg, #f59e0b22, #fbbf2422); }
-.card-img.contact { background: linear-gradient(135deg, #3b82f622, #60a5fa22); }
-.card-img.dashboard { background: linear-gradient(135deg, #3b82f622, #818cf822); }
-.card-img.ecom { background: linear-gradient(135deg, #6c63ff22, #a855f722); }
-.card-img.saas { background: linear-gradient(135deg, #6c63ff22, #22d3ee22); }
-.card-img.devport { background: linear-gradient(135deg, #22d3ee22, #34d39922); }
-.card-img.tgwebapp { background: linear-gradient(135deg, #229ED922, #34d39922); }
-.card-body { padding: 20px; }
-.card-body h3 { font-size: 16px; margin-bottom: 6px; }
-.card-body p { font-size: 13px; color: #888; line-height: 1.4; }
-.tags { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
-.tag { font-size: 11px; padding: 3px 10px; border-radius: 10px; }
-.tag.html { background: #f59e0b22; color: #f59e0b; }
-.tag.css { background: #3b82f622; color: #60a5fa; }
-.tag.js { background: #fbbf2422; color: #fbbf24; }
-.tag.react { background: #22d3ee22; color: #22d3ee; }
-.tag.next { background: #818cf822; color: #818cf8; }
-.tag.tw { background: #34d39922; color: #34d399; }
-.tag.tg { background: #229ED922; color: #229ED9; }
-.contact-info { margin-top: 48px; padding: 24px; background: #1a1a2e; border-radius: 16px; border: 1px solid #2a2a3e; }
-.contact-info h2 { font-size: 20px; margin-bottom: 12px; }
-.contact-info a { color: #818cf8; text-decoration: none; }
-.contact-info p { color: #888; font-size: 14px; margin-bottom: 8px; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --bg-light: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #a78bfa;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* HERO */
+  .hero {
+    min-height: 60vh;
+    padding: 80px 0 60px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(56,189,248,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(167,139,250,0.15) 0%, transparent 50%),
+      var(--bg);
+    display: flex; align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero__content { text-align: center; max-width: 700px; margin: 0 auto; }
+  .hero__avatar {
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 44px;
+    box-shadow: 0 20px 60px rgba(56,189,248,0.3);
+  }
+  .hero__label {
+    display: inline-block;
+    background: rgba(56,189,248,0.1);
+    color: var(--accent);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(56,189,248,0.3);
+  }
+  .hero__label::before { content: '● '; }
+  .hero h1 {
+    font-size: 52px; line-height: 1.1; margin-bottom: 20px;
+    font-weight: 800; letter-spacing: -1px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero__lead {
+    font-size: 18px; color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+  .hero__tags {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  }
+  .tag {
+    background: var(--bg-card);
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid var(--bg-light);
+  }
+
+  /* WORKS */
+  .section { padding: 80px 0; }
+  .section__title {
+    font-size: 36px; margin-bottom: 12px; font-weight: 800;
+  }
+  .section__lead {
+    color: var(--text-muted); font-size: 16px; margin-bottom: 48px;
+  }
+
+  .works {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+  }
+  .work {
+    background: var(--bg-card);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--bg-light);
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+  .work:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .work__preview {
+    aspect-ratio: 16/10;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .work--1 .work__preview { background: linear-gradient(135deg, #1a202c 0%, #4a5568 100%); }
+  .work--2 .work__preview { background: linear-gradient(135deg, #2b1810 0%, #8b5a3c 100%); }
+  .work--3 .work__preview { background: linear-gradient(135deg, #0a0a0a 0%, #c9a86a 150%); }
+  .work--4 .work__preview { background: linear-gradient(135deg, #faf8f5 0%, #d4c4a8 100%); color: #1a1a1a; }
+  .work--5 .work__preview { background: linear-gradient(135deg, #667eea 0%, #f5576c 100%); }
+  .work--6 .work__preview { background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%); }
+  .work--7 .work__preview { background: linear-gradient(135deg, #6c63ff 0%, #a855f7 100%); }
+  .work--8 .work__preview { background: linear-gradient(135deg, #6c63ff 0%, #22d3ee 100%); }
+  .work--9 .work__preview { background: linear-gradient(135deg, #22d3ee 0%, #34d399 100%); }
+  .work--10 .work__preview { background: linear-gradient(135deg, #6c63ff 0%, #f59e0b 100%); }
+
+  .work__body {
+    padding: 24px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .work__category {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .work__title {
+    font-size: 22px; font-weight: 700; margin-bottom: 8px;
+  }
+  .work__desc {
+    color: var(--text-muted); font-size: 14px; margin-bottom: 16px;
+    flex: 1;
+  }
+  .work__stack {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .work__stack span {
+    background: var(--bg-light);
+    color: var(--text);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* SKILLS */
+  .skills {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 48px;
+    border: 1px solid var(--bg-light);
+  }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+  }
+  .skill__icon { font-size: 36px; margin-bottom: 12px; }
+  .skill__name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .skill__desc { font-size: 14px; color: var(--text-muted); }
+
+  /* CONTACT */
+  .contact {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(167,139,250,0.1));
+    border-radius: 16px;
+    padding: 60px 40px;
+    border: 1px solid var(--bg-light);
+  }
+  .contact h2 { font-size: 32px; margin-bottom: 12px; }
+  .contact p { color: var(--text-muted); margin-bottom: 32px; }
+  .contact__buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .btn--primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--bg);
+  }
+  .btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(56,189,248,0.4);
+  }
+  .btn--secondary {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--bg-light);
+  }
+  .btn--secondary:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  .btn__icon { font-size: 18px; }
+
+  /* FOOTER */
+  .footer {
+    padding: 30px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--bg-light);
+  }
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .footer a:hover { text-decoration: underline; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .hero h1 { font-size: 36px; }
+    .section { padding: 50px 0; }
+    .section__title { font-size: 26px; }
+    .skills { padding: 28px; }
+    .contact { padding: 40px 24px; }
+    .contact__buttons { flex-direction: column; }
+    .btn { justify-content: center; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>Future<span>Code_Lab</span></h1>
-  <p class="subtitle">Портфолио веб-разработчика — адаптивные сайты, лендинги и веб-приложения</p>
-  
-  <div class="grid">
-    <a class="card" href="./coffee-landing/">
-      <div class="card-img coffee">☕</div>
-      <div class="card-body">
-        <h3>Лендинг для кофейни «Зерно»</h3>
-        <p>Адаптивный лендинг с тёплой кофейной стилистикой, формой заказа и анимациями</p>
-        <div class="tags"><span class="tag html">HTML5</span><span class="tag css">CSS3</span><span class="tag js">JavaScript</span></div>
-      </div>
-    </a>
-    <a class="card" href="./barbershop-landing/">
-      <div class="card-img barber">✂️</div>
-      <div class="card-body">
-        <h3>Лендинг барбершопа BLADE</h3>
-        <p>Тёмная тема, анимированные секции, форма записи и галерея работ</p>
-        <div class="tags"><span class="tag html">HTML5</span><span class="tag css">CSS3</span><span class="tag js">JavaScript</span></div>
-      </div>
-    </a>
-    <a class="card" href="./photographer-landing/">
-      <div class="card-img photo">📷</div>
-      <div class="card-body">
-        <h3>Лендинг фотографа</h3>
-        <p>Минималистичный портфолио-сайт с галереей и контактной формой</p>
-        <div class="tags"><span class="tag html">HTML5</span><span class="tag css">CSS3</span><span class="tag js">JavaScript</span></div>
-      </div>
-    </a>
-    <a class="card" href="./cookie-banner/">
-      <div class="card-img cookie">🍪</div>
-      <div class="card-body">
-        <h3>Cookie-баннер</h3>
-        <p>Виджет cookie-согласия с localStorage и анимациями появления</p>
-        <div class="tags"><span class="tag html">HTML5</span><span class="tag css">CSS3</span><span class="tag js">JavaScript</span></div>
-      </div>
-    </a>
-    <a class="card" href="./contact-form-widget/">
-      <div class="card-img contact">📩</div>
-      <div class="card-body">
-        <h3>Форма обратной связи</h3>
-        <p>Всплывающий виджет с валидацией полей и отправкой через Formspree</p>
-        <div class="tags"><span class="tag html">HTML5</span><span class="tag css">CSS3</span><span class="tag js">JavaScript</span></div>
-      </div>
-    </a>
-    <a class="card" href="./react-dashboard/">
-      <div class="card-img dashboard">📊</div>
-      <div class="card-body">
-        <h3>Dashboard аналитики</h3>
-        <p>Панель управления с виджетами, графиками и real-time статистикой</p>
-        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
-      </div>
-    </a>
-    <a class="card" href="./react-ecommerce/">
-      <div class="card-img ecom">👟</div>
-      <div class="card-body">
-        <h3>Магазин кроссовок</h3>
-        <p>E-commerce с каталогом, фильтрами, корзиной и карточками товаров</p>
-        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
-      </div>
-    </a>
-    <a class="card" href="./react-saas/">
-      <div class="card-img saas">🚀</div>
-      <div class="card-body">
-        <h3>SaaS платформа FlowSync</h3>
-        <p>Лендинг с тарифами, фичами, формами подписки и анимациями</p>
-        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
-      </div>
-    </a>
-    <a class="card" href="./react-dev-portfolio/">
-      <div class="card-img devport">💻</div>
-      <div class="card-body">
-        <h3>Портфолио разработчика</h3>
-        <p>Персональный сайт с проектами, навыками и контактной формой</p>
-        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
-      </div>
-    </a>
-    <a class="card" href="./telegram-webapp-demo/">
-      <div class="card-img tgwebapp">📱</div>
-      <div class="card-body">
-        <h3>Telegram WebApp</h3>
-        <p>Мини-приложение для Telegram с поддержкой тем и Safe Area</p>
-        <div class="tags"><span class="tag html">HTML5</span><span class="tag css">CSS3</span><span class="tag tg">Telegram</span></div>
-      </div>
-    </a>
-  </div>
 
-  <div class="contact-info">
-    <h2>Контакты</h2>
-    <p>Kwork: <a href="https://kwork.ru/user/FutureCode_Lab" target="_blank">FutureCode_Lab</a></p>
-    <p id="email"></p>
+<section class="hero">
+  <div class="container hero__content">
+    <div class="hero__avatar">👨‍💻</div>
+    <span class="hero__label">Открыт к заказам</span>
+    <h1>Делаю <span>сайты и приложения</span><br>на React и чистом JS</h1>
+    <p class="hero__lead">
+      Лендинги, одностраничники, дашборды, мини-приложения.
+      React/Next.js или чистый HTML/CSS/JS — быстро, чисто, адаптивно.
+    </p>
+    <div class="hero__tags">
+      <div class="tag">React</div>
+      <div class="tag">Next.js</div>
+      <div class="tag">TypeScript</div>
+      <div class="tag">Tailwind CSS</div>
+      <div class="tag">HTML5/CSS3/JS</div>
+      <div class="tag">Адаптивная вёрстка</div>
+    </div>
   </div>
-</div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section__title">Работы</h2>
+    <p class="section__lead">10 кейсов — кликни на любой, чтобы посмотреть в действии</p>
+
+    <div class="works">
+
+      <a href="coffee-landing/index.html" class="work work--2">
+        <div class="work__preview">☕</div>
+        <div class="work__body">
+          <div class="work__category">Лендинг</div>
+          <div class="work__title">Кофейня «Зерно»</div>
+          <div class="work__desc">
+            Одностраничник для кофейни: hero, меню, история, контакты, форма брони. Тёплая стилистика, адаптив.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS Grid</span><span>Flexbox</span><span>Адаптив</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="barbershop-landing/index.html" class="work work--3">
+        <div class="work__preview">✂️</div>
+        <div class="work__body">
+          <div class="work__category">Лендинг</div>
+          <div class="work__title">Барбершоп BLADE</div>
+          <div class="work__desc">
+            Премиум-лендинг для мужского барбершопа: услуги, команда мастеров, форма записи. Тёмная тема, премиум-эстетика.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>Form validation</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="photographer-landing/index.html" class="work work--4">
+        <div class="work__preview">📷</div>
+        <div class="work__body">
+          <div class="work__category">Лендинг</div>
+          <div class="work__title">Фотограф Анна Соколова</div>
+          <div class="work__desc">
+            Светлый минималистичный лендинг для фотографа: галерея работ, услуги с ценами, история, контакты. Журнальная стилистика.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS Grid</span><span>Адаптив</span><span>Минимализм</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="cookie-banner/index.html" class="work work--1">
+        <div class="work__preview">🍪</div>
+        <div class="work__body">
+          <div class="work__category">Виджет</div>
+          <div class="work__title">Cookie-баннер</div>
+          <div class="work__desc">
+            Всплывающий баннер согласия на cookies. Запоминает выбор пользователя через localStorage, плавная анимация, адаптивный.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>localStorage</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="contact-form-widget/index.html" class="work work--5">
+        <div class="work__preview">💬</div>
+        <div class="work__body">
+          <div class="work__category">Виджет</div>
+          <div class="work__title">Форма обратной связи</div>
+          <div class="work__desc">
+            Плавающая кнопка + модальное окно с формой. Маска телефона, JS-валидация, анимация успеха, закрытие по Esc.
+          </div>
+          <div class="work__stack">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>Модалка</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="react-dashboard/index.html" class="work work--6">
+        <div class="work__preview">📊</div>
+        <div class="work__body">
+          <div class="work__category">React</div>
+          <div class="work__title">Dashboard аналитики</div>
+          <div class="work__desc">
+            Панель управления с виджетами, графиками, статистикой и real-time данными. Тёмная тема, сайдбар навигация.
+          </div>
+          <div class="work__stack">
+            <span>React</span><span>Next.js</span><span>Tailwind</span><span>TypeScript</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="react-ecommerce/index.html" class="work work--7">
+        <div class="work__preview">👟</div>
+        <div class="work__body">
+          <div class="work__category">React</div>
+          <div class="work__title">Магазин кроссовок</div>
+          <div class="work__desc">
+            E-commerce с каталогом товаров, фильтрами, корзиной и карточками. Скидки, рейтинги, адаптив.
+          </div>
+          <div class="work__stack">
+            <span>React</span><span>Next.js</span><span>Tailwind</span><span>TypeScript</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="react-saas/index.html" class="work work--8">
+        <div class="work__preview">🚀</div>
+        <div class="work__body">
+          <div class="work__category">React</div>
+          <div class="work__title">SaaS платформа FlowSync</div>
+          <div class="work__desc">
+            Лендинг для SaaS-продукта: тарифы, фичи, форма подписки, CTA-блоки. SSR, SEO-оптимизация.
+          </div>
+          <div class="work__stack">
+            <span>React</span><span>Next.js</span><span>Tailwind</span><span>SSR</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="react-dev-portfolio/index.html" class="work work--9">
+        <div class="work__preview">💻</div>
+        <div class="work__body">
+          <div class="work__category">React</div>
+          <div class="work__title">Портфолио разработчика</div>
+          <div class="work__desc">
+            Персональный сайт с проектами, навыками и контактной формой. Тёмная тема, плавные анимации.
+          </div>
+          <div class="work__stack">
+            <span>React</span><span>Next.js</span><span>Tailwind</span><span>Framer Motion</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="react-taskmanager/index.html" class="work work--10">
+        <div class="work__preview">📋</div>
+        <div class="work__body">
+          <div class="work__category">React</div>
+          <div class="work__title">Таск-менеджер</div>
+          <div class="work__desc">
+            Kanban-доска с колонками задач, приоритетами, тегами и аватарами. Drag-and-drop стиль, как Trello.
+          </div>
+          <div class="work__stack">
+            <span>React</span><span>Next.js</span><span>Tailwind</span><span>TypeScript</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section__title">Что умею</h2>
+    <p class="section__lead">Технологии, в которых работаю каждый день</p>
+
+    <div class="skills">
+      <div class="skills-grid">
+        <div class="skill">
+          <div class="skill__icon">⚛️</div>
+          <div class="skill__name">React / Next.js</div>
+          <div class="skill__desc">SSR, SSG, маршрутизация, компонентный подход</div>
+        </div>
+        <div class="skill">
+          <div class="skill__icon">🔷</div>
+          <div class="skill__name">TypeScript</div>
+          <div class="skill__desc">Типизация, интерфейсы, generics</div>
+        </div>
+        <div class="skill">
+          <div class="skill__icon">🎨</div>
+          <div class="skill__name">Tailwind CSS</div>
+          <div class="skill__desc">Utility-first, адаптив, кастомные темы</div>
+        </div>
+        <div class="skill">
+          <div class="skill__icon">⚡</div>
+          <div class="skill__name">JavaScript</div>
+          <div class="skill__desc">Ванильный JS, DOM, события, формы, localStorage</div>
+        </div>
+        <div class="skill">
+          <div class="skill__icon">🎨</div>
+          <div class="skill__name">Адаптивная вёрстка</div>
+          <div class="skill__desc">Mobile-first, Grid, Flexbox, media queries</div>
+        </div>
+        <div class="skill">
+          <div class="skill__icon">📱</div>
+          <div class="skill__name">Telegram WebApp</div>
+          <div class="skill__desc">Mini Apps, TG SDK, Safe Area, темы</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="contact">
+      <h2>Нужен сайт или виджет?</h2>
+      <p>Свяжитесь со мной удобным способом — отвечу в течение часа</p>
+      <div class="contact__buttons">
+        <a href="https://kwork.ru/user/futurecode_lab" target="_blank" rel="noopener" class="btn btn--primary">
+          <span class="btn__icon">💼</span>
+          Написать на Kwork
+        </a>
+        <a href="#" id="emailBtn" class="btn btn--secondary">
+          <span class="btn__icon">✉️</span>
+          <span id="emailText">Написать на e-mail</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    © 2026 Артём — фронтенд-разработчик · <a href="https://kwork.ru/user/futurecode_lab" target="_blank" rel="noopener">FutureCode_Lab на Kwork</a>
+  </div>
+</footer>
+
 <script>
-const e=['f','r','o','n','t','m','a','s','t','e','r','4','2','@','p','r','o','t','o','n','m','e','i','l','.','c','o','m'];
-document.getElementById('email').innerHTML='Email: <a href="mailto:'+e.join('')+'">'+e.join('')+'</a>';
+  // защита email от спам-ботов
+  (function() {
+    var u = ['r','a','l','e','k','s','e','e','v','4','3','7'].join('');
+    var d = ['g','m','a','i','l'].join('') + '.' + 'com';
+    var email = u + String.fromCharCode(64) + d;
+    var btn = document.getElementById('emailBtn');
+    var label = document.getElementById('emailText');
+    if (btn) btn.setAttribute('href', 'mailto:' + email);
+    if (label) label.textContent = email;
+  })();
 </script>
+
 </body>
 </html>
