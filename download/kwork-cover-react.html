@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { width: 790px; height: 440px; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
+.cover {
+  width: 790px; height: 440px;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 40%, #2d1b69 70%, #1a1a3e 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.cover::before {
+  content: '';
+  position: absolute; top: -50px; right: -50px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(97,218,251,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.cover::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -30px;
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.content {
+  position: relative; z-index: 1;
+  text-align: center; color: white;
+}
+.logo {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin-bottom: 24px;
+}
+.react-icon {
+  width: 60px; height: 60px;
+  position: relative;
+}
+.atom { animation: spin 8s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+h1 {
+  font-size: 38px; font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #61dafb, #a78bfa, #61dafb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle {
+  font-size: 18px; color: rgba(255,255,255,0.7);
+  margin-bottom: 28px; letter-spacing: 0.5px;
+}
+.tags {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+}
+.tag {
+  padding: 8px 18px;
+  background: rgba(97,218,251,0.1);
+  border: 1px solid rgba(97,218,251,0.3);
+  border-radius: 20px;
+  color: #61dafb; font-size: 14px; font-weight: 600;
+}
+.tag.purple {
+  background: rgba(139,92,246,0.1);
+  border-color: rgba(139,92,246,0.3);
+  color: #a78bfa;
+}
+.tag.green {
+  background: rgba(52,211,153,0.1);
+  border-color: rgba(52,211,153,0.3);
+  color: #34d399;
+}
+.code-bg {
+  position: absolute; top: 20px; right: 30px;
+  font-family: 'Courier New', monospace; font-size: 11px;
+  color: rgba(97,218,251,0.15); line-height: 1.6;
+  transform: rotate(-5deg);
+}
+.code-bg2 {
+  position: absolute; bottom: 20px; left: 30px;
+  font-family: 'Courier New', monospace; font-size: 11px;
+  color: rgba(139,92,246,0.12); line-height: 1.6;
+  transform: rotate(3deg);
+}
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="code-bg">const App = () =&gt; {<br>&nbsp;&nbsp;return (&lt;div&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;Header /&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;Main /&gt;<br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;Footer /&gt;<br>&nbsp;&nbsp;)&lt;/div&gt;<br>}</div>
+  <div class="code-bg2">export async function<br>getServerSideProps() {<br>&nbsp;&nbsp;const data = await<br>&nbsp;&nbsp;&nbsp;&nbsp;fetch('/api')<br>&nbsp;&nbsp;return { props: {data} }<br>}</div>
+  <div class="content">
+    <div class="logo">
+      <svg class="react-icon atom" viewBox="0 0 100 100" width="60" height="60">
+        <circle cx="50" cy="50" r="8" fill="#61dafb"/>
+        <ellipse cx="50" cy="50" rx="45" ry="17" fill="none" stroke="#61dafb" stroke-width="2" opacity="0.6"/>
+        <ellipse cx="50" cy="50" rx="45" ry="17" fill="none" stroke="#61dafb" stroke-width="2" opacity="0.6" transform="rotate(60 50 50)"/>
+        <ellipse cx="50" cy="50" rx="45" ry="17" fill="none" stroke="#61dafb" stroke-width="2" opacity="0.6" transform="rotate(120 50 50)"/>
+      </svg>
+    </div>
+    <h1>React / Next.js</h1>
+    <div class="subtitle">Адаптивный лендинг с SSR и SEO-оптимизацией</div>
+    <div class="tags">
+      <span class="tag">React 18</span>
+      <span class="tag purple">Next.js 14</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag purple">Tailwind CSS</span>
+      <span class="tag green">Адаптив</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
