@@ -3,105 +3,635 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Магазин кроссовок — React Next.js</title>
+<title>Магазин кроссовок — SneakPeak</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafafa; color: #1a1a2e; }
-.header { background: white; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+
+/* ===== HEADER ===== */
+.header { background: white; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
 .logo { font-size: 22px; font-weight: 800; }
 .logo span { color: #6c63ff; }
 .nav-links { display: flex; gap: 24px; }
-.nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; }
+.nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: color 0.2s; }
 .nav-links a:hover { color: #6c63ff; }
-.cart-btn { background: #6c63ff; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; }
+.cart-btn { background: #6c63ff; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; position: relative; transition: background 0.2s; }
+.cart-btn:hover { background: #5a52e0; }
+.cart-count { background: #ff4757; color: white; font-size: 11px; font-weight: 700; border-radius: 50%; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; vertical-align: middle; }
+.cart-count.hidden { display: none; }
+
+/* ===== HERO ===== */
 .hero { padding: 60px 40px; display: flex; align-items: center; gap: 40px; max-width: 1200px; margin: 0 auto; }
 .hero-text { flex: 1; }
 .hero-text h1 { font-size: 42px; line-height: 1.2; margin-bottom: 16px; }
 .hero-text h1 span { color: #6c63ff; }
 .hero-text p { color: #666; font-size: 16px; margin-bottom: 24px; line-height: 1.6; }
-.hero-btn { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.hero-btn { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.hero-btn:hover { background: #5a52e0; }
 .hero-img { width: 400px; height: 300px; background: linear-gradient(135deg, #6c63ff22, #6c63ff11); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+
+/* ===== PRODUCTS ===== */
 .products { padding: 40px; max-width: 1200px; margin: 0 auto; }
 .products h2 { font-size: 28px; margin-bottom: 24px; }
+
+/* ===== FILTER BAR ===== */
+.filter-bar { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+.filter-btn { padding: 8px 20px; border-radius: 20px; border: 2px solid #e0e0e0; background: white; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #555; }
+.filter-btn:hover { border-color: #6c63ff; color: #6c63ff; }
+.filter-btn.active { background: #6c63ff; color: white; border-color: #6c63ff; }
+.filter-btn .new-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 8px; margin-left: 4px; }
+
+/* ===== GRID ===== */
 .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.product { background: white; border-radius: 16px; padding: 20px; border: 1px solid #eee; transition: transform 0.2s; }
+.product { background: white; border-radius: 16px; padding: 20px; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; position: relative; }
 .product:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.product.new-tag { border-color: #ff475740; }
+.product.new-tag::after { content: 'NEW'; position: absolute; top: 12px; right: 12px; background: #ff4757; color: white; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 8px; }
 .product-img { width: 100%; height: 140px; background: #f5f5f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 12px; }
 .product h3 { font-size: 15px; margin-bottom: 4px; }
 .product .brand { color: #999; font-size: 12px; margin-bottom: 8px; }
 .product .price { font-size: 18px; font-weight: 700; color: #6c63ff; }
 .product .old-price { font-size: 13px; color: #999; text-decoration: line-through; margin-left: 8px; }
 .product .rating { font-size: 12px; color: #f59e0b; margin-top: 4px; }
+.add-to-cart-btn { width: 100%; margin-top: 12px; padding: 10px; border: none; border-radius: 10px; background: #6c63ff; color: white; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.add-to-cart-btn:hover { background: #5a52e0; }
+.add-to-cart-btn.added { background: #22c55e; animation: popBtn 0.3s ease; }
+@keyframes popBtn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+/* ===== FEATURES ===== */
 .features { padding: 60px 40px; max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; }
 .feature { flex: 1; background: white; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #eee; }
 .feature .icon { font-size: 36px; margin-bottom: 12px; }
 .feature h3 { font-size: 15px; margin-bottom: 6px; }
 .feature p { font-size: 13px; color: #888; }
+
+/* ===== FOOTER ===== */
 .footer { background: #1a1a2e; color: white; padding: 40px; text-align: center; margin-top: 40px; }
 .footer p { color: #888; font-size: 13px; margin-top: 8px; }
+
+/* ===== CART SIDEBAR ===== */
+.cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.cart-overlay.open { opacity: 1; pointer-events: auto; }
+.cart-sidebar { position: fixed; top: 0; right: -420px; width: 400px; height: 100%; background: white; z-index: 201; transition: right 0.3s ease; display: flex; flex-direction: column; box-shadow: -4px 0 20px rgba(0,0,0,0.1); }
+.cart-sidebar.open { right: 0; }
+.cart-header { padding: 20px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+.cart-header h2 { font-size: 20px; }
+.cart-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; padding: 4px 8px; }
+.cart-close:hover { color: #333; }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+.cart-empty { text-align: center; padding: 60px 20px; color: #999; }
+.cart-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+.cart-empty p { font-size: 15px; }
+.cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid #f0f0f0; align-items: center; }
+.cart-item-img { width: 56px; height: 56px; background: #f5f5f5; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.cart-item-info { flex: 1; }
+.cart-item-info h4 { font-size: 14px; margin-bottom: 2px; }
+.cart-item-info .cart-item-brand { font-size: 11px; color: #999; }
+.cart-item-info .cart-item-price { font-size: 14px; font-weight: 700; color: #6c63ff; margin-top: 4px; }
+.cart-item-qty { display: flex; align-items: center; gap: 8px; }
+.qty-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.qty-btn:hover { border-color: #6c63ff; color: #6c63ff; }
+.cart-item-qty span { font-size: 14px; font-weight: 600; min-width: 16px; text-align: center; }
+.cart-item-remove { background: none; border: none; color: #ccc; font-size: 18px; cursor: pointer; padding: 4px; transition: color 0.2s; }
+.cart-item-remove:hover { color: #ff4757; }
+.cart-footer { padding: 20px 24px; border-top: 1px solid #eee; }
+.cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.cart-total span:last-child { color: #6c63ff; }
+.checkout-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: #6c63ff; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.checkout-btn:hover { background: #5a52e0; }
+.checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+/* ===== PRODUCT MODAL ===== */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: white; border-radius: 20px; width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalIn 0.25s ease; }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.modal-close { position: absolute; top: 16px; right: 16px; background: white; border: none; font-size: 24px; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 1; transition: background 0.2s; }
+.modal-close:hover { background: #f5f5f5; }
+.modal-content { display: flex; gap: 32px; padding: 32px; }
+.modal-img { width: 280px; height: 280px; background: #f5f5f5; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 80px; flex-shrink: 0; }
+.modal-info { flex: 1; }
+.modal-info .modal-brand { color: #999; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.modal-info h2 { font-size: 26px; margin-bottom: 8px; }
+.modal-info .modal-rating { color: #f59e0b; font-size: 14px; margin-bottom: 12px; }
+.modal-info .modal-desc { color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+.modal-info .modal-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
+.modal-info .modal-price { font-size: 28px; font-weight: 800; color: #6c63ff; }
+.modal-info .modal-old-price { font-size: 16px; color: #999; text-decoration: line-through; }
+.modal-info .modal-discount { background: #ff475720; color: #ff4757; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+.modal-info .size-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #555; }
+.size-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.size-chip { width: 44px; height: 44px; border: 2px solid #e0e0e0; border-radius: 10px; background: white; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #555; display: flex; align-items: center; justify-content: center; }
+.size-chip:hover { border-color: #6c63ff; color: #6c63ff; }
+.size-chip.selected { background: #6c63ff; color: white; border-color: #6c63ff; }
+.modal-add-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: #6c63ff; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.modal-add-btn:hover { background: #5a52e0; }
+
+/* ===== CHECKOUT MODAL ===== */
+.checkout-modal .modal { max-width: 520px; }
+.checkout-content { padding: 32px; }
+.checkout-content h2 { font-size: 22px; margin-bottom: 4px; }
+.checkout-content .checkout-subtitle { color: #999; font-size: 14px; margin-bottom: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555; }
+.form-group input { width: 100%; padding: 12px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; transition: border-color 0.2s; outline: none; }
+.form-group input:focus { border-color: #6c63ff; }
+.order-summary { background: #f8f8ff; border-radius: 12px; padding: 16px; margin: 20px 0; }
+.order-summary h3 { font-size: 14px; margin-bottom: 10px; color: #555; }
+.order-summary-item { display: flex; justify-content: space-between; font-size: 13px; padding: 4px 0; }
+.order-summary-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; border-top: 1px solid #e0e0e0; padding-top: 8px; margin-top: 8px; }
+.order-summary-total span:last-child { color: #6c63ff; }
+.submit-order-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: #6c63ff; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.submit-order-btn:hover { background: #5a52e0; }
+
+/* ===== SUCCESS ===== */
+.success-content { padding: 48px 32px; text-align: center; }
+.success-content .success-icon { font-size: 64px; margin-bottom: 16px; }
+.success-content h2 { font-size: 22px; margin-bottom: 8px; }
+.success-content p { color: #666; font-size: 14px; margin-bottom: 24px; }
+.success-close-btn { padding: 12px 32px; border: none; border-radius: 12px; background: #6c63ff; color: white; font-size: 15px; font-weight: 600; cursor: pointer; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .modal-content { flex-direction: column; }
+  .modal-img { width: 100%; height: 200px; }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+  .hero { flex-direction: column; padding: 40px 20px; }
+  .hero-img { width: 100%; height: 200px; }
+  .header { padding: 12px 16px; }
+  .products { padding: 24px 16px; }
+  .features { flex-direction: column; padding: 24px 16px; }
+  .cart-sidebar { width: 100%; right: -100%; }
+}
 </style>
 </head>
 <body>
+
+<!-- ===== HEADER ===== -->
 <div class="header">
   <div class="logo">Sneak<span>Peak</span></div>
   <div class="nav-links">
-    <a href="#">Каталог</a>
-    <a href="#">Новинки</a>
-    <a href="#">Бренды</a>
-    <a href="#">О нас</a>
+    <a onclick="scrollToProducts()">Каталог</a>
+    <a onclick="filterNew()">Новинки</a>
+    <a onclick="scrollToProducts()">Бренды</a>
+    <a onclick="scrollToFeatures()">О нас</a>
   </div>
-  <button class="cart-btn">🛒 Корзина (3)</button>
+  <button class="cart-btn" onclick="openCart()">🛒 Корзина<span class="cart-count hidden" id="cartCount">0</span></button>
 </div>
+
+<!-- ===== HERO ===== -->
 <div class="hero">
   <div class="hero-text">
     <h1>Новая коллекция <span>Spring 2026</span></h1>
     <p>Стильные кроссовки от ведущих брендов с быстрой доставкой по всей России. Более 2000 моделей в наличии.</p>
-    <button class="hero-btn">Смотреть каталог</button>
+    <button class="hero-btn" onclick="scrollToProducts()">Смотреть каталог</button>
   </div>
   <div class="hero-img">👟</div>
 </div>
-<div class="products">
+
+<!-- ===== PRODUCTS ===== -->
+<div class="products" id="productsSection">
   <h2>Популярные модели</h2>
-  <div class="grid">
-    <div class="product">
-      <div class="product-img">👟</div>
-      <h3>Air Max Pulse</h3>
-      <div class="brand">Nike</div>
-      <div><span class="price">12 990 ₽</span><span class="old-price">15 990 ₽</span></div>
-      <div class="rating">★★★★★ (124)</div>
-    </div>
-    <div class="product">
-      <div class="product-img">👟</div>
-      <h3>Ultraboost Light</h3>
-      <div class="brand">Adidas</div>
-      <div><span class="price">14 490 ₽</span></div>
-      <div class="rating">★★★★☆ (89)</div>
-    </div>
-    <div class="product">
-      <div class="product-img">👟</div>
-      <h3>574 Classic</h3>
-      <div class="brand">New Balance</div>
-      <div><span class="price">9 990 ₽</span><span class="old-price">11 990 ₽</span></div>
-      <div class="rating">★★★★★ (201)</div>
-    </div>
-    <div class="product">
-      <div class="product-img">👟</div>
-      <h3>Gel-Kayano 30</h3>
-      <div class="brand">ASICS</div>
-      <div><span class="price">16 990 ₽</span></div>
-      <div class="rating">★★★★☆ (67)</div>
-    </div>
-  </div>
+  <div class="filter-bar" id="filterBar"></div>
+  <div class="grid" id="productGrid"></div>
 </div>
-<div class="features">
+
+<!-- ===== FEATURES ===== -->
+<div class="features" id="featuresSection">
   <div class="feature"><div class="icon">🚀</div><h3>Быстрая доставка</h3><p>От 1 дня по Москве</p></div>
   <div class="feature"><div class="icon">🔄</div><h3>Обмен и возврат</h3><p>30 дней на возврат</p></div>
   <div class="feature"><div class="icon">✅</div><h3>Оригинал 100%</h3><p>Гарантия подлинности</p></div>
   <div class="feature"><div class="icon">💳</div><h3>Оплата</h3><p>Любым способом</p></div>
 </div>
+
+<!-- ===== FOOTER ===== -->
 <div class="footer">
   <div class="logo">Sneak<span>Peak</span></div>
-  <p>© 2026 SneakPeak. React + Next.js + Tailwind CSS</p>
+  <p>&copy; 2026 SneakPeak. React + Next.js + Tailwind CSS</p>
 </div>
+
+<!-- ===== CART OVERLAY ===== -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- ===== CART SIDEBAR ===== -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>🛒 Корзина</h2>
+    <button class="cart-close" onclick="closeCart()">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Итого:</span>
+      <span id="cartTotal">0 ₽</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()" disabled>Оформить заказ</button>
+  </div>
+</div>
+
+<!-- ===== PRODUCT DETAIL MODAL ===== -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeProductModal()">&times;</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div class="modal-overlay checkout-modal" id="checkoutModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCheckout()">&times;</button>
+    <div id="checkoutContent"></div>
+  </div>
+</div>
+
+<script>
+// ===== PRODUCT DATA =====
+const products = [
+  {
+    id: 1, name: 'Air Max Pulse', brand: 'Nike', price: 12990, oldPrice: 15990,
+    rating: 5, reviews: 124, emoji: '👟', isNew: false,
+    description: 'Культовая модель Nike Air Max в обновлённом дизайне. Технология Air обеспечивает максимальную амортизацию, а дышащий верх — комфорт на весь день.'
+  },
+  {
+    id: 2, name: 'Ultraboost Light', brand: 'Adidas', price: 14490, oldPrice: null,
+    rating: 4, reviews: 89, emoji: '👟', isNew: false,
+    description: 'Лёгкие и отзывчивые кроссовки с технологией Boost для энергоотдачи на каждом шаге. Идеальны для бега и повседневной носки.'
+  },
+  {
+    id: 3, name: '574 Classic', brand: 'New Balance', price: 9990, oldPrice: 11990,
+    rating: 5, reviews: 201, emoji: '👟', isNew: false,
+    description: 'Классика New Balance, которая никогда не выходит из моды. Кожаный верх и подписная подошва ENCAP для надёжной поддержки.'
+  },
+  {
+    id: 4, name: 'Gel-Kayano 30', brand: 'ASICS', price: 16990, oldPrice: null,
+    rating: 4, reviews: 67, emoji: '👟', isNew: false,
+    description: 'Стабильные беговые кроссовки с технологией GEL для превосходной амортизации. Подходят для длинных дистанций и ежедневных пробежек.'
+  },
+  {
+    id: 5, name: 'Dunk Low Retro', brand: 'Nike', price: 10990, oldPrice: 13990,
+    rating: 5, reviews: 156, emoji: '👟', isNew: true,
+    description: 'Легендарные Nike Dunk Low возвращаются в ретро-цветовой гамме. Кожаный верх и резиновая подошва — стиль на все времена.'
+  },
+  {
+    id: 6, name: 'Samba OG', brand: 'Adidas', price: 11490, oldPrice: null,
+    rating: 4, reviews: 98, emoji: '👟', isNew: true,
+    description: 'Культовые футбольные кроссовки, ставшие уличной классикой. Замшевая накладка и фирменная шипованная подошва T-toe.'
+  },
+  {
+    id: 7, name: '990v6', brand: 'New Balance', price: 19990, oldPrice: 22990,
+    rating: 5, reviews: 45, emoji: '👟', isNew: true,
+    description: 'Флагманская модель Made in USA. Премиальные материалы, технология FuelCell и безупречный стиль для ценителей.'
+  },
+  {
+    id: 8, name: 'Gel-1130', brand: 'ASICS', price: 8990, oldPrice: null,
+    rating: 4, reviews: 73, emoji: '👟', isNew: true,
+    description: 'Ретро-беговые кроссовки с технологией GEL и современным дизайном. Лёгкость и комфорт в повседневной носке.'
+  }
+];
+
+const brands = ['Все', 'Nike', 'Adidas', 'New Balance', 'ASICS'];
+const sizes = [40, 41, 42, 43, 44, 45];
+
+// ===== STATE =====
+let cart = [];
+let activeFilter = 'Все';
+let isNewFilter = false;
+
+// ===== FORMAT HELPERS =====
+function formatPrice(p) {
+  return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ₽';
+}
+
+function stars(r) {
+  return '★'.repeat(r) + '☆'.repeat(5 - r);
+}
+
+function discountPercent(price, oldPrice) {
+  if (!oldPrice) return 0;
+  return Math.round((1 - price / oldPrice) * 100);
+}
+
+// ===== RENDER FILTERS =====
+function renderFilters() {
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = brands.map(b => {
+    const isActive = (b === activeFilter && !isNewFilter);
+    return `<button class="filter-btn${isActive ? ' active' : ''}" onclick="setFilter('${b}')">${b}</button>`;
+  }).join('') + `<button class="filter-btn${isNewFilter ? ' active' : ''}" onclick="filterNew()">Новинки<span class="new-badge">NEW</span></button>`;
+}
+
+function setFilter(brand) {
+  isNewFilter = false;
+  activeFilter = brand;
+  renderFilters();
+  renderProducts();
+}
+
+function filterNew() {
+  isNewFilter = true;
+  activeFilter = 'Все';
+  renderFilters();
+  renderProducts();
+  scrollToProducts();
+}
+
+// ===== RENDER PRODUCTS =====
+function renderProducts() {
+  const grid = document.getElementById('productGrid');
+  let filtered = products;
+  if (isNewFilter) {
+    filtered = products.filter(p => p.isNew);
+  } else if (activeFilter !== 'Все') {
+    filtered = products.filter(p => p.brand === activeFilter);
+  }
+
+  grid.innerHTML = filtered.map(p => {
+    const discount = discountPercent(p.price, p.oldPrice);
+    return `
+      <div class="product${p.isNew ? ' new-tag' : ''}" onclick="openProductModal(${p.id})">
+        <div class="product-img">${p.emoji}</div>
+        <h3>${p.name}</h3>
+        <div class="brand">${p.brand}</div>
+        <div>
+          <span class="price">${formatPrice(p.price)}</span>${p.oldPrice ? `<span class="old-price">${formatPrice(p.oldPrice)}</span>` : ''}
+        </div>
+        <div class="rating">${stars(p.rating)} (${p.reviews})</div>
+        <button class="add-to-cart-btn" id="addBtn${p.id}" onclick="event.stopPropagation(); addToCart(${p.id})">В корзину</button>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===== CART FUNCTIONS =====
+function addToCart(productId, selectedSize) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+
+  const size = selectedSize || 42;
+  const existingIndex = cart.findIndex(item => item.id === productId && item.size === size);
+
+  if (existingIndex >= 0) {
+    cart[existingIndex].qty++;
+  } else {
+    cart.push({ id: productId, name: product.name, brand: product.brand, price: product.price, emoji: product.emoji, size: size, qty: 1 });
+  }
+
+  updateCartUI();
+
+  // Button feedback
+  const btn = document.getElementById(`addBtn${productId}`);
+  if (btn) {
+    btn.textContent = '✓ Добавлено';
+    btn.classList.add('added');
+    setTimeout(() => {
+      btn.textContent = 'В корзину';
+      btn.classList.remove('added');
+    }, 1200);
+  }
+
+  // Modal button feedback
+  const modalBtn = document.getElementById(`modalAddBtn${productId}`);
+  if (modalBtn) {
+    modalBtn.textContent = '✓ Добавлено';
+    modalBtn.style.background = '#22c55e';
+    setTimeout(() => {
+      modalBtn.textContent = 'В корзину';
+      modalBtn.style.background = '#6c63ff';
+    }, 1200);
+  }
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCartUI();
+}
+
+function changeQty(index, delta) {
+  cart[index].qty += delta;
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const countEl = document.getElementById('cartCount');
+  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+  countEl.textContent = totalItems;
+  countEl.classList.toggle('hidden', totalItems === 0);
+
+  const itemsEl = document.getElementById('cartItems');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  if (cart.length === 0) {
+    itemsEl.innerHTML = `<div class="cart-empty"><div class="empty-icon">🛒</div><p>Корзина пуста</p></div>`;
+    checkoutBtn.disabled = true;
+  } else {
+    itemsEl.innerHTML = cart.map((item, i) => `
+      <div class="cart-item">
+        <div class="cart-item-img">${item.emoji}</div>
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <div class="cart-item-brand">${item.brand} · Размер ${item.size}</div>
+          <div class="cart-item-price">${formatPrice(item.price * item.qty)}</div>
+        </div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${i}, -1)">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${i}, 1)">+</button>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+      </div>
+    `).join('');
+    checkoutBtn.disabled = false;
+  }
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  document.getElementById('cartTotal').textContent = formatPrice(total);
+}
+
+// ===== CART SIDEBAR =====
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartSidebar').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartSidebar').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== PRODUCT MODAL =====
+let currentSelectedSize = 42;
+
+function openProductModal(productId) {
+  const p = products.find(pr => pr.id === productId);
+  if (!p) return;
+  currentSelectedSize = 42;
+
+  const discount = discountPercent(p.price, p.oldPrice);
+  const content = document.getElementById('modalContent');
+
+  content.innerHTML = `
+    <div class="modal-img">${p.emoji}</div>
+    <div class="modal-info">
+      <div class="modal-brand">${p.brand}</div>
+      <h2>${p.name}</h2>
+      <div class="modal-rating">${stars(p.rating)} (${p.reviews} отзывов)</div>
+      <div class="modal-desc">${p.description}</div>
+      <div class="modal-price-row">
+        <span class="modal-price">${formatPrice(p.price)}</span>
+        ${p.oldPrice ? `<span class="modal-old-price">${formatPrice(p.oldPrice)}</span>` : ''}
+        ${discount ? `<span class="modal-discount">-${discount}%</span>` : ''}
+      </div>
+      <div class="size-label">Выберите размер:</div>
+      <div class="size-chips" id="sizeChips">
+        ${sizes.map(s => `<button class="size-chip${s === currentSelectedSize ? ' selected' : ''}" onclick="selectSize(${s})">${s}</button>`).join('')}
+      </div>
+      <button class="modal-add-btn" id="modalAddBtn${p.id}" onclick="addToCart(${p.id}, currentSelectedSize); closeProductModal();">В корзину</button>
+    </div>
+  `;
+
+  document.getElementById('productModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function selectSize(size) {
+  currentSelectedSize = size;
+  document.querySelectorAll('.size-chip').forEach(chip => {
+    chip.classList.toggle('selected', parseInt(chip.textContent) === size);
+  });
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== CHECKOUT MODAL =====
+function openCheckout() {
+  closeCart();
+  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+  const content = document.getElementById('checkoutContent');
+  content.innerHTML = `
+    <div class="checkout-content">
+      <h2>Оформление заказа</h2>
+      <div class="checkout-subtitle">Заполните данные для доставки</div>
+      <div class="order-summary">
+        <h3>Ваш заказ</h3>
+        ${cart.map(item => `
+          <div class="order-summary-item">
+            <span>${item.name} (${item.brand}) × ${item.qty}, р. ${item.size}</span>
+            <span>${formatPrice(item.price * item.qty)}</span>
+          </div>
+        `).join('')}
+        <div class="order-summary-total">
+          <span>Итого:</span>
+          <span>${formatPrice(total)}</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Имя и фамилия</label>
+        <input type="text" id="checkoutName" placeholder="Иван Иванов" />
+      </div>
+      <div class="form-group">
+        <label>Телефон</label>
+        <input type="tel" id="checkoutPhone" placeholder="+7 (999) 123-45-67" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="checkoutEmail" placeholder="ivan@example.com" />
+      </div>
+      <div class="form-group">
+        <label>Адрес доставки</label>
+        <input type="text" id="checkoutAddress" placeholder="г. Москва, ул. Примерная, д. 1, кв. 42" />
+      </div>
+      <button class="submit-order-btn" onclick="submitOrder()">Подтвердить заказ</button>
+    </div>
+  `;
+
+  document.getElementById('checkoutModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function submitOrder() {
+  const name = document.getElementById('checkoutName').value.trim();
+  const phone = document.getElementById('checkoutPhone').value.trim();
+  const email = document.getElementById('checkoutEmail').value.trim();
+  const address = document.getElementById('checkoutAddress').value.trim();
+
+  if (!name || !phone || !email || !address) {
+    alert('Пожалуйста, заполните все поля.');
+    return;
+  }
+
+  const content = document.getElementById('checkoutContent');
+  const orderNum = 'SP-' + Math.floor(100000 + Math.random() * 900000);
+
+  content.innerHTML = `
+    <div class="success-content">
+      <div class="success-icon">🎉</div>
+      <h2>Заказ оформлен!</h2>
+      <p>Номер заказа: <strong>${orderNum}</strong><br>Мы отправим подтверждение на ${email}</p>
+      <button class="success-close-btn" onclick="finishOrder()">Продолжить покупки</button>
+    </div>
+  `;
+}
+
+function finishOrder() {
+  cart = [];
+  updateCartUI();
+  closeCheckout();
+}
+
+// ===== NAVIGATION =====
+function scrollToProducts() {
+  document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scrollToFeatures() {
+  document.getElementById('featuresSection').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== CLOSE MODALS ON ESCAPE =====
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeProductModal();
+    closeCheckout();
+    closeCart();
+  }
+});
+
+// ===== CLOSE PRODUCT MODAL ON OVERLAY CLICK =====
+document.getElementById('productModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('productModal')) {
+    closeProductModal();
+  }
+});
+
+document.getElementById('checkoutModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('checkoutModal')) {
+    closeCheckout();
+  }
+});
+
+// ===== INIT =====
+renderFilters();
+renderProducts();
+updateCartUI();
+</script>
+
 </body>
 </html>

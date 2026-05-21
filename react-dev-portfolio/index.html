@@ -6,27 +6,51 @@
 <title>Портфолио — React Next.js</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; color: #e5e5e5; }
-.nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 60px; }
+
+/* ===== NAV ===== */
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 60px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,10,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: border-color 0.3s, background 0.3s; }
+.nav.scrolled { border-bottom-color: #2a2a2a; background: rgba(10,10,10,0.95); }
 .logo { font-size: 20px; font-weight: 700; color: #fff; }
 .logo span { color: #22d3ee; }
 .nav-links { display: flex; gap: 28px; }
-.nav-links a { color: #888; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+.nav-links a { color: #888; text-decoration: none; font-size: 14px; transition: color 0.2s; position: relative; padding-bottom: 4px; }
 .nav-links a:hover { color: #22d3ee; }
-.hero { padding: 100px 60px 60px; }
+.nav-links a.active { color: #22d3ee; }
+.nav-links a.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: #22d3ee; border-radius: 1px; }
+
+/* ===== HERO ===== */
+.hero { padding: 160px 60px 60px; }
 .hero h1 { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
 .hero h1 span { color: #22d3ee; }
 .hero p { color: #888; font-size: 18px; max-width: 500px; line-height: 1.6; margin-bottom: 32px; }
-.hero-btn { display: inline-block; background: #22d3ee; color: #0a0a0a; padding: 12px 28px; border-radius: 24px; font-size: 14px; font-weight: 600; text-decoration: none; }
-.projects { padding: 40px 60px; }
-.projects h2 { font-size: 28px; margin-bottom: 32px; }
+.hero-btn { display: inline-block; background: #22d3ee; color: #0a0a0a; padding: 12px 28px; border-radius: 24px; font-size: 14px; font-weight: 600; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+.hero-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(34,211,238,0.25); }
+
+/* ===== PROJECTS ===== */
+.projects { padding: 40px 60px 80px; }
+.projects h2 { font-size: 28px; margin-bottom: 24px; }
+
+/* Filter Buttons */
+.filter-bar { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+.filter-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid #2a2a2a; background: transparent; color: #888; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s; font-family: inherit; }
+.filter-btn:hover { border-color: #22d3ee; color: #22d3ee; }
+.filter-btn.active { background: #22d3ee; color: #0a0a0a; border-color: #22d3ee; font-weight: 600; }
+
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.project { background: #1a1a1a; border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+.project { background: #1a1a1a; border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s, opacity 0.4s, max-height 0.5s; cursor: pointer; opacity: 1; }
 .project:hover { transform: translateY(-6px); border-color: #22d3ee; }
-.project-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+.project.hidden { opacity: 0; pointer-events: none; position: absolute; visibility: hidden; }
+.project.fade-out { opacity: 0; transform: scale(0.95); }
+.project.fade-in { opacity: 1; transform: scale(1); }
+.project-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 48px; transition: background 0.3s; }
 .project-img.cyan { background: linear-gradient(135deg, #22d3ee15, #22d3ee08); }
 .project-img.purple { background: linear-gradient(135deg, #a855f715, #a855f708); }
 .project-img.green { background: linear-gradient(135deg, #34d39915, #34d39908); }
+.project-img.orange { background: linear-gradient(135deg, #fb923c15, #fb923c08); }
+.project-img.pink { background: linear-gradient(135deg, #f472b615, #f472b608); }
+.project-img.blue { background: linear-gradient(135deg, #60a5fa15, #60a5fa08); }
 .project-info { padding: 20px; }
 .project-info h3 { font-size: 16px; margin-bottom: 6px; }
 .project-info p { font-size: 13px; color: #888; line-height: 1.4; margin-bottom: 12px; }
@@ -35,37 +59,135 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
 .tag.react { color: #22d3ee; background: #22d3ee15; }
 .tag.next { color: #a855f7; background: #a855f715; }
 .tag.tw { color: #34d399; background: #34d39915; }
-.about { padding: 80px 60px; display: flex; gap: 60px; align-items: center; }
+
+/* ===== MODAL ===== */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: #141414; border: 1px solid #2a2a2a; border-radius: 20px; max-width: 720px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative; transform: translateY(30px) scale(0.95); transition: transform 0.3s; }
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid #2a2a2a; background: #1a1a1a; color: #888; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 10; }
+.modal-close:hover { border-color: #22d3ee; color: #22d3ee; background: #22d3ee10; }
+.modal-preview { height: 260px; display: flex; align-items: center; justify-content: center; font-size: 72px; border-radius: 20px 20px 0 0; }
+.modal-body { padding: 32px; }
+.modal-body h2 { font-size: 24px; margin-bottom: 8px; }
+.modal-body .modal-desc { color: #999; font-size: 15px; line-height: 1.7; margin-bottom: 20px; }
+.modal-body .modal-tags { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.modal-body .modal-tags .tag { font-size: 12px; padding: 5px 14px; }
+.modal-features { margin-bottom: 24px; }
+.modal-features h4 { font-size: 14px; color: #22d3ee; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.modal-features ul { list-style: none; padding: 0; }
+.modal-features li { font-size: 14px; color: #bbb; padding: 6px 0; padding-left: 20px; position: relative; }
+.modal-features li::before { content: '▸'; position: absolute; left: 0; color: #22d3ee; }
+.modal-actions { display: flex; gap: 12px; }
+.modal-actions .btn-primary { display: inline-flex; align-items: center; gap: 6px; background: #22d3ee; color: #0a0a0a; padding: 10px 24px; border-radius: 20px; font-size: 14px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: inherit; }
+.modal-actions .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34,211,238,0.3); }
+.modal-actions .btn-secondary { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: #ccc; padding: 10px 24px; border-radius: 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid #2a2a2a; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.modal-actions .btn-secondary:hover { border-color: #22d3ee; color: #22d3ee; }
+
+/* ===== ABOUT ===== */
+.about { padding: 80px 60px; display: flex; gap: 60px; align-items: flex-start; }
 .about-text { flex: 1; }
 .about-text h2 { font-size: 32px; margin-bottom: 16px; }
 .about-text p { color: #888; font-size: 15px; line-height: 1.7; margin-bottom: 16px; }
-.skills { display: flex; gap: 10px; flex-wrap: wrap; }
-.skill { padding: 8px 16px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 20px; font-size: 13px; color: #ccc; }
+
+/* Skill Bars */
+.skill-bars { margin-top: 24px; width: 100%; }
+.skill-bar-item { margin-bottom: 18px; }
+.skill-bar-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.skill-bar-name { font-size: 14px; color: #ccc; font-weight: 500; }
+.skill-bar-pct { font-size: 13px; color: #22d3ee; font-weight: 600; }
+.skill-bar-track { width: 100%; height: 8px; background: #1a1a1a; border-radius: 4px; overflow: hidden; border: 1px solid #2a2a2a; }
+.skill-bar-fill { height: 100%; border-radius: 4px; width: 0; transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.skill-bar-fill.animated { /* width set via JS */ }
+.skill-bar-fill.cyan { background: linear-gradient(90deg, #22d3ee, #06b6d4); }
+.skill-bar-fill.purple { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+.skill-bar-fill.green { background: linear-gradient(90deg, #34d399, #10b981); }
+.skill-bar-fill.blue { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+.skill-bar-fill.pink { background: linear-gradient(90deg, #f472b6, #ec4899); }
+.skill-bar-fill.orange { background: linear-gradient(90deg, #fb923c, #f97316); }
+
+/* ===== CONTACT FORM ===== */
 .contact { padding: 80px 60px; text-align: center; }
 .contact h2 { font-size: 36px; margin-bottom: 16px; }
-.contact p { color: #888; font-size: 16px; margin-bottom: 28px; }
-.contact-btn { display: inline-block; background: #22d3ee; color: #0a0a0a; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; text-decoration: none; }
+.contact > p { color: #888; font-size: 16px; margin-bottom: 36px; max-width: 480px; margin-left: auto; margin-right: auto; }
+.contact-form { max-width: 480px; margin: 0 auto; text-align: left; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; color: #999; margin-bottom: 8px; font-weight: 500; }
+.form-group input, .form-group textarea { width: 100%; padding: 12px 16px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; color: #e5e5e5; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+.form-group input:focus, .form-group textarea:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34,211,238,0.1); }
+.form-group textarea { min-height: 120px; resize: vertical; }
+.form-group input.error, .form-group textarea.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+.form-group .error-msg { font-size: 12px; color: #ef4444; margin-top: 6px; display: none; }
+.form-group .error-msg.visible { display: block; }
+.form-submit { width: 100%; padding: 14px; background: #22d3ee; color: #0a0a0a; border: none; border-radius: 24px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; }
+.form-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(34,211,238,0.25); }
+.form-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+.form-submit .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(10,10,10,0.3); border-top-color: #0a0a0a; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.form-success { display: none; text-align: center; padding: 40px 20px; }
+.form-success.visible { display: block; }
+.form-success .success-icon { font-size: 48px; margin-bottom: 16px; }
+.form-success h3 { font-size: 22px; margin-bottom: 8px; color: #22d3ee; }
+.form-success p { color: #888; font-size: 15px; }
+
+/* ===== BACK TO TOP ===== */
+.back-to-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; border-radius: 50%; background: #1a1a1a; border: 1px solid #2a2a2a; color: #888; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 90; opacity: 0; pointer-events: none; transform: translateY(10px); transition: all 0.3s; }
+.back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+.back-to-top:hover { border-color: #22d3ee; color: #22d3ee; background: #22d3ee10; }
+
+/* ===== FOOTER ===== */
 .footer { padding: 24px 60px; border-top: 1px solid #2a2a2a; text-align: center; color: #555; font-size: 13px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .nav { padding: 16px 24px; }
+  .hero { padding: 120px 24px 40px; }
+  .hero h1 { font-size: 36px; }
+  .projects { padding: 32px 24px 60px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .about { padding: 48px 24px; flex-direction: column; gap: 32px; }
+  .contact { padding: 48px 24px; }
+  .footer { padding: 20px 24px; }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+  .nav-links { gap: 16px; }
+  .nav-links a { font-size: 13px; }
+}
 </style>
 </head>
 <body>
-<div class="nav">
+
+<!-- ===== NAVIGATION ===== -->
+<div class="nav" id="navbar">
   <div class="logo">dev<span>.</span>portfolio</div>
   <div class="nav-links">
-    <a href="#">Проекты</a>
-    <a href="#">Обо мне</a>
-    <a href="#">Контакты</a>
+    <a href="#projects" data-section="projects">Проекты</a>
+    <a href="#about" data-section="about">Обо мне</a>
+    <a href="#contact" data-section="contact">Контакты</a>
   </div>
 </div>
+
+<!-- ===== HERO ===== -->
 <div class="hero">
   <h1>Создаю <span>веб-приложения</span> на React</h1>
   <p>Frontend-разработчик. Специализируюсь на React, Next.js и современных веб-технологиях</p>
-  <a href="#" class="hero-btn">Смотреть работы</a>
+  <a href="#projects" class="hero-btn">Смотреть работы</a>
 </div>
-<div class="projects">
+
+<!-- ===== PROJECTS ===== -->
+<div class="projects" id="projects">
   <h2>Проекты</h2>
-  <div class="grid">
-    <div class="project">
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">Все</button>
+    <button class="filter-btn" data-filter="react">React</button>
+    <button class="filter-btn" data-filter="next">Next.js</button>
+    <button class="filter-btn" data-filter="tw">Tailwind</button>
+  </div>
+  <div class="grid" id="projectGrid">
+
+    <!-- Project 1: Dashboard -->
+    <div class="project" data-tags="react,next,tw" data-project="0">
       <div class="project-img cyan">📊</div>
       <div class="project-info">
         <h3>Dashboard аналитики</h3>
@@ -73,7 +195,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
         <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
       </div>
     </div>
-    <div class="project">
+
+    <!-- Project 2: E-commerce -->
+    <div class="project" data-tags="react,next,tw" data-project="1">
       <div class="project-img purple">🛒</div>
       <div class="project-info">
         <h3>Интернет-магазин</h3>
@@ -81,7 +205,9 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
         <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
       </div>
     </div>
-    <div class="project">
+
+    <!-- Project 3: SaaS -->
+    <div class="project" data-tags="react,next,tw" data-project="2">
       <div class="project-img green">📱</div>
       <div class="project-info">
         <h3>SaaS платформа</h3>
@@ -89,28 +215,547 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; colo
         <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
       </div>
     </div>
+
+    <!-- Project 4: Task Manager -->
+    <div class="project" data-tags="react,tw" data-project="3">
+      <div class="project-img orange">✅</div>
+      <div class="project-info">
+        <h3>Task Manager</h3>
+        <p>Система управления задачами с досками, драг-н-дроп и уведомлениями</p>
+        <div class="tags"><span class="tag react">React</span><span class="tag tw">Tailwind</span></div>
+      </div>
+    </div>
+
+    <!-- Project 5: Telegram Bot Dashboard -->
+    <div class="project" data-tags="next,tw" data-project="4">
+      <div class="project-img pink">🤖</div>
+      <div class="project-info">
+        <h3>Telegram Bot Dashboard</h3>
+        <p>Панель управления Telegram-ботами с аналитикой и логами</p>
+        <div class="tags"><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
+      </div>
+    </div>
+
+    <!-- Project 6: Portfolio Generator -->
+    <div class="project" data-tags="react,next" data-project="5">
+      <div class="project-img blue">🎨</div>
+      <div class="project-info">
+        <h3>Portfolio Generator</h3>
+        <p>Конструктор портфолио-сайтов с шаблонами и кастомизацией</p>
+        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span></div>
+      </div>
+    </div>
+
   </div>
 </div>
-<div class="about">
+
+<!-- ===== ABOUT ===== -->
+<div class="about" id="about">
   <div class="about-text">
     <h2>Обо мне</h2>
     <p>Разрабатываю современные веб-приложения с акцентом на производительность, доступность и пользовательский опыт. Каждый проект — чистый код, адаптивный дизайн и быстрая загрузка.</p>
     <p>Использую React 18, Next.js 14, TypeScript и Tailwind CSS — стек, который обеспечивает максимальную скорость разработки и качество результата.</p>
-    <div class="skills">
-      <span class="skill">React 18</span>
-      <span class="skill">Next.js 14</span>
-      <span class="skill">TypeScript</span>
-      <span class="skill">Tailwind CSS</span>
-      <span class="skill">Framer Motion</span>
-      <span class="skill">REST API</span>
+    <div class="skill-bars" id="skillBars">
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span class="skill-bar-name">React 18</span><span class="skill-bar-pct">95%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill cyan" data-width="95"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span class="skill-bar-name">Next.js 14</span><span class="skill-bar-pct">90%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill purple" data-width="90"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span class="skill-bar-name">TypeScript</span><span class="skill-bar-pct">88%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill blue" data-width="88"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span class="skill-bar-name">Tailwind CSS</span><span class="skill-bar-pct">92%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill green" data-width="92"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span class="skill-bar-name">Framer Motion</span><span class="skill-bar-pct">80%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill pink" data-width="80"></div></div>
+      </div>
+      <div class="skill-bar-item">
+        <div class="skill-bar-header"><span class="skill-bar-name">REST API</span><span class="skill-bar-pct">85%</span></div>
+        <div class="skill-bar-track"><div class="skill-bar-fill orange" data-width="85"></div></div>
+      </div>
     </div>
   </div>
 </div>
-<div class="contact">
+
+<!-- ===== CONTACT ===== -->
+<div class="contact" id="contact">
   <h2>Есть проект?</h2>
   <p>Давайте обсудим вашу задачу и найдём лучшее решение</p>
-  <a href="#" class="contact-btn">Написать</a>
+  <form class="contact-form" id="contactForm" novalidate>
+    <div class="form-group">
+      <label for="name">Имя</label>
+      <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+      <div class="error-msg" id="nameError">Пожалуйста, введите ваше имя</div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="your@email.com" required>
+      <div class="error-msg" id="emailError">Введите корректный email адрес</div>
+    </div>
+    <div class="form-group">
+      <label for="message">Сообщение</label>
+      <textarea id="message" name="message" placeholder="Расскажите о вашем проекте..." required></textarea>
+      <div class="error-msg" id="messageError">Пожалуйста, введите сообщение</div>
+    </div>
+    <button type="submit" class="form-submit" id="submitBtn">Отправить</button>
+  </form>
+  <div class="form-success" id="formSuccess">
+    <div class="success-icon">✅</div>
+    <h3>Сообщение отправлено!</h3>
+    <p>Спасибо за обращение. Я свяжусь с вами в ближайшее время.</p>
+  </div>
 </div>
+
+<!-- ===== FOOTER ===== -->
 <div class="footer">© 2026 dev.portfolio — React + Next.js</div>
+
+<!-- ===== BACK TO TOP ===== -->
+<button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
+
+<!-- ===== PROJECT MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-preview" id="modalPreview"></div>
+    <div class="modal-body">
+      <h2 id="modalTitle"></h2>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-features">
+        <h4>Ключевые особенности</h4>
+        <ul id="modalFeatures"></ul>
+      </div>
+      <div class="modal-actions">
+        <a href="#" class="btn-primary" id="modalLive" target="_blank" rel="noopener">🔗 Посмотреть проект</a>
+        <a href="#" class="btn-secondary" id="modalCode" target="_blank" rel="noopener">💻 Исходный код</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+(function() {
+  'use strict';
+
+  // ========== PROJECT DATA ==========
+  const projectsData = [
+    {
+      title: 'Dashboard аналитики',
+      emoji: '📊',
+      imgClass: 'cyan',
+      shortDesc: 'Панель управления с графиками, виджетами и real-time данными',
+      tags: ['React', 'Next.js', 'Tailwind'],
+      tagClasses: ['react', 'next', 'tw'],
+      dataTags: 'react,next,tw',
+      description: 'Комплексная панель аналитики для мониторинга бизнес-показателей в реальном времени. Приложение отображает ключевые метрики через интерактивные графики, диаграммы и виджеты с автоматическим обновлением данных.<br><br>Реализована система дашбордов с возможностью кастомизации layout через drag-and-drop, фильтрация по временным периодам и экспорт отчётов в PDF/Excel. Все данные обновляются через WebSocket с минимальной задержкой.<br><br>Архитектура построена на React 18 с использованием Server Components для начальной загрузки и Client Components для интерактивных элементов.',
+      features: [
+        'Real-time обновление данных через WebSocket',
+        'Интерактивные графики на D3.js и Recharts',
+        'Drag-and-drop кастомизация дашборда',
+        'Экспорт отчётов в PDF и Excel',
+        'Адаптивный дизайн для мобильных устройств',
+        'Тёмная и светлая тема'
+      ]
+    },
+    {
+      title: 'Интернет-магазин',
+      emoji: '🛒',
+      imgClass: 'purple',
+      shortDesc: 'E-commerce с корзиной, фильтрами и каталогом товаров',
+      tags: ['React', 'Next.js', 'Tailwind'],
+      tagClasses: ['react', 'next', 'tw'],
+      dataTags: 'react,next,tw',
+      description: 'Полнофункциональный интернет-магазин с каталогом товаров, системой фильтрации, корзиной и оформлением заказа. Приложение поддерживает SSR для SEO-оптимизации и ISR для кеширования страниц товаров.<br><br>Каталог включает многоуровневую навигацию, фасеточный поиск, сортировку и пагинацию. Корзина сохраняется в localStorage и синхронизируется с сервером при авторизации. Оформление заказа реализовано в виде пошагового wizard-а.<br><br>Панель администратора позволяет управлять товарами, заказами и контентом через удобный интерфейс с rich-text редактором.',
+      features: [
+        'SSR и ISR для SEO-оптимизации',
+        'Фасеточный поиск и фильтрация товаров',
+        'Персистентная корзина с синхронизацией',
+        'Пошаговое оформление заказа',
+        'Админ-панель с rich-text редактором',
+        'Интеграция с платёжными системами'
+      ]
+    },
+    {
+      title: 'SaaS платформа',
+      emoji: '📱',
+      imgClass: 'green',
+      shortDesc: 'Лендинг с тарифами, фичами и формами подписки',
+      tags: ['React', 'Next.js', 'Tailwind'],
+      tagClasses: ['react', 'next', 'tw'],
+      dataTags: 'react,next,tw',
+      description: 'Лендинг и маркетинговая платформа для SaaS-продукта с интерактивными секциями, тарифными планами и системой подписки. Дизайн разработан с фокусом на конверсию и пользовательский опыт.<br><br>Каждая секция лендинга анимирована при скролле с помощью Framer Motion. Тарифная сетка включает переключатель месячной/годовой оплаты с анимацией перехода. Формы подписки интегрированы с Stripe для обработки платежей.<br><br>Реализована A/B-тестирование секций через Next.js Middleware и аналитика поведения пользователей с тепловыми картами кликов.',
+      features: [
+        'Scroll-анимации на Framer Motion',
+        'Интерактивная тарифная сетка с переключателем',
+        'Интеграция Stripe для подписок',
+        'A/B-тестирование через Next.js Middleware',
+        'Тепловые карты кликов и аналитика',
+        'Оптимизация Core Web Vitals'
+      ]
+    },
+    {
+      title: 'Task Manager',
+      emoji: '✅',
+      imgClass: 'orange',
+      shortDesc: 'Система управления задачами с досками, драг-н-дроп и уведомлениями',
+      tags: ['React', 'Tailwind'],
+      tagClasses: ['react', 'tw'],
+      dataTags: 'react,tw',
+      description: 'Kanban-доска для управления проектами с drag-and-drop, системой уведомлений и командной работой. Приложение вдохновлено Trello и Notion, но с упором на скорость и простоту.<br><br>Доски поддерживают неограниченную вложенность, кастомные поля для задач, метки, дедлайны и прикреплённые файлы. Drag-and-drop реализован на основе dnd-kit с поддержкой тач-устройств и клавиатурной навигации.<br><br>Система уведомлений работает в реальном времени через Server-Sent Events и поддерживает email-дайджесты.',
+      features: [
+        'Kanban-доски с drag-and-drop (dnd-kit)',
+        'Кастомные поля и шаблоны задач',
+        'Real-time уведомления через SSE',
+        'Командная работа и роли участников',
+        'Фильтрация, поиск и теги',
+        'Офлайн-режим с синхронизацией'
+      ]
+    },
+    {
+      title: 'Telegram Bot Dashboard',
+      emoji: '🤖',
+      imgClass: 'pink',
+      shortDesc: 'Панель управления Telegram-ботами с аналитикой и логами',
+      tags: ['Next.js', 'Tailwind'],
+      tagClasses: ['next', 'tw'],
+      dataTags: 'next,tw',
+      description: 'Административная панель для управления Telegram-ботами с мониторингом активности, аналитикой пользователей и логированием всех взаимодействий. Позволяет управлять несколькими ботами из единого интерфейса.<br><br>Дашборд отображает статистику по пользователям, сообщениям и командам в реальном времени. Система логов поддерживает фильтрацию по уровню, боту и временному диапазону. Встроенный редактор позволяет менять тексты и настройки ботов без деплоя.<br><br>Архитектура использует Next.js API Routes для бекенда и Prisma ORM для работы с PostgreSQL.',
+      features: [
+        'Мониторинг нескольких ботов из одного интерфейса',
+        'Real-time аналитика и графики активности',
+        'Система логов с фильтрацией и поиском',
+        'Встроенный редактор контента ботов',
+        'Управление подписками и рассылками',
+        'Prisma ORM + PostgreSQL'
+      ]
+    },
+    {
+      title: 'Portfolio Generator',
+      emoji: '🎨',
+      imgClass: 'blue',
+      shortDesc: 'Конструктор портфолио-сайтов с шаблонами и кастомизацией',
+      tags: ['React', 'Next.js'],
+      tagClasses: ['react', 'next'],
+      dataTags: 'react,next',
+      description: 'Конструктор для быстрого создания портфолио-сайтов с выбором шаблонов, кастомизацией тем и автоматическим деплоем. Идеален для разработчиков, дизайнеров и фрилансеров.<br><br>Пользователь выбирает базовый шаблон, заполняет данные о проектах и навыках через интуитивный редактор, настраивает цветовую палитру и типографику. Результат автоматически деплоится на Vercel через API.<br><br>Шаблоны построены на модульной системе — каждый блок (герой, проекты, навыки, контакты) независим и может быть переупорядочен. Поддерживается экспорт в статический HTML для самостоятельного хостинга.',
+      features: [
+        'Модульные шаблоны с drag-and-drop',
+        'Кастомизация тем и типографики',
+        'Автоматический деплой на Vercel',
+        'Предпросмотр в реальном времени',
+        'Экспорт в статический HTML',
+        'SEO-оптимизация из коробки'
+      ]
+    }
+  ];
+
+  // ========== PROJECT FILTER ==========
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('.project');
+  const projectGrid = document.getElementById('projectGrid');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active button
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      projectCards.forEach(card => {
+        const tags = card.dataset.tags.split(',');
+        const matches = filter === 'all' || tags.includes(filter);
+
+        if (matches) {
+          card.classList.remove('fade-out', 'hidden');
+          card.classList.add('fade-in');
+          card.style.display = '';
+        } else {
+          card.classList.remove('fade-in');
+          card.classList.add('fade-out');
+          setTimeout(() => {
+            if (card.classList.contains('fade-out')) {
+              card.classList.add('hidden');
+              card.style.display = 'none';
+            }
+          }, 350);
+        }
+      });
+    });
+  });
+
+  // ========== PROJECT MODAL ==========
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalClose = document.getElementById('modalClose');
+  const modalPreview = document.getElementById('modalPreview');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalTags = document.getElementById('modalTags');
+  const modalFeatures = document.getElementById('modalFeatures');
+  const modalLive = document.getElementById('modalLive');
+  const modalCode = document.getElementById('modalCode');
+
+  function openModal(projectIndex) {
+    const p = projectsData[projectIndex];
+    if (!p) return;
+
+    modalPreview.textContent = p.emoji;
+    modalPreview.className = 'modal-preview ' + p.imgClass;
+    modalTitle.textContent = p.title;
+    modalDesc.innerHTML = p.description;
+
+    // Tags
+    modalTags.innerHTML = '';
+    p.tags.forEach((tag, i) => {
+      const span = document.createElement('span');
+      span.className = 'tag ' + p.tagClasses[i];
+      span.textContent = tag;
+      modalTags.appendChild(span);
+    });
+
+    // Features
+    modalFeatures.innerHTML = '';
+    p.features.forEach(f => {
+      const li = document.createElement('li');
+      li.textContent = f;
+      modalFeatures.appendChild(li);
+    });
+
+    // Links (demo URLs)
+    modalLive.href = '#';
+    modalCode.href = '#';
+
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  projectCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const idx = parseInt(card.dataset.project, 10);
+      openModal(idx);
+    });
+  });
+
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ========== SMOOTH SCROLL NAV ==========
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const heroBtn = document.querySelector('.hero-btn');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        const navHeight = document.getElementById('navbar').offsetHeight;
+        const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    });
+  });
+
+  if (heroBtn) {
+    heroBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById('projects');
+      if (target) {
+        const navHeight = document.getElementById('navbar').offsetHeight;
+        const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+      }
+    });
+  }
+
+  // ========== ACTIVE NAV LINK ON SCROLL ==========
+  const sections = ['projects', 'about', 'contact'];
+  const navbar = document.getElementById('navbar');
+
+  function updateActiveNav() {
+    const scrollPos = window.scrollY + navbar.offsetHeight + 80;
+
+    let currentSection = '';
+    sections.forEach(id => {
+      const section = document.getElementById(id);
+      if (section && section.offsetTop <= scrollPos) {
+        currentSection = id;
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.dataset.section === currentSection) {
+        link.classList.add('active');
+      }
+    });
+
+    // Nav background on scroll
+    if (window.scrollY > 20) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  updateActiveNav();
+
+  // ========== SKILL BAR ANIMATION ==========
+  let skillsAnimated = false;
+  const skillBars = document.getElementById('skillBars');
+
+  function animateSkillBars() {
+    if (skillsAnimated) return;
+    const rect = skillBars.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if (rect.top < windowHeight - 60) {
+      skillsAnimated = true;
+      const fills = skillBars.querySelectorAll('.skill-bar-fill');
+      fills.forEach((fill, i) => {
+        setTimeout(() => {
+          fill.style.width = fill.dataset.width + '%';
+          fill.classList.add('animated');
+        }, i * 120);
+      });
+    }
+  }
+
+  window.addEventListener('scroll', animateSkillBars, { passive: true });
+  animateSkillBars();
+
+  // ========== BACK TO TOP ==========
+  const backToTop = document.getElementById('backToTop');
+
+  function toggleBackToTop() {
+    if (window.scrollY > 400) {
+      backToTop.classList.add('visible');
+    } else {
+      backToTop.classList.remove('visible');
+    }
+  }
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+  toggleBackToTop();
+
+  // ========== CONTACT FORM ==========
+  const contactForm = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formSuccess = document.getElementById('formSuccess');
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const messageInput = document.getElementById('message');
+  const nameError = document.getElementById('nameError');
+  const emailError = document.getElementById('emailError');
+  const messageError = document.getElementById('messageError');
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function clearFieldError(input, errorEl) {
+    input.classList.remove('error');
+    errorEl.classList.remove('visible');
+  }
+
+  function showFieldError(input, errorEl) {
+    input.classList.add('error');
+    errorEl.classList.add('visible');
+  }
+
+  // Live validation on blur
+  nameInput.addEventListener('blur', () => {
+    if (nameInput.value.trim()) {
+      clearFieldError(nameInput, nameError);
+    }
+  });
+
+  emailInput.addEventListener('blur', () => {
+    if (validateEmail(emailInput.value.trim())) {
+      clearFieldError(emailInput, emailError);
+    }
+  });
+
+  messageInput.addEventListener('blur', () => {
+    if (messageInput.value.trim()) {
+      clearFieldError(messageInput, messageError);
+    }
+  });
+
+  // Clear error on input
+  nameInput.addEventListener('input', () => clearFieldError(nameInput, nameError));
+  emailInput.addEventListener('input', () => clearFieldError(emailInput, emailError));
+  messageInput.addEventListener('input', () => clearFieldError(messageInput, messageError));
+
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let valid = true;
+
+    // Validate name
+    if (!nameInput.value.trim()) {
+      showFieldError(nameInput, nameError);
+      valid = false;
+    } else {
+      clearFieldError(nameInput, nameError);
+    }
+
+    // Validate email
+    if (!emailInput.value.trim() || !validateEmail(emailInput.value.trim())) {
+      showFieldError(emailInput, emailError);
+      valid = false;
+    } else {
+      clearFieldError(emailInput, emailError);
+    }
+
+    // Validate message
+    if (!messageInput.value.trim()) {
+      showFieldError(messageInput, messageError);
+      valid = false;
+    } else {
+      clearFieldError(messageInput, messageError);
+    }
+
+    if (!valid) return;
+
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span>Отправка...';
+
+    // Simulate form submission
+    setTimeout(() => {
+      contactForm.style.display = 'none';
+      formSuccess.classList.add('visible');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Отправить';
+    }, 1500);
+  });
+
+})();
+</script>
+
 </body>
 </html>

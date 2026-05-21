@@ -49,6 +49,106 @@
     color: #d53f8c;
   }
 
+  /* ============== FAB CUSTOMIZATION PANEL ============== */
+  .fab-controls {
+    margin-top: 28px;
+    padding: 24px;
+    background: #f7fafc;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+  }
+  .fab-controls h3 {
+    font-size: 16px; color: #1a202c; margin-bottom: 16px;
+  }
+  .fab-controls__row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .fab-controls__row:last-child { margin-bottom: 0; }
+  .fab-controls__label {
+    font-size: 13px; color: #4a5568; font-weight: 500; min-width: 120px;
+  }
+  .fab-controls__toggle {
+    position: relative; width: 44px; height: 24px;
+    background: #cbd5e0; border-radius: 12px;
+    cursor: pointer; transition: background 0.2s; border: none;
+  }
+  .fab-controls__toggle.active { background: #667eea; }
+  .fab-controls__toggle::after {
+    content: ''; position: absolute;
+    top: 3px; left: 3px;
+    width: 18px; height: 18px;
+    background: white; border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .fab-controls__toggle.active::after { transform: translateX(20px); }
+  .fab-controls__btn {
+    padding: 6px 14px; border: 2px solid #e2e8f0;
+    border-radius: 8px; background: white;
+    font-size: 12px; cursor: pointer; transition: all 0.15s;
+    font-weight: 500;
+  }
+  .fab-controls__btn:hover { border-color: #667eea; }
+  .fab-controls__btn.active { background: #667eea; color: white; border-color: #667eea; }
+  .fab-controls__color {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 3px solid transparent; cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .fab-controls__color:hover { transform: scale(1.1); }
+  .fab-controls__color.active { border-color: #1a202c; }
+
+  /* ============== FORM HISTORY ============== */
+  .form-history {
+    margin-top: 28px;
+    padding: 24px;
+    background: #f7fafc;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+  }
+  .form-history h3 {
+    font-size: 16px; color: #1a202c; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .form-history__clear {
+    font-size: 12px; color: #e53e3e; cursor: pointer;
+    background: none; border: none; font-weight: 500;
+    transition: opacity 0.15s;
+  }
+  .form-history__clear:hover { opacity: 0.7; }
+  .form-history__empty {
+    text-align: center; padding: 20px; color: #a0aec0; font-size: 13px;
+  }
+  .form-history__item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; background: white; border-radius: 10px;
+    margin-bottom: 8px; border: 1px solid #e2e8f0;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .form-history__avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; flex-shrink: 0;
+  }
+  .form-history__info { flex: 1; min-width: 0; }
+  .form-history__name {
+    font-size: 14px; font-weight: 600; color: #1a202c;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .form-history__meta {
+    font-size: 12px; color: #a0aec0; margin-top: 2px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .form-history__badge {
+    background: #ebf4ff; color: #667eea; padding: 1px 8px;
+    border-radius: 4px; font-size: 11px; font-weight: 500;
+  }
+
   /* ============== WIDGET FAB ============== */
   .fab {
     position: fixed;
@@ -63,19 +163,33 @@
     box-shadow: 0 10px 30px rgba(102,126,234,0.5);
     z-index: 998;
     display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s;
+    transition: transform 0.2s, background 0.3s, bottom 0.3s, right 0.3s, left 0.3s;
   }
   .fab:hover { transform: scale(1.08); }
+  .fab.pos-bottom-left { right: auto; left: 28px; }
   .fab__pulse {
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     border-radius: 50%;
     background: rgba(102,126,234,0.4);
     animation: pulse 2s ease-out infinite;
   }
+  .fab__pulse.hidden { display: none; }
   @keyframes pulse {
     0% { transform: scale(1); opacity: 1; }
     100% { transform: scale(1.5); opacity: 0; }
   }
+
+  /* FAB color themes */
+  .fab.theme-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 10px 30px rgba(102,126,234,0.5); }
+  .fab.theme-purple .fab__pulse { background: rgba(102,126,234,0.4); }
+  .fab.theme-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); box-shadow: 0 10px 30px rgba(245,87,108,0.5); }
+  .fab.theme-pink .fab__pulse { background: rgba(245,87,108,0.4); }
+  .fab.theme-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); box-shadow: 0 10px 30px rgba(79,172,254,0.5); }
+  .fab.theme-blue .fab__pulse { background: rgba(79,172,254,0.4); }
+  .fab.theme-green { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); box-shadow: 0 10px 30px rgba(67,233,123,0.5); }
+  .fab.theme-green .fab__pulse { background: rgba(67,233,123,0.4); }
+  .fab.theme-orange { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); box-shadow: 0 10px 30px rgba(250,112,154,0.5); }
+  .fab.theme-orange .fab__pulse { background: rgba(250,112,154,0.4); }
 
   /* ============== MODAL ============== */
   .modal-overlay {
@@ -101,6 +215,8 @@
     transform: translateY(30px) scale(0.95);
     transition: transform 0.3s;
     box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    max-height: 90vh;
+    overflow-y: auto;
   }
   .modal-overlay.show .modal { transform: translateY(0) scale(1); }
 
@@ -113,6 +229,7 @@
     font-size: 18px;
     color: #4a5568;
     transition: background 0.2s;
+    z-index: 5;
   }
   .modal__close:hover { background: #edf2f7; }
 
@@ -129,8 +246,38 @@
     font-size: 26px; margin-bottom: 8px; color: #1a202c;
   }
   .modal__lead {
-    color: #718096; margin-bottom: 28px; font-size: 14px;
+    color: #718096; margin-bottom: 24px; font-size: 14px;
   }
+
+  /* ============== PROGRESS STEPS ============== */
+  .step-progress {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin-bottom: 24px;
+  }
+  .step-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #e2e8f0; transition: all 0.3s;
+  }
+  .step-dot.active { background: #667eea; width: 28px; border-radius: 5px; }
+  .step-dot.done { background: #48bb78; }
+  .step-line {
+    width: 40px; height: 2px; background: #e2e8f0; transition: background 0.3s;
+  }
+  .step-line.done { background: #48bb78; }
+
+  .step-label {
+    text-align: center; font-size: 12px; color: #a0aec0;
+    margin-bottom: 20px; font-weight: 500;
+  }
+
+  /* ============== FORM FIELDS ============== */
+  .form-step { display: none; }
+  .form-step.active { display: block; animation: fadeInStep 0.3s ease; }
+  @keyframes fadeInStep {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
   .form-group {
     margin-bottom: 16px;
     position: relative;
@@ -143,17 +290,28 @@
     font-weight: 500;
   }
   .form-group input,
-  .form-group textarea {
+  .form-group textarea,
+  .form-group select {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 40px 12px 16px;
     border: 2px solid #e2e8f0;
     border-radius: 10px;
     font-size: 14px;
     font-family: inherit;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s;
+    background: white;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8.825L0.375 3.2l.85-.85L6 7.125l4.775-4.775.85.85z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
   }
   .form-group input:focus,
-  .form-group textarea:focus {
+  .form-group textarea:focus,
+  .form-group select:focus {
     outline: none;
     border-color: #667eea;
   }
@@ -161,6 +319,13 @@
     resize: vertical;
     min-height: 90px;
   }
+  .form-group input:disabled,
+  .form-group textarea:disabled,
+  .form-group select:disabled {
+    background: #f7fafc; cursor: not-allowed; opacity: 0.7;
+  }
+
+  /* Validation states */
   .form-group .error {
     color: #e53e3e;
     font-size: 12px;
@@ -168,13 +333,85 @@
     display: none;
   }
   .form-group.has-error input,
-  .form-group.has-error textarea {
+  .form-group.has-error textarea,
+  .form-group.has-error select {
     border-color: #fc8181;
   }
   .form-group.has-error .error { display: block; }
+  .form-group.is-valid input,
+  .form-group.is-valid textarea,
+  .form-group.is-valid select {
+    border-color: #48bb78;
+  }
 
+  /* Green checkmark indicator */
+  .field-check {
+    position: absolute;
+    right: 12px;
+    top: 34px;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .form-group.is-valid .field-check { opacity: 1; }
+  .field-check svg { width: 16px; height: 16px; }
+
+  /* Character counter */
+  .char-counter {
+    font-size: 11px; color: #a0aec0; text-align: right; margin-top: 4px;
+  }
+  .char-counter.warn { color: #ed8936; }
+  .char-counter.over { color: #e53e3e; }
+
+  /* Radio/toggle group for budget and urgency */
+  .option-group {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .option-group__item {
+    position: relative;
+  }
+  .option-group__item input[type="radio"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .option-group__label {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+    user-select: none;
+  }
+  .option-group__label:hover { border-color: #667eea; color: #667eea; }
+  .option-group__item input[type="radio"]:checked + .option-group__label {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; border-color: transparent;
+  }
+
+  /* Step navigation buttons */
+  .step-nav {
+    display: flex; gap: 10px; margin-top: 20px;
+  }
+  .step-nav__back {
+    flex: 0 0 auto;
+    padding: 14px 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    background: white;
+    color: #4a5568;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .step-nav__back:hover { border-color: #667eea; color: #667eea; }
+  .step-nav__next,
   .submit-btn {
-    width: 100%;
+    flex: 1;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white; border: none;
     padding: 14px;
@@ -183,36 +420,95 @@
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.2s;
-    margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
+  .step-nav__next:hover,
   .submit-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 10px 24px rgba(102,126,234,0.4);
   }
+  .step-nav__next:active,
   .submit-btn:active { transform: scale(0.98); }
-  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .step-nav__next:disabled,
+  .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
+  /* Spinner */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: none;
+  }
+  .sending .spinner { display: block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Shake animation */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+  }
+  .shake { animation: shake 0.5s ease; }
+
+  /* ============== SUCCESS MESSAGE ============== */
   .success-message {
     text-align: center;
     padding: 30px 0 10px;
     display: none;
   }
-  .success-message.show { display: block; }
-  .success-message__icon {
-    width: 70px; height: 70px;
-    background: #48bb78;
-    color: white;
-    border-radius: 50%;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 36px;
-    margin-bottom: 20px;
+  .success-message.show { display: block; animation: fadeInStep 0.4s ease; }
+
+  .success-check {
+    width: 80px; height: 80px;
+    margin: 0 auto 24px;
   }
-  .success-message h2 { color: #1a202c; margin-bottom: 12px; }
-  .success-message p { color: #718096; }
+  .success-check svg {
+    width: 80px; height: 80px;
+  }
+  .success-check .circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: checkStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+  }
+  .success-check .check {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkStroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.4s forwards;
+  }
+  @keyframes checkStroke {
+    100% { stroke-dashoffset: 0; }
+  }
+
+  .success-message h2 { color: #1a202c; margin-bottom: 8px; font-size: 24px; }
+  .success-message .order-num {
+    color: #667eea; font-weight: 700; font-size: 15px; margin-bottom: 12px;
+  }
+  .success-message p { color: #718096; font-size: 14px; margin-bottom: 4px; }
+
+  .reset-btn {
+    margin-top: 20px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white; border: none;
+    border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .reset-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(102,126,234,0.4);
+  }
 
   @media (max-width: 480px) {
     .modal { padding: 30px 24px; }
     .fab { width: 56px; height: 56px; bottom: 20px; right: 20px; }
+    .fab.pos-bottom-left { right: auto; left: 20px; }
+    .option-group__label { font-size: 12px; padding: 6px 10px; }
+    .demo-container { padding: 30px 20px; }
+    .fab-controls__row { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
@@ -225,23 +521,58 @@
   <p><strong>Что внутри:</strong></p>
   <ul>
     <li>Плавающая кнопка-FAB с анимацией пульсации</li>
-    <li>Модальное окно с формой (имя, телефон, сообщение)</li>
-    <li>JS-валидация в реальном времени</li>
-    <li>Telegram-маска и проверка длины полей</li>
-    <li>Анимированное состояние «успешно отправлено»</li>
+    <li>Многошаговая модальная форма (контакты + детали проекта)</li>
+    <li>Email, телефон с маской, выбор услуги, бюджет, срочность</li>
+    <li>JS-валидация в реальном времени с зелёной галочкой</li>
+    <li>Анимированное состояние «успешно отправлено» с номером заявки</li>
     <li>Закрытие по клику вне окна и по клавише <code>Esc</code></li>
+    <li>История отправленных заявок (sessionStorage)</li>
+    <li>Настройка FAB: пульсация, позиция, цвет</li>
     <li>Полностью адаптивный</li>
   </ul>
 
   <p>Нажмите <strong>фиолетовую кнопку в правом нижнем углу</strong> — увидите виджет в действии.</p>
 
   <button class="demo-btn" onclick="openModal()">Открыть форму через кнопку</button>
+
+  <!-- FAB Customization Panel -->
+  <div class="fab-controls">
+    <h3>⚙️ Настройка FAB-кнопки</h3>
+    <div class="fab-controls__row">
+      <span class="fab-controls__label">Пульсация:</span>
+      <button class="fab-controls__toggle active" id="pulseToggle" onclick="togglePulse()"></button>
+    </div>
+    <div class="fab-controls__row">
+      <span class="fab-controls__label">Позиция:</span>
+      <button class="fab-controls__btn active" id="posRight" onclick="setFabPos('bottom-right')">Справа</button>
+      <button class="fab-controls__btn" id="posLeft" onclick="setFabPos('bottom-left')">Слева</button>
+    </div>
+    <div class="fab-controls__row">
+      <span class="fab-controls__label">Цвет:</span>
+      <div class="fab-controls__color active" style="background:linear-gradient(135deg,#667eea,#764ba2)" onclick="setFabTheme('purple',this)"></div>
+      <div class="fab-controls__color" style="background:linear-gradient(135deg,#f093fb,#f5576c)" onclick="setFabTheme('pink',this)"></div>
+      <div class="fab-controls__color" style="background:linear-gradient(135deg,#4facfe,#00f2fe)" onclick="setFabTheme('blue',this)"></div>
+      <div class="fab-controls__color" style="background:linear-gradient(135deg,#43e97b,#38f9d7)" onclick="setFabTheme('green',this)"></div>
+      <div class="fab-controls__color" style="background:linear-gradient(135deg,#fa709a,#fee140)" onclick="setFabTheme('orange',this)"></div>
+    </div>
+  </div>
+
+  <!-- Form History -->
+  <div class="form-history" id="formHistory">
+    <h3>
+      📋 История заявок
+      <button class="form-history__clear" id="clearHistory" onclick="clearHistory()">Очистить историю</button>
+    </h3>
+    <div id="historyList">
+      <div class="form-history__empty" id="historyEmpty">Заявок ещё не было</div>
+    </div>
+  </div>
 </div>
 
 <!-- ============== ВИДЖЕТ (этот блок копируем на сайт) ============== -->
 
-<button class="fab" id="fabBtn" aria-label="Открыть форму обратной связи">
-  <span class="fab__pulse"></span>
+<button class="fab theme-purple" id="fabBtn" aria-label="Открыть форму обратной связи">
+  <span class="fab__pulse" id="fabPulse"></span>
   <span style="position:relative;z-index:2;">💬</span>
 </button>
 
@@ -254,119 +585,595 @@
       <h2>Свяжитесь с нами</h2>
       <p class="modal__lead">Оставьте контакты — перезвоним в течение 15 минут</p>
 
+      <!-- Progress Indicator -->
+      <div class="step-progress" id="stepProgress">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-line" id="line1"></div>
+        <div class="step-dot" id="dot2"></div>
+      </div>
+      <div class="step-label" id="stepLabel">Шаг 1 из 2 — Контактная информация</div>
+
       <form id="contactForm" novalidate>
-        <div class="form-group" id="nameGroup">
-          <label for="nameInput">Ваше имя</label>
-          <input type="text" id="nameInput" placeholder="Артём">
-          <div class="error">Введите имя (минимум 2 символа)</div>
+        <!-- STEP 1: Contact Info -->
+        <div class="form-step active" id="step1">
+          <div class="form-group" id="nameGroup">
+            <label for="nameInput">Ваше имя *</label>
+            <input type="text" id="nameInput" placeholder="Артём">
+            <div class="field-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="error" id="nameError">Введите имя (минимум 2 символа)</div>
+          </div>
+
+          <div class="form-group" id="phoneGroup">
+            <label for="phoneInput">Телефон *</label>
+            <input type="tel" id="phoneInput" placeholder="+7 (___) ___-__-__">
+            <div class="field-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="error" id="phoneError">Введите корректный номер телефона</div>
+          </div>
+
+          <div class="form-group" id="emailGroup">
+            <label for="emailInput">Email *</label>
+            <input type="email" id="emailInput" placeholder="artem@example.com">
+            <div class="field-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="error" id="emailError">Введите корректный email</div>
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="step-nav__next" id="nextBtn1">Далее →</button>
+          </div>
         </div>
 
-        <div class="form-group" id="phoneGroup">
-          <label for="phoneInput">Телефон</label>
-          <input type="tel" id="phoneInput" placeholder="+7 (___) ___-__-__">
-          <div class="error">Введите корректный телефон</div>
-        </div>
+        <!-- STEP 2: Project Details -->
+        <div class="form-step" id="step2">
+          <div class="form-group" id="serviceGroup">
+            <label>Тип услуги *</label>
+            <select id="serviceSelect">
+              <option value="">Выберите услугу...</option>
+              <option value="Разработка сайта">Разработка сайта</option>
+              <option value="Лендинг">Лендинг</option>
+              <option value="Telegram бот">Telegram бот</option>
+              <option value="Дизайн">Дизайн</option>
+              <option value="Консультация">Консультация</option>
+              <option value="Другое">Другое</option>
+            </select>
+            <div class="field-check" style="top:30px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="error" id="serviceError">Выберите тип услуги</div>
+          </div>
 
-        <div class="form-group" id="messageGroup">
-          <label for="messageInput">Сообщение</label>
-          <textarea id="messageInput" placeholder="Коротко опишите задачу..."></textarea>
-          <div class="error">Сообщение должно быть от 10 символов</div>
-        </div>
+          <div class="form-group" id="budgetGroup">
+            <label>Бюджет</label>
+            <div class="option-group" id="budgetOptions">
+              <div class="option-group__item">
+                <input type="radio" name="budget" id="b1" value="До 10 000₽">
+                <label class="option-group__label" for="b1">До 10 000₽</label>
+              </div>
+              <div class="option-group__item">
+                <input type="radio" name="budget" id="b2" value="10-30 000₽">
+                <label class="option-group__label" for="b2">10-30 000₽</label>
+              </div>
+              <div class="option-group__item">
+                <input type="radio" name="budget" id="b3" value="30-50 000₽">
+                <label class="option-group__label" for="b3">30-50 000₽</label>
+              </div>
+              <div class="option-group__item">
+                <input type="radio" name="budget" id="b4" value="50-100 000₽">
+                <label class="option-group__label" for="b4">50-100 000₽</label>
+              </div>
+              <div class="option-group__item">
+                <input type="radio" name="budget" id="b5" value="100 000₽+">
+                <label class="option-group__label" for="b5">100 000₽+</label>
+              </div>
+            </div>
+          </div>
 
-        <button type="submit" class="submit-btn">Отправить заявку</button>
+          <div class="form-group" id="urgencyGroup">
+            <label>Срочность</label>
+            <div class="option-group" id="urgencyOptions">
+              <div class="option-group__item">
+                <input type="radio" name="urgency" id="u1" value="Не срочно">
+                <label class="option-group__label" for="u1">🟢 Не срочно</label>
+              </div>
+              <div class="option-group__item">
+                <input type="radio" name="urgency" id="u2" value="В течение недели">
+                <label class="option-group__label" for="u2">🟡 В течение недели</label>
+              </div>
+              <div class="option-group__item">
+                <input type="radio" name="urgency" id="u3" value="Срочно">
+                <label class="option-group__label" for="u3">🔴 Срочно</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" id="messageGroup">
+            <label for="messageInput">Сообщение *</label>
+            <textarea id="messageInput" placeholder="Опишите вашу задачу подробнее..." maxlength="500"></textarea>
+            <div class="field-check" style="top:34px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#48bb78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="char-counter" id="charCounter">0 / 500 (мин. 10)</div>
+            <div class="error" id="messageError">Сообщение должно быть от 10 до 500 символов</div>
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="step-nav__back" id="backBtn">← Назад</button>
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <span class="spinner" id="submitSpinner"></span>
+              <span id="submitText">Отправить заявку</span>
+            </button>
+          </div>
+        </div>
       </form>
     </div>
 
     <div class="success-message" id="successBlock">
-      <div class="success-message__icon">✓</div>
+      <div class="success-check">
+        <svg viewBox="0 0 52 52">
+          <circle class="circle" cx="26" cy="26" r="25" fill="none" stroke="#48bb78" stroke-width="2"/>
+          <path class="check" fill="none" stroke="#48bb78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
       <h2>Заявка отправлена!</h2>
-      <p>Мы свяжемся с вами в течение 15 минут</p>
+      <div class="order-num" id="orderNum">Заявка #0000</div>
+      <p>Мы перезвоним в течение 15 минут</p>
+      <p style="color:#a0aec0;font-size:13px;margin-top:8px;">Подтверждение отправлено на ваш email</p>
+      <button class="reset-btn" id="resetBtn" onclick="resetForm()">Отправить ещё</button>
     </div>
   </div>
 </div>
 
 <script>
   (function() {
+    /* ===== DOM References ===== */
     var fab = document.getElementById('fabBtn');
+    var fabPulse = document.getElementById('fabPulse');
     var overlay = document.getElementById('modalOverlay');
     var closeBtn = document.getElementById('closeBtn');
     var form = document.getElementById('contactForm');
     var formBlock = document.getElementById('formBlock');
     var successBlock = document.getElementById('successBlock');
 
+    var step1 = document.getElementById('step1');
+    var step2 = document.getElementById('step2');
+    var dot1 = document.getElementById('dot1');
+    var dot2 = document.getElementById('dot2');
+    var line1 = document.getElementById('line1');
+    var stepLabel = document.getElementById('stepLabel');
+
     var nameInput = document.getElementById('nameInput');
     var phoneInput = document.getElementById('phoneInput');
+    var emailInput = document.getElementById('emailInput');
+    var serviceSelect = document.getElementById('serviceSelect');
     var messageInput = document.getElementById('messageInput');
+    var charCounter = document.getElementById('charCounter');
 
     var nameGroup = document.getElementById('nameGroup');
     var phoneGroup = document.getElementById('phoneGroup');
+    var emailGroup = document.getElementById('emailGroup');
+    var serviceGroup = document.getElementById('serviceGroup');
+    var budgetGroup = document.getElementById('budgetGroup');
+    var urgencyGroup = document.getElementById('urgencyGroup');
     var messageGroup = document.getElementById('messageGroup');
 
-    // Открытие/закрытие
+    var nextBtn1 = document.getElementById('nextBtn1');
+    var backBtn = document.getElementById('backBtn');
+    var submitBtn = document.getElementById('submitBtn');
+    var submitSpinner = document.getElementById('submitSpinner');
+    var submitText = document.getElementById('submitText');
+    var orderNum = document.getElementById('orderNum');
+
+    var isSending = false;
+    var currentStep = 1;
+
+    /* ===== Modal Open / Close ===== */
     window.openModal = function() {
       overlay.classList.add('show');
       setTimeout(function(){ nameInput.focus(); }, 300);
     };
+
     function closeModal() {
       overlay.classList.remove('show');
       setTimeout(function() {
         formBlock.style.display = 'block';
         successBlock.classList.remove('show');
-        form.reset();
-        [nameGroup, phoneGroup, messageGroup].forEach(function(g){ g.classList.remove('has-error'); });
+        // Don't reset form on close — keep user data
       }, 300);
     }
+
     fab.addEventListener('click', openModal);
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', function(e) {
       if (e.target === overlay) closeModal();
     });
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape' && overlay.classList.contains('show')) closeModal();
     });
 
-    // Маска телефона
+    /* ===== Step Navigation ===== */
+    function goToStep(step) {
+      currentStep = step;
+      if (step === 1) {
+        step1.classList.add('active');
+        step2.classList.remove('active');
+        dot1.className = 'step-dot active';
+        dot2.className = 'step-dot';
+        line1.className = 'step-line';
+        stepLabel.textContent = 'Шаг 1 из 2 — Контактная информация';
+      } else {
+        step1.classList.remove('active');
+        step2.classList.add('active');
+        dot1.className = 'step-dot done';
+        dot2.className = 'step-dot active';
+        line1.className = 'step-line done';
+        stepLabel.textContent = 'Шаг 2 из 2 — Детали проекта';
+        messageInput.focus();
+      }
+    }
+
+    nextBtn1.addEventListener('click', function() {
+      if (validateStep1()) {
+        goToStep(2);
+      } else {
+        shakeForm();
+      }
+    });
+
+    backBtn.addEventListener('click', function() {
+      goToStep(1);
+    });
+
+    /* ===== Phone Mask ===== */
     phoneInput.addEventListener('input', function(e) {
-      var x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-      e.target.value = !x[2] ? x[1] : '+' + (x[1] || '7') + ' (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+      var raw = e.target.value.replace(/\D/g, '');
+      // Auto-add 7 if starts with 8 or nothing
+      if (raw.length > 0 && raw[0] === '8') {
+        raw = '7' + raw.substring(1);
+      }
+      if (raw.length > 0 && raw[0] !== '7') {
+        raw = '7' + raw;
+      }
+      var x = raw.match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+      if (!x) return;
+      var formatted = '';
+      if (x[1]) formatted = '+' + x[1];
+      if (x[2]) formatted += ' (' + x[2];
+      if (x[3]) formatted += ') ' + x[3];
+      if (x[4]) formatted += '-' + x[4];
+      if (x[5]) formatted += '-' + x[5];
+      e.target.value = formatted;
     });
 
-    // Валидация
-    function validate() {
+    phoneInput.addEventListener('focus', function(e) {
+      if (!e.target.value) {
+        e.target.value = '+7 ';
+      }
+    });
+
+    /* ===== Character Counter ===== */
+    messageInput.addEventListener('input', function() {
+      var len = messageInput.value.length;
+      charCounter.textContent = len + ' / 500 (мин. 10)';
+      charCounter.className = 'char-counter';
+      if (len > 0 && len < 10) charCounter.classList.add('warn');
+      if (len > 450) charCounter.classList.add('warn');
+      if (len > 500) charCounter.classList.add('over');
+    });
+
+    /* ===== Real-time Validation ===== */
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    function validateField(input, group, errorEl, validator) {
+      var valid = validator(input.value);
+      group.classList.remove('has-error', 'is-valid');
+      if (input.value.trim() === '') {
+        // empty — no indicator
+      } else if (valid) {
+        group.classList.add('is-valid');
+      } else {
+        group.classList.add('has-error');
+      }
+      return valid;
+    }
+
+    // Real-time validation on input
+    nameInput.addEventListener('input', function() {
+      validateField(nameInput, nameGroup, document.getElementById('nameError'), function(v) {
+        return v.trim().length >= 2;
+      });
+    });
+
+    phoneInput.addEventListener('input', function() {
+      var digits = phoneInput.value.replace(/\D/g, '');
+      validateField(phoneInput, phoneGroup, document.getElementById('phoneError'), function() {
+        return digits.length >= 11;
+      });
+    });
+
+    emailInput.addEventListener('input', function() {
+      validateField(emailInput, emailGroup, document.getElementById('emailError'), function(v) {
+        return emailRegex.test(v.trim());
+      });
+    });
+
+    serviceSelect.addEventListener('change', function() {
+      validateField(serviceSelect, serviceGroup, document.getElementById('serviceError'), function(v) {
+        return v.trim() !== '';
+      });
+    });
+
+    messageInput.addEventListener('input', function() {
+      var len = messageInput.value.trim().length;
+      validateField(messageInput, messageGroup, document.getElementById('messageError'), function() {
+        return len >= 10 && len <= 500;
+      });
+    });
+
+    /* ===== Step Validation ===== */
+    function validateStep1() {
       var ok = true;
-      if (nameInput.value.trim().length < 2) { nameGroup.classList.add('has-error'); ok = false; }
-      else nameGroup.classList.remove('has-error');
-
+      var nameVal = nameInput.value.trim();
       var phoneDigits = phoneInput.value.replace(/\D/g, '');
-      if (phoneDigits.length < 11) { phoneGroup.classList.add('has-error'); ok = false; }
-      else phoneGroup.classList.remove('has-error');
+      var emailVal = emailInput.value.trim();
 
-      if (messageInput.value.trim().length < 10) { messageGroup.classList.add('has-error'); ok = false; }
-      else messageGroup.classList.remove('has-error');
+      // Name
+      nameGroup.classList.remove('has-error', 'is-valid');
+      if (nameVal.length >= 2) {
+        nameGroup.classList.add('is-valid');
+      } else {
+        nameGroup.classList.add('has-error');
+        var nameErr = document.getElementById('nameError');
+        nameErr.textContent = nameVal.length === 0 ? 'Поле обязательно для заполнения' : 'Введите имя (минимум 2 символа)';
+        ok = false;
+      }
+
+      // Phone
+      phoneGroup.classList.remove('has-error', 'is-valid');
+      if (phoneDigits.length >= 11) {
+        phoneGroup.classList.add('is-valid');
+      } else {
+        phoneGroup.classList.add('has-error');
+        var phoneErr = document.getElementById('phoneError');
+        phoneErr.textContent = phoneDigits.length === 0 ? 'Поле обязательно для заполнения' : 'Введите корректный номер телефона';
+        ok = false;
+      }
+
+      // Email
+      emailGroup.classList.remove('has-error', 'is-valid');
+      if (emailRegex.test(emailVal)) {
+        emailGroup.classList.add('is-valid');
+      } else {
+        emailGroup.classList.add('has-error');
+        var emailErr = document.getElementById('emailError');
+        emailErr.textContent = emailVal.length === 0 ? 'Поле обязательно для заполнения' : 'Введите корректный email (example@mail.com)';
+        ok = false;
+      }
 
       return ok;
     }
 
-    // Очистка ошибок при вводе
-    [nameInput, phoneInput, messageInput].forEach(function(input, idx) {
-      input.addEventListener('input', function() {
-        var groups = [nameGroup, phoneGroup, messageGroup];
-        groups[idx].classList.remove('has-error');
-      });
-    });
+    function validateStep2() {
+      var ok = true;
+      var serviceVal = serviceSelect.value;
+      var messageLen = messageInput.value.trim().length;
 
-    // Сабмит
+      // Service
+      serviceGroup.classList.remove('has-error', 'is-valid');
+      if (serviceVal.trim() !== '') {
+        serviceGroup.classList.add('is-valid');
+      } else {
+        serviceGroup.classList.add('has-error');
+        ok = false;
+      }
+
+      // Message
+      messageGroup.classList.remove('has-error', 'is-valid');
+      if (messageLen >= 10 && messageLen <= 500) {
+        messageGroup.classList.add('is-valid');
+      } else {
+        messageGroup.classList.add('has-error');
+        var msgErr = document.getElementById('messageError');
+        if (messageLen === 0) msgErr.textContent = 'Поле обязательно для заполнения';
+        else if (messageLen < 10) msgErr.textContent = 'Сообщение слишком короткое (мин. 10 символов, сейчас ' + messageLen + ')';
+        else msgErr.textContent = 'Сообщение слишком длинное (макс. 500 символов)';
+        ok = false;
+      }
+
+      return ok;
+    }
+
+    /* ===== Shake Animation ===== */
+    function shakeForm() {
+      var activeStep = currentStep === 1 ? step1 : step2;
+      activeStep.classList.add('shake');
+      setTimeout(function() { activeStep.classList.remove('shake'); }, 500);
+    }
+
+    /* ===== Form Submit ===== */
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      if (!validate()) return;
+      if (isSending) return;
+      if (!validateStep2()) {
+        shakeForm();
+        return;
+      }
 
-      // тут была бы реальная отправка через fetch() на ваш бэкенд
-      // например: fetch('/api/contact', { method: 'POST', body: ... })
+      // Start sending state
+      isSending = true;
+      submitBtn.classList.add('sending');
+      submitBtn.disabled = true;
+      submitText.textContent = 'Отправка...';
 
-      formBlock.style.display = 'none';
-      successBlock.classList.add('show');
-      setTimeout(closeModal, 2500);
+      // Disable all fields
+      var allInputs = form.querySelectorAll('input, textarea, select');
+      allInputs.forEach(function(inp) { inp.disabled = true; });
+
+      // Generate order number
+      var orderNumber = '#' + (1000 + Math.floor(Math.random() * 9000));
+      orderNum.textContent = 'Заявка ' + orderNumber + ' отправлена!';
+
+      // Simulate 2-second delay
+      setTimeout(function() {
+        // Save to history
+        saveToHistory({
+          name: nameInput.value.trim(),
+          phone: phoneInput.value.trim(),
+          email: emailInput.value.trim(),
+          service: serviceSelect.value,
+          budget: getSelectedRadio('budget'),
+          urgency: getSelectedRadio('urgency'),
+          message: messageInput.value.trim(),
+          orderNum: orderNumber,
+          date: new Date()
+        });
+
+        // Show success
+        formBlock.style.display = 'none';
+        successBlock.classList.add('show');
+
+        // Reset sending state
+        isSending = false;
+        submitBtn.classList.remove('sending');
+        submitBtn.disabled = false;
+        submitText.textContent = 'Отправить заявку';
+        allInputs.forEach(function(inp) { inp.disabled = false; });
+      }, 2000);
     });
+
+    /* ===== Helper: Get Selected Radio Value ===== */
+    function getSelectedRadio(name) {
+      var el = document.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : '';
+    }
+
+    /* ===== Reset Form ===== */
+    window.resetForm = function() {
+      form.reset();
+      [nameGroup, phoneGroup, emailGroup, serviceGroup, budgetGroup, urgencyGroup, messageGroup].forEach(function(g) {
+        g.classList.remove('has-error', 'is-valid');
+      });
+      charCounter.textContent = '0 / 500 (мин. 10)';
+      charCounter.className = 'char-counter';
+      goToStep(1);
+      formBlock.style.display = 'block';
+      successBlock.classList.remove('show');
+      setTimeout(function() { nameInput.focus(); }, 100);
+    };
+
+    /* ===== Form History (sessionStorage) ===== */
+    function getHistory() {
+      try {
+        var data = sessionStorage.getItem('contactFormHistory');
+        return data ? JSON.parse(data) : [];
+      } catch(e) { return []; }
+    }
+
+    function saveToHistory(entry) {
+      var history = getHistory();
+      history.unshift({
+        name: entry.name,
+        service: entry.service,
+        budget: entry.budget,
+        urgency: entry.urgency,
+        orderNum: entry.orderNum,
+        date: entry.date.toLocaleString('ru-RU')
+      });
+      // Keep only last 20 entries
+      if (history.length > 20) history = history.slice(0, 20);
+      sessionStorage.setItem('contactFormHistory', JSON.stringify(history));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      var history = getHistory();
+      var list = document.getElementById('historyList');
+      var empty = document.getElementById('historyEmpty');
+      var clearBtn = document.getElementById('clearHistory');
+
+      if (history.length === 0) {
+        list.innerHTML = '<div class="form-history__empty" id="historyEmpty">Заявок ещё не было</div>';
+        clearBtn.style.display = 'none';
+        return;
+      }
+
+      clearBtn.style.display = 'inline';
+      var html = '';
+      history.forEach(function(item) {
+        var initial = item.name ? item.name.charAt(0).toUpperCase() : '?';
+        html += '<div class="form-history__item">';
+        html += '  <div class="form-history__avatar">' + initial + '</div>';
+        html += '  <div class="form-history__info">';
+        html += '    <div class="form-history__name">' + escapeHtml(item.name) + '</div>';
+        html += '    <div class="form-history__meta">';
+        html += '      <span>' + escapeHtml(item.date) + '</span>';
+        if (item.service) html += '      <span class="form-history__badge">' + escapeHtml(item.service) + '</span>';
+        if (item.orderNum) html += '      <span class="form-history__badge" style="background:#f0fff4;color:#38a169;">' + escapeHtml(item.orderNum) + '</span>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    window.clearHistory = function() {
+      sessionStorage.removeItem('contactFormHistory');
+      renderHistory();
+    };
+
+    // Render history on load
+    renderHistory();
+
+    /* ===== FAB Customization ===== */
+    window.togglePulse = function() {
+      var toggle = document.getElementById('pulseToggle');
+      toggle.classList.toggle('active');
+      if (toggle.classList.contains('active')) {
+        fabPulse.classList.remove('hidden');
+      } else {
+        fabPulse.classList.add('hidden');
+      }
+    };
+
+    window.setFabPos = function(pos) {
+      var posRight = document.getElementById('posRight');
+      var posLeft = document.getElementById('posLeft');
+      if (pos === 'bottom-right') {
+        fab.classList.remove('pos-bottom-left');
+        posRight.classList.add('active');
+        posLeft.classList.remove('active');
+      } else {
+        fab.classList.add('pos-bottom-left');
+        posLeft.classList.add('active');
+        posRight.classList.remove('active');
+      }
+    };
+
+    window.setFabTheme = function(theme, el) {
+      fab.className = 'fab theme-' + theme;
+      if (fab.classList.contains('pos-bottom-left')) fab.classList.add('pos-bottom-left');
+      if (document.getElementById('pulseToggle').classList.contains('active')) {
+        // pulse is on, keep the pulse span visible
+      } else {
+        fabPulse.classList.add('hidden');
+      }
+      // Update active color swatch
+      document.querySelectorAll('.fab-controls__color').forEach(function(c) {
+        c.classList.remove('active');
+      });
+      el.classList.add('active');
+    };
+
   })();
 </script>
 

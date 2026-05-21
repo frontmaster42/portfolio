@@ -3,31 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaaS Landing — React Next.js</title>
+<title>FlowSync — Управление проектами на новом уровне</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; color: #1a1a2e; }
-.nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; }
-.logo { font-size: 22px; font-weight: 800; color: #6c63ff; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; color: #1a1a2e; overflow-x: hidden; }
+
+/* === NAV === */
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); z-index: 100; border-bottom: 1px solid #f0f0f5; }
+.logo { font-size: 22px; font-weight: 800; color: #6c63ff; cursor: pointer; }
 .nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { color: #555; text-decoration: none; font-size: 14px; }
-.btn-try { background: #6c63ff; color: white; border: none; padding: 10px 24px; border-radius: 24px; font-size: 14px; }
+.nav-links a { color: #555; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer; }
+.nav-links a:hover { color: #6c63ff; }
+.btn-try { background: #6c63ff; color: white; border: none; padding: 10px 24px; border-radius: 24px; font-size: 14px; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+.btn-try:hover { background: #5b52ee; transform: translateY(-1px); }
+
+/* === HERO === */
 .hero { text-align: center; padding: 80px 60px 60px; }
 .hero .badge { display: inline-block; background: #6c63ff11; color: #6c63ff; font-size: 13px; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px; }
 .hero h1 { font-size: 52px; line-height: 1.15; margin-bottom: 20px; }
 .hero h1 span { background: linear-gradient(135deg, #6c63ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .hero p { color: #666; font-size: 18px; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
 .hero-buttons { display: flex; gap: 16px; justify-content: center; }
-.btn-primary { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; }
-.btn-outline { background: white; color: #6c63ff; border: 2px solid #6c63ff; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; }
+.btn-primary { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+.btn-primary:hover { background: #5b52ee; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,0.3); }
+.btn-outline { background: white; color: #6c63ff; border: 2px solid #6c63ff; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+.btn-outline:hover { background: #6c63ff11; transform: translateY(-2px); }
+
+/* === STATS === */
 .stats { display: flex; justify-content: center; gap: 60px; padding: 40px 60px; }
 .stat { text-align: center; }
 .stat .num { font-size: 36px; font-weight: 800; color: #6c63ff; }
 .stat .label { font-size: 14px; color: #888; margin-top: 4px; }
+
+/* === FEATURES === */
 .features { padding: 80px 60px; background: #f8f9ff; }
 .features h2 { text-align: center; font-size: 36px; margin-bottom: 48px; }
 .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
-.feature { background: white; border-radius: 16px; padding: 28px; border: 1px solid #eee; }
+.feature { background: white; border-radius: 16px; padding: 28px; border: 1px solid #eee; cursor: pointer; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; position: relative; }
+.feature:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(108,99,255,0.12); border-color: #6c63ff40; }
 .feature .icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
 .feature .icon.blue { background: #6c63ff15; }
 .feature .icon.green { background: #34d39915; }
@@ -35,75 +49,735 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; colo
 .feature .icon.purple { background: #a855f715; }
 .feature h3 { font-size: 17px; margin-bottom: 8px; }
 .feature p { font-size: 14px; color: #888; line-height: 1.5; }
+.feature .expand-hint { font-size: 12px; color: #6c63ff; margin-top: 12px; opacity: 0; transition: opacity 0.2s; }
+.feature:hover .expand-hint { opacity: 1; }
+
+/* === FAQ === */
+.faq { padding: 80px 60px; background: #ffffff; }
+.faq h2 { text-align: center; font-size: 36px; margin-bottom: 48px; }
+.faq-list { max-width: 760px; margin: 0 auto; }
+.faq-item { border: 1px solid #eee; border-radius: 14px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
+.faq-item.active { border-color: #6c63ff40; box-shadow: 0 4px 16px rgba(108,99,255,0.08); }
+.faq-question { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; cursor: pointer; font-size: 16px; font-weight: 600; user-select: none; transition: color 0.2s; }
+.faq-question:hover { color: #6c63ff; }
+.faq-arrow { font-size: 20px; transition: transform 0.3s; color: #6c63ff; }
+.faq-item.active .faq-arrow { transform: rotate(180deg); }
+.faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; padding: 0 24px; }
+.faq-item.active .faq-answer { max-height: 300px; padding: 0 24px 20px; }
+.faq-answer p { font-size: 15px; color: #666; line-height: 1.7; }
+
+/* === PRICING === */
 .pricing { padding: 80px 60px; text-align: center; }
-.pricing h2 { font-size: 36px; margin-bottom: 48px; }
+.pricing h2 { font-size: 36px; margin-bottom: 24px; }
+.pricing-toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 40px; }
+.pricing-toggle-wrap span { font-size: 14px; color: #888; }
+.pricing-toggle-wrap span.active-label { color: #1a1a2e; font-weight: 600; }
+.toggle-switch { position: relative; width: 52px; height: 28px; background: #ddd; border-radius: 14px; cursor: pointer; transition: background 0.3s; }
+.toggle-switch.on { background: #6c63ff; }
+.toggle-switch .toggle-knob { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; background: white; border-radius: 50%; transition: transform 0.3s; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+.toggle-switch.on .toggle-knob { transform: translateX(24px); }
+.yearly-badge { display: inline-block; background: #34d39920; color: #16a34a; font-size: 12px; padding: 4px 12px; border-radius: 10px; font-weight: 600; opacity: 0; transform: translateY(4px); transition: opacity 0.3s, transform 0.3s; margin-left: 8px; }
+.yearly-badge.visible { opacity: 1; transform: translateY(0); }
 .plans { display: flex; gap: 24px; justify-content: center; }
-.plan { background: white; border: 2px solid #eee; border-radius: 20px; padding: 32px; width: 300px; }
+.plan { background: white; border: 2px solid #eee; border-radius: 20px; padding: 32px; width: 300px; transition: transform 0.25s, box-shadow 0.25s; }
+.plan:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(108,99,255,0.1); }
 .plan.popular { border-color: #6c63ff; position: relative; }
 .plan.popular::before { content: 'Популярный'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6c63ff; color: white; font-size: 12px; padding: 4px 14px; border-radius: 10px; }
 .plan h3 { font-size: 20px; margin-bottom: 8px; }
-.plan .price { font-size: 36px; font-weight: 800; color: #6c63ff; margin-bottom: 4px; }
+.plan .price { font-size: 36px; font-weight: 800; color: #6c63ff; margin-bottom: 4px; transition: opacity 0.3s; }
 .plan .period { font-size: 13px; color: #888; margin-bottom: 20px; }
 .plan ul { list-style: none; text-align: left; margin-bottom: 24px; }
 .plan li { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; color: #555; }
-.plan li::before { content: '✓'; color: #6c63ff; font-weight: 700; margin-right: 8px; }
+.plan li::before { content: '\2713'; color: #6c63ff; font-weight: 700; margin-right: 8px; }
+
+/* === CTA === */
 .cta { background: linear-gradient(135deg, #6c63ff, #a855f7); color: white; padding: 80px 60px; text-align: center; }
 .cta h2 { font-size: 36px; margin-bottom: 16px; }
 .cta p { font-size: 16px; opacity: 0.9; margin-bottom: 28px; }
-.btn-white { background: white; color: #6c63ff; border: none; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; }
+.btn-white { background: white; color: #6c63ff; border: none; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; }
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+/* === FOOTER === */
 .footer { padding: 24px 60px; text-align: center; color: #888; font-size: 13px; }
+
+/* === MODAL OVERLAY === */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+.modal-overlay.show { opacity: 1; visibility: visible; }
+.modal { background: white; border-radius: 20px; padding: 40px; max-width: 460px; width: 90%; position: relative; transform: translateY(20px) scale(0.97); transition: transform 0.3s; }
+.modal-overlay.show .modal { transform: translateY(0) scale(1); }
+.modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; color: #aaa; cursor: pointer; transition: color 0.2s; line-height: 1; }
+.modal-close:hover { color: #333; }
+.modal h2 { font-size: 24px; margin-bottom: 8px; }
+.modal .modal-subtitle { color: #888; font-size: 14px; margin-bottom: 28px; }
+
+/* Registration form */
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555; }
+.form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e8e8f0; border-radius: 12px; font-size: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+.form-group input:focus { border-color: #6c63ff; box-shadow: 0 0 0 3px rgba(108,99,255,0.12); }
+.form-group input.error { border-color: #ef4444; }
+.form-group .error-msg { font-size: 12px; color: #ef4444; margin-top: 4px; display: none; }
+.form-group input.error + .error-msg { display: block; }
+.btn-submit { width: 100%; background: #6c63ff; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s; margin-top: 8px; }
+.btn-submit:hover { background: #5b52ee; transform: translateY(-1px); }
+.btn-submit:disabled { background: #b0adc8; cursor: not-allowed; transform: none; }
+.success-state { text-align: center; display: none; }
+.success-state .success-icon { font-size: 56px; margin-bottom: 16px; }
+.success-state h3 { font-size: 22px; margin-bottom: 8px; }
+.success-state p { color: #888; font-size: 14px; }
+
+/* Demo modal */
+.demo-modal { max-width: 720px; padding: 0; overflow: hidden; }
+.demo-video-area { background: linear-gradient(135deg, #1a1a2e, #2d2b55); aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; }
+.demo-video-area .play-btn { width: 72px; height: 72px; background: rgba(108,99,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, background 0.2s; }
+.demo-video-area .play-btn:hover { transform: scale(1.1); background: #6c63ff; }
+.demo-video-area .play-btn::after { content: ''; border-style: solid; border-width: 12px 0 12px 22px; border-color: transparent transparent transparent white; margin-left: 4px; }
+.demo-video-area .play-btn.playing::after { border-width: 0 0 0 0; width: 8px; height: 24px; border-left: 4px solid white; border-right: 4px solid white; margin-left: 0; }
+.demo-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: #6c63ff; width: 0%; transition: width 0.1s linear; }
+.demo-content { padding: 32px; }
+.demo-content h2 { font-size: 22px; margin-bottom: 16px; }
+.demo-highlights { display: flex; gap: 16px; flex-wrap: wrap; }
+.demo-highlight { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #555; background: #f8f9ff; padding: 8px 14px; border-radius: 10px; }
+.demo-highlight .dot { width: 8px; height: 8px; border-radius: 50%; background: #6c63ff; flex-shrink: 0; }
+
+/* Feature detail modal */
+.feature-detail-modal { max-width: 560px; }
+.feature-detail-modal .fd-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 20px; }
+.feature-detail-modal h2 { font-size: 24px; margin-bottom: 12px; }
+.feature-detail-modal .fd-desc { color: #666; font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+.feature-detail-modal .fd-benefits { list-style: none; }
+.feature-detail-modal .fd-benefits li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #555; display: flex; align-items: center; gap: 10px; }
+.feature-detail-modal .fd-benefits li::before { content: '\2713'; color: #6c63ff; font-weight: 700; font-size: 16px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .nav { padding: 16px 24px; }
+  .nav-links { gap: 16px; }
+  .hero { padding: 60px 24px 40px; }
+  .hero h1 { font-size: 36px; }
+  .stats { gap: 30px; flex-wrap: wrap; padding: 30px 24px; }
+  .features, .faq, .pricing { padding: 60px 24px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .plans { flex-direction: column; align-items: center; }
+  .cta { padding: 60px 24px; }
+}
 </style>
 </head>
 <body>
+
+<!-- ===== NAVIGATION ===== -->
 <div class="nav">
-  <div class="logo">FlowSync</div>
+  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">FlowSync</div>
   <div class="nav-links">
-    <a href="#">Возможности</a>
-    <a href="#">Цены</a>
-    <a href="#">Документация</a>
-    <a href="#">Блог</a>
-    <button class="btn-try">Начать бесплатно</button>
+    <a onclick="smoothScroll('features')">Возможности</a>
+    <a onclick="smoothScroll('pricing')">Цены</a>
+    <a onclick="smoothScroll('faq')">Документация</a>
+    <a onclick="smoothScroll('cta')">Блог</a>
+    <button class="btn-try" onclick="openModal('reg')">Начать бесплатно</button>
   </div>
 </div>
+
+<!-- ===== HERO ===== -->
 <div class="hero">
-  <div class="badge">🚀 Новая версия 2.0</div>
+  <div class="badge">&#x1F680; Новая версия 2.0</div>
   <h1>Управление проектами<br><span>на новом уровне</span></h1>
   <p>Автоматизируйте рутину, отслеживайте прогресс и сотрудничайте с командой в реальном времени</p>
   <div class="hero-buttons">
-    <button class="btn-primary">Попробовать бесплатно</button>
-    <button class="btn-outline">Смотреть демо</button>
+    <button class="btn-primary" onclick="openModal('reg')">Попробовать бесплатно</button>
+    <button class="btn-outline" onclick="openModal('demo')">Смотреть демо</button>
   </div>
 </div>
-<div class="stats">
-  <div class="stat"><div class="num">10K+</div><div class="label">Пользователей</div></div>
-  <div class="stat"><div class="num">99.9%</div><div class="label">Аптайм</div></div>
-  <div class="stat"><div class="num">50М+</div><div class="label">Задач выполнено</div></div>
-  <div class="stat"><div class="num">4.9★</div><div class="label">Рейтинг</div></div>
+
+<!-- ===== STATS ===== -->
+<div class="stats" id="stats-section">
+  <div class="stat"><div class="num" data-target="10000" data-suffix="+">0</div><div class="label">Пользователей</div></div>
+  <div class="stat"><div class="num" data-target="99.9" data-suffix="%" data-decimal="1">0</div><div class="label">Аптайм</div></div>
+  <div class="stat"><div class="num" data-target="50" data-suffix="М+">0</div><div class="label">Задач выполнено</div></div>
+  <div class="stat"><div class="num" data-target="4.9" data-suffix="&#9733;" data-decimal="1">0</div><div class="label">Рейтинг</div></div>
 </div>
-<div class="features">
+
+<!-- ===== FEATURES ===== -->
+<div class="features" id="features">
   <h2>Возможности</h2>
   <div class="feature-grid">
-    <div class="feature"><div class="icon blue">📊</div><h3>Аналитика</h3><p>Детальные отчёты и дашборды для принятия решений на основе данных</p></div>
-    <div class="feature"><div class="icon green">⚡</div><h3>Автоматизация</h3><p>Настройте автоматические правила и триггеры для рутинных задач</p></div>
-    <div class="feature"><div class="icon orange">👥</div><h3>Сотрудничество</h3><p>Работайте в реальном времени с командой, комментариями и уведомлениями</p></div>
-    <div class="feature"><div class="icon purple">🔗</div><h3>Интеграции</h3><p>Подключайте Slack, GitHub, Jira и более 100 сервисов</p></div>
-    <div class="feature"><div class="icon blue">🔒</div><h3>Безопасность</h3><p>Шифрование данных, 2FA и соответствие стандартам GDPR</p></div>
-    <div class="feature"><div class="icon green">📱</div><h3>Мобильное приложение</h3><p>Управляйте проектами из любой точки мира с любого устройства</p></div>
+    <div class="feature" onclick="openFeatureDetail(0)">
+      <div class="icon blue">&#x1F4CA;</div>
+      <h3>Аналитика</h3>
+      <p>Детальные отчёты и дашборды для принятия решений на основе данных</p>
+      <div class="expand-hint">Нажмите для подробностей &rarr;</div>
+    </div>
+    <div class="feature" onclick="openFeatureDetail(1)">
+      <div class="icon green">&#x26A1;</div>
+      <h3>Автоматизация</h3>
+      <p>Настройте автоматические правила и триггеры для рутинных задач</p>
+      <div class="expand-hint">Нажмите для подробностей &rarr;</div>
+    </div>
+    <div class="feature" onclick="openFeatureDetail(2)">
+      <div class="icon orange">&#x1F465;</div>
+      <h3>Сотрудничество</h3>
+      <p>Работайте в реальном времени с командой, комментариями и уведомлениями</p>
+      <div class="expand-hint">Нажмите для подробностей &rarr;</div>
+    </div>
+    <div class="feature" onclick="openFeatureDetail(3)">
+      <div class="icon purple">&#x1F517;</div>
+      <h3>Интеграции</h3>
+      <p>Подключайте Slack, GitHub, Jira и более 100 сервисов</p>
+      <div class="expand-hint">Нажмите для подробностей &rarr;</div>
+    </div>
+    <div class="feature" onclick="openFeatureDetail(4)">
+      <div class="icon blue">&#x1F512;</div>
+      <h3>Безопасность</h3>
+      <p>Шифрование данных, 2FA и соответствие стандартам GDPR</p>
+      <div class="expand-hint">Нажмите для подробностей &rarr;</div>
+    </div>
+    <div class="feature" onclick="openFeatureDetail(5)">
+      <div class="icon green">&#x1F4F1;</div>
+      <h3>Мобильное приложение</h3>
+      <p>Управляйте проектами из любой точки мира с любого устройства</p>
+      <div class="expand-hint">Нажмите для подробностей &rarr;</div>
+    </div>
   </div>
 </div>
-<div class="pricing">
+
+<!-- ===== FAQ ===== -->
+<div class="faq" id="faq">
+  <h2>Частые вопросы</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Как начать работать с FlowSync?</span>
+        <span class="faq-arrow">&#x25BC;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Зарегистрируйтесь бесплатно, создайте рабочее пространство и пригласите команду. Настройка занимает менее 5 минут &mdash; интуитивный интерфейс и встроенные подсказки помогут быстро освоиться. Мы также предлагаем обучающие видео и вебинары.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Можно ли перейти с другого инструмента?</span>
+        <span class="faq-arrow">&#x25BC;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Да! FlowSync поддерживает импорт данных из Jira, Trello, Asana, Notion и других платформ. Мастер импорта перенесёт ваши проекты, задачи и вложения за несколько минут без потери данных.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Какие интеграции доступны?</span>
+        <span class="faq-arrow">&#x25BC;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Более 100 интеграций: Slack, GitHub, GitLab, Figma, Google Drive, Dropbox, Zapier и многие другие. На тарифах «Бизнес» и «Корпорация» доступен REST API и вебхуки для кастомных интеграций.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Безопасны ли мои данные?</span>
+        <span class="faq-arrow">&#x25BC;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Абсолютно. Мы используем шифрование AES-256 для хранения и TLS 1.3 для передачи данных. Двуфакторная аутентификация, аудит действий и соответствие GDPR/SOC 2 гарантируют защиту на уровне корпоративных стандартов.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Можно ли отменить подписку в любой момент?</span>
+        <span class="faq-arrow">&#x25BC;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Да, вы можете отменить подписку в один клик из настроек аккаунта. Доступ сохраняется до конца оплаченного периода, а ваши данные доступны для экспорта в течение 30 дней после отмены.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        <span>Есть ли поддержка на русском языке?</span>
+        <span class="faq-arrow">&#x25BC;</span>
+      </div>
+      <div class="faq-answer">
+        <p>Да, интерфейс полностью локализован на русский язык. Техническая поддержка на русском доступна на всех тарифах: на «Старт» &mdash; через чат и email, на «Бизнес» &mdash; приоритетная поддержка, на «Корпорация» &mdash; выделенный менеджер.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRICING ===== -->
+<div class="pricing" id="pricing">
   <h2>Тарифы</h2>
+  <div class="pricing-toggle-wrap">
+    <span id="label-monthly" class="active-label">Ежемесячно</span>
+    <div class="toggle-switch" id="pricing-toggle" onclick="togglePricing()">
+      <div class="toggle-knob"></div>
+    </div>
+    <span id="label-yearly">Ежегодно</span>
+    <span class="yearly-badge" id="yearly-badge">2 месяца бесплатно</span>
+  </div>
   <div class="plans">
-    <div class="plan"><h3>Старт</h3><div class="price">0 ₽</div><div class="period">навсегда</div><ul><li>До 5 проектов</li><li>3 участника</li><li>1 ГБ хранилище</li><li>Базовая аналитика</li></ul><button class="btn-outline" style="width:100%">Начать</button></div>
-    <div class="plan popular"><h3>Бизнес</h3><div class="price">1 490 ₽</div><div class="period">в месяц</div><ul><li>Безлимит проектов</li><li>20 участников</li><li>50 ГБ хранилище</li><li>Продвинутая аналитика</li><li>Автоматизация</li></ul><button class="btn-primary" style="width:100%">Попробовать</button></div>
-    <div class="plan"><h3>Корпорация</h3><div class="price">4 990 ₽</div><div class="period">в месяц</div><ul><li>Всё из Бизнес</li><li>Безлимит участников</li><li>500 ГБ хранилище</li><li>SSO и аудит</li><li>Приоритетная поддержка</li></ul><button class="btn-outline" style="width:100%">Связаться</button></div>
+    <div class="plan">
+      <h3>Старт</h3>
+      <div class="price" id="price-start">0 &#8381;</div>
+      <div class="period" id="period-start">навсегда</div>
+      <ul>
+        <li>До 5 проектов</li>
+        <li>3 участника</li>
+        <li>1 ГБ хранилище</li>
+        <li>Базовая аналитика</li>
+      </ul>
+      <button class="btn-outline" style="width:100%" onclick="openModal('reg')">Начать</button>
+    </div>
+    <div class="plan popular">
+      <h3>Бизнес</h3>
+      <div class="price" id="price-biz">1 490 &#8381;</div>
+      <div class="period" id="period-biz">в месяц</div>
+      <ul>
+        <li>Безлимит проектов</li>
+        <li>20 участников</li>
+        <li>50 ГБ хранилище</li>
+        <li>Продвинутая аналитика</li>
+        <li>Автоматизация</li>
+      </ul>
+      <button class="btn-primary" style="width:100%" onclick="openModal('reg')">Попробовать</button>
+    </div>
+    <div class="plan">
+      <h3>Корпорация</h3>
+      <div class="price" id="price-corp">4 990 &#8381;</div>
+      <div class="period" id="period-corp">в месяц</div>
+      <ul>
+        <li>Всё из Бизнес</li>
+        <li>Безлимит участников</li>
+        <li>500 ГБ хранилище</li>
+        <li>SSO и аудит</li>
+        <li>Приоритетная поддержка</li>
+      </ul>
+      <button class="btn-outline" style="width:100%" onclick="openModal('reg')">Связаться</button>
+    </div>
   </div>
 </div>
-<div class="cta">
+
+<!-- ===== CTA ===== -->
+<div class="cta" id="cta">
   <h2>Готовы начать?</h2>
   <p>Присоединяйтесь к 10 000+ командам, которые уже используют FlowSync</p>
-  <button class="btn-white">Начать бесплатно</button>
+  <button class="btn-white" onclick="openModal('reg')">Начать бесплатно</button>
 </div>
-<div class="footer">© 2026 FlowSync. React + Next.js + Tailwind CSS</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">&copy; 2026 FlowSync. React + Next.js + Tailwind CSS</div>
+
+<!-- ===== REGISTRATION MODAL ===== -->
+<div class="modal-overlay" id="reg-overlay" onclick="closeOnOverlay(event, 'reg')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('reg')" aria-label="Закрыть">&times;</button>
+    <div id="reg-form-state">
+      <h2>Создать аккаунт</h2>
+      <p class="modal-subtitle">Начните использовать FlowSync бесплатно</p>
+      <form onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label for="reg-name">Имя</label>
+          <input type="text" id="reg-name" placeholder="Ваше имя" required>
+          <div class="error-msg">Введите ваше имя</div>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="you@company.com" required>
+          <div class="error-msg">Введите корректный email</div>
+        </div>
+        <div class="form-group">
+          <label for="reg-pass">Пароль</label>
+          <input type="password" id="reg-pass" placeholder="Минимум 6 символов" required minlength="6">
+          <div class="error-msg">Пароль должен содержать минимум 6 символов</div>
+        </div>
+        <button type="submit" class="btn-submit" id="reg-submit-btn">Зарегистрироваться</button>
+      </form>
+    </div>
+    <div class="success-state" id="reg-success">
+      <div class="success-icon">&#x2705;</div>
+      <h3>Добро пожаловать!</h3>
+      <p>Ваш аккаунт создан. Проверьте почту для подтверждения.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DEMO MODAL ===== -->
+<div class="modal-overlay" id="demo-overlay" onclick="closeOnOverlay(event, 'demo')">
+  <div class="modal demo-modal">
+    <button class="modal-close" onclick="closeModal('demo')" aria-label="Закрыть">&times;</button>
+    <div class="demo-video-area" id="demo-video-area" onclick="toggleDemoPlay()">
+      <div class="play-btn" id="demo-play-btn"></div>
+      <div class="demo-progress" id="demo-progress"></div>
+    </div>
+    <div class="demo-content">
+      <h2>FlowSync в действии</h2>
+      <div class="demo-highlights">
+        <div class="demo-highlight"><div class="dot"></div>Канбан-доски и диаграммы</div>
+        <div class="demo-highlight"><div class="dot"></div>Автоматические отчёты</div>
+        <div class="demo-highlight"><div class="dot"></div>Совместное редактирование</div>
+        <div class="demo-highlight"><div class="dot"></div>Интеграции в один клик</div>
+        <div class="demo-highlight"><div class="dot"></div>Мобильное управление</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FEATURE DETAIL MODAL ===== -->
+<div class="modal-overlay" id="feature-overlay" onclick="closeOnOverlay(event, 'feature')">
+  <div class="modal feature-detail-modal">
+    <button class="modal-close" onclick="closeModal('feature')" aria-label="Закрыть">&times;</button>
+    <div class="fd-icon" id="fd-icon"></div>
+    <h2 id="fd-title"></h2>
+    <p class="fd-desc" id="fd-desc"></p>
+    <ul class="fd-benefits" id="fd-benefits"></ul>
+  </div>
+</div>
+
+<script>
+/* ========================================
+   SMOOTH SCROLL NAVIGATION
+   ======================================== */
+function smoothScroll(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ========================================
+   STATS COUNTER ANIMATION
+   ======================================== */
+let statsAnimated = false;
+function animateCounters() {
+  if (statsAnimated) return;
+  statsAnimated = true;
+  document.querySelectorAll('.stat .num').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const decimal = parseInt(el.dataset.decimal) || 0;
+    const duration = 2000;
+    const startTime = performance.now();
+    function update(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = target * eased;
+      if (decimal > 0) {
+        el.textContent = current.toFixed(decimal) + suffix;
+      } else {
+        el.textContent = Math.floor(current).toLocaleString('ru-RU') + suffix;
+      }
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) animateCounters();
+  });
+}, { threshold: 0.3 });
+statsObserver.observe(document.getElementById('stats-section'));
+
+/* ========================================
+   FAQ ACCORDION
+   ======================================== */
+function toggleFaq(questionEl) {
+  const item = questionEl.parentElement;
+  const wasActive = item.classList.contains('active');
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+  // Open clicked if it wasn't active
+  if (!wasActive) item.classList.add('active');
+}
+
+/* ========================================
+   PRICING TOGGLE
+   ======================================== */
+let isYearly = false;
+function togglePricing() {
+  isYearly = !isYearly;
+  const toggle = document.getElementById('pricing-toggle');
+  const labelM = document.getElementById('label-monthly');
+  const labelY = document.getElementById('label-yearly');
+  const badge = document.getElementById('yearly-badge');
+
+  toggle.classList.toggle('on', isYearly);
+  labelM.classList.toggle('active-label', !isYearly);
+  labelY.classList.toggle('active-label', isYearly);
+  badge.classList.toggle('visible', isYearly);
+
+  // Update prices with animation
+  const priceBiz = document.getElementById('price-biz');
+  const priceCorp = document.getElementById('price-corp');
+  const periodBiz = document.getElementById('period-biz');
+  const periodCorp = document.getElementById('period-corp');
+
+  priceBiz.style.opacity = '0';
+  priceCorp.style.opacity = '0';
+
+  setTimeout(() => {
+    if (isYearly) {
+      priceBiz.innerHTML = '1 290 &#8381;';
+      priceCorp.innerHTML = '3 990 &#8381;';
+      periodBiz.textContent = 'в месяц (при оплате за год)';
+      periodCorp.textContent = 'в месяц (при оплате за год)';
+    } else {
+      priceBiz.innerHTML = '1 490 &#8381;';
+      priceCorp.innerHTML = '4 990 &#8381;';
+      periodBiz.textContent = 'в месяц';
+      periodCorp.textContent = 'в месяц';
+    }
+    priceBiz.style.opacity = '1';
+    priceCorp.style.opacity = '1';
+  }, 200);
+}
+
+/* ========================================
+   MODAL SYSTEM
+   ======================================== */
+function openModal(type) {
+  const overlay = document.getElementById(type + '-overlay');
+  if (overlay) {
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal(type) {
+  const overlay = document.getElementById(type + '-overlay');
+  if (overlay) {
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    // Reset registration form
+    if (type === 'reg') {
+      setTimeout(() => {
+        document.getElementById('reg-form-state').style.display = '';
+        document.getElementById('reg-success').style.display = 'none';
+        document.getElementById('reg-name').value = '';
+        document.getElementById('reg-email').value = '';
+        document.getElementById('reg-pass').value = '';
+        document.getElementById('reg-name').classList.remove('error');
+        document.getElementById('reg-email').classList.remove('error');
+        document.getElementById('reg-pass').classList.remove('error');
+        document.getElementById('reg-submit-btn').disabled = false;
+      }, 300);
+    }
+    // Reset demo
+    if (type === 'demo') {
+      stopDemo();
+    }
+  }
+}
+
+function closeOnOverlay(event, type) {
+  if (event.target === event.currentTarget) closeModal(type);
+}
+
+// Close on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    ['reg', 'demo', 'feature'].forEach(type => closeModal(type));
+  }
+});
+
+/* ========================================
+   REGISTRATION FORM
+   ======================================== */
+function handleRegister(e) {
+  e.preventDefault();
+  const name = document.getElementById('reg-name');
+  const email = document.getElementById('reg-email');
+  const pass = document.getElementById('reg-pass');
+  let valid = true;
+
+  // Validate name
+  if (!name.value.trim()) {
+    name.classList.add('error');
+    valid = false;
+  } else {
+    name.classList.remove('error');
+  }
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.value)) {
+    email.classList.add('error');
+    valid = false;
+  } else {
+    email.classList.remove('error');
+  }
+
+  // Validate password
+  if (pass.value.length < 6) {
+    pass.classList.add('error');
+    valid = false;
+  } else {
+    pass.classList.remove('error');
+  }
+
+  if (!valid) return;
+
+  // Simulate submit
+  const btn = document.getElementById('reg-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Регистрация...';
+
+  setTimeout(() => {
+    document.getElementById('reg-form-state').style.display = 'none';
+    document.getElementById('reg-success').style.display = 'block';
+    btn.textContent = 'Зарегистрироваться';
+  }, 1200);
+}
+
+// Remove error on input
+['reg-name', 'reg-email', 'reg-pass'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function() {
+    this.classList.remove('error');
+  });
+});
+
+/* ========================================
+   DEMO PLAY SIMULATION
+   ======================================== */
+let demoPlaying = false;
+let demoTimer = null;
+let demoProgress = 0;
+
+function toggleDemoPlay() {
+  if (demoPlaying) {
+    stopDemo();
+  } else {
+    startDemo();
+  }
+}
+
+function startDemo() {
+  demoPlaying = true;
+  const btn = document.getElementById('demo-play-btn');
+  const bar = document.getElementById('demo-progress');
+  const area = document.getElementById('demo-video-area');
+  btn.classList.add('playing');
+  demoProgress = 0;
+
+  demoTimer = setInterval(() => {
+    demoProgress += 0.5;
+    bar.style.width = demoProgress + '%';
+    if (demoProgress >= 100) {
+      stopDemo();
+    }
+  }, 100);
+}
+
+function stopDemo() {
+  demoPlaying = false;
+  const btn = document.getElementById('demo-play-btn');
+  const bar = document.getElementById('demo-progress');
+  btn.classList.remove('playing');
+  clearInterval(demoTimer);
+  demoTimer = null;
+  // Don't reset progress — keep where it stopped
+}
+
+/* ========================================
+   FEATURE DETAIL MODAL
+   ======================================== */
+const featureData = [
+  {
+    icon: '&#x1F4CA;',
+    iconClass: 'blue',
+    title: 'Аналитика',
+    desc: 'Получайте полную картину ваших проектов с помощью интерактивных дашбордов, настраиваемых отчётов и предиктивной аналитики на базе ИИ. Отслеживайте KPI, выявляйте узкие места и принимайте решения на основе данных в реальном времени.',
+    benefits: [
+      '10+ встроенных виджетов для дашбордов',
+      'Экспорт отчётов в PDF и Excel',
+      'Предиктивная аналитика с машинным обучением',
+      'Настраиваемые метрики и фильтры',
+      'Автоматическая рассылка отчётов по расписанию'
+    ]
+  },
+  {
+    icon: '&#x26A1;',
+    iconClass: 'green',
+    title: 'Автоматизация',
+    desc: 'Автоматизируйте повторяющиеся задачи с помощью визуального конструктора правил. Настройте триггеры, условия и действия &mdash; без единой строки кода. Экономьте часы работы команды каждую неделю.',
+    benefits: [
+      'Визуальный конструктор правил (drag & drop)',
+      '30+ готовых шаблонов автоматизаций',
+      'Условная логика и ветвление',
+      'Уведомления, эскалация и автоназначение',
+      'Логирование всех автоматических действий'
+    ]
+  },
+  {
+    icon: '&#x1F465;',
+    iconClass: 'orange',
+    title: 'Сотрудничество',
+    desc: 'Работайте вместе в реальном времени: совместное редактирование документов, комментарии к задачам, упоминания коллег и мгновенные уведомления. Команда всегда на одной волне.',
+    benefits: [
+      'Совместное редактирование документов в реальном времени',
+      'Комментарии и треды к задачам',
+      'Упоминания @name с уведомлениями',
+      'Общие каналы и чат внутри проекта',
+      'Индикаторы присутствия и активности'
+    ]
+  },
+  {
+    icon: '&#x1F517;',
+    iconClass: 'purple',
+    title: 'Интеграции',
+    desc: 'Подключайте ваши любимые инструменты в пару кликов. FlowSync интегрируется с более чем 100 сервисами: от систем контроля версий до корпоративных мессенджеров и облачных хранилищ.',
+    benefits: [
+      'Slack, Microsoft Teams, Telegram уведомления',
+      'GitHub, GitLab, Bitbucket &mdash; синхронизация коммитов',
+      'Google Drive, Dropbox, OneDrive &mdash; вложения',
+      'Zapier и REST API для кастомных интеграций',
+      'Двусторонняя синхронизация данных'
+    ]
+  },
+  {
+    icon: '&#x1F512;',
+    iconClass: 'blue',
+    title: 'Безопасность',
+    desc: 'Защита данных &mdash; наш приоритет. Корпоративное шифрование, двуфакторная аутентификация, детальный аудит и соответствие международным стандартам обеспечивают спокойствие вашей компании.',
+    benefits: [
+      'Шифрование AES-256 в покое и TLS 1.3 в транзите',
+      'Двуфакторная аутентификация (TOTP и SMS)',
+      'Детальный журнал аудита всех действий',
+      'Соответствие GDPR и SOC 2 Type II',
+      'SSO через SAML 2.0 (тариф «Корпорация»)'
+    ]
+  },
+  {
+    icon: '&#x1F4F1;',
+    iconClass: 'green',
+    title: 'Мобильное приложение',
+    desc: 'Управляйте проектами, ставьте задачи и общайтесь с командой из любой точки мира. Нативные приложения для iOS и Android с полным функционалом и офлайн-режимом.',
+    benefits: [
+      'Нативные приложения iOS и Android',
+      'Полный функционал на мобильных устройствах',
+      'Офлайн-режим с автоматической синхронизацией',
+      'Push-уведомления о важных событиях',
+      'Биометрическая аутентификация (Face ID / Touch ID)'
+    ]
+  }
+];
+
+function openFeatureDetail(index) {
+  const data = featureData[index];
+  document.getElementById('fd-icon').innerHTML = data.icon;
+  document.getElementById('fd-icon').className = 'fd-icon icon ' + data.iconClass;
+  document.getElementById('fd-icon').style.background = data.iconClass === 'blue' ? '#6c63ff15' : data.iconClass === 'green' ? '#34d39915' : data.iconClass === 'orange' ? '#fb923c15' : '#a855f715';
+  document.getElementById('fd-icon').style.width = '64px';
+  document.getElementById('fd-icon').style.height = '64px';
+  document.getElementById('fd-icon').style.borderRadius = '16px';
+  document.getElementById('fd-icon').style.display = 'flex';
+  document.getElementById('fd-icon').style.alignItems = 'center';
+  document.getElementById('fd-icon').style.justifyContent = 'center';
+  document.getElementById('fd-icon').style.fontSize = '30px';
+  document.getElementById('fd-icon').style.marginBottom = '20px';
+  document.getElementById('fd-title').textContent = data.title;
+  document.getElementById('fd-desc').innerHTML = data.desc;
+  const benefitsList = document.getElementById('fd-benefits');
+  benefitsList.innerHTML = data.benefits.map(b => '<li>' + b + '</li>').join('');
+  openModal('feature');
+}
+</script>
 </body>
 </html>
