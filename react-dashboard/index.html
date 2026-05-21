@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Dashboard — FutureCode Lab</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0f1117;
+            --card: #1a1d27;
+            --card-hover: #22253a;
+            --border: #2a2d3e;
+            --text: #e4e4e7;
+            --text-muted: #8b8fa3;
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --green: #22c55e;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --pink: #ec4899;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .app { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 260px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 8px;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-logo .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+        }
+
+        .sidebar-logo span {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .nav-item:hover { background: var(--card-hover); color: var(--text); }
+        .nav-item.active { background: var(--accent); color: white; }
+
+        .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--red);
+            color: white;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 16px 8px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .sidebar-user-info { flex: 1; }
+        .sidebar-user-info .name { font-size: 13px; font-weight: 500; }
+        .sidebar-user-info .role { font-size: 11px; color: var(--text-muted); }
+
+        .main {
+            flex: 1;
+            margin-left: 260px;
+            padding: 24px 32px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .header h1 { font-size: 24px; font-weight: 600; }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            color: var(--text);
+            outline: none;
+            font-size: 13px;
+            width: 180px;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        .icon-btn:hover { background: var(--card-hover); color: var(--text); }
+
+        .icon-btn .dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 7px;
+            height: 7px;
+            background: var(--red);
+            border-radius: 50%;
+        }
+
+        /* Stat Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        .stat-card .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat-card .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .stat-card .stat-change {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .stat-change.up { background: rgba(34,197,94,0.15); color: var(--green); }
+        .stat-change.down { background: rgba(239,68,68,0.15); color: var(--red); }
+
+        .stat-card .stat-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+        .stat-card .stat-label { font-size: 13px; color: var(--text-muted); }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 { font-size: 15px; font-weight: 500; }
+
+        .chart-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg);
+            padding: 3px;
+            border-radius: 6px;
+        }
+
+        .chart-tab {
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.2s;
+        }
+
+        .chart-tab.active { background: var(--accent); color: white; }
+        .chart-tab:hover:not(.active) { color: var(--text); }
+
+        .chart-area {
+            height: 200px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            padding-top: 20px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            border-radius: 4px 4px 0 0;
+            transition: 0.3s;
+            cursor: pointer;
+            min-width: 8px;
+        }
+
+        .chart-bar:hover { opacity: 0.8; transform: scaleY(1.05); transform-origin: bottom; }
+
+        /* Donut chart */
+        .donut-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .donut {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--accent) 0deg 130deg,
+                var(--green) 130deg 220deg,
+                var(--orange) 220deg 290deg,
+                var(--pink) 290deg 360deg
+            );
+            position: relative;
+        }
+
+        .donut::after {
+            content: '78%';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: var(--card);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .donut-legend {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .legend-item span:last-child { margin-left: auto; font-weight: 500; }
+
+        /* Table */
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .table-header h3 { font-size: 15px; font-weight: 500; }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+        }
+
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-light); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 12px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:hover td { background: var(--card-hover); }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.completed { background: rgba(34,197,94,0.15); color: var(--green); }
+        .status-badge.pending { background: rgba(245,158,11,0.15); color: var(--orange); }
+        .status-badge.cancelled { background: rgba(239,68,68,0.15); color: var(--red); }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 16px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 12px; align-items: flex-start; }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card, .chart-card, .table-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">FC</div>
+                <span>FutureCode</span>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Меню</div>
+                <div class="nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Дашборд
+                </div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Пользователи
+                    <span class="nav-badge">12</span>
+                </div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Сообщения
+                    <span class="nav-badge">3</span>
+                </div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Настройки
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Аналитика</div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    Статистика
+                </div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Отчёты
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-avatar">АВ</div>
+                <div class="sidebar-user-info">
+                    <div class="name">Артём В.</div>
+                    <div class="role">Администратор</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <div class="header">
+                <h1>Дашборд</h1>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" placeholder="Поиск...">
+                    </div>
+                    <div class="icon-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background:rgba(99,102,241,0.15);color:var(--accent);">💰</div>
+                        <span class="stat-change up">+12.5%</span>
+                    </div>
+                    <div class="stat-value">284 500 ₽</div>
+                    <div class="stat-label">Общий доход</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background:rgba(34,197,94,0.15);color:var(--green);">👥</div>
+                        <span class="stat-change up">+8.2%</span>
+                    </div>
+                    <div class="stat-value">1 247</div>
+                    <div class="stat-label">Пользователи</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:var(--orange);">📦</div>
+                        <span class="stat-change down">-3.1%</span>
+                    </div>
+                    <div class="stat-value">89</div>
+                    <div class="stat-label">Заказы</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background:rgba(236,72,153,0.15);color:var(--pink);">⭐</div>
+                        <span class="stat-change up">+2.4%</span>
+                    </div>
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">Средний рейтинг</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Доход за месяц</h3>
+                        <div class="chart-tabs">
+                            <div class="chart-tab active">Неделя</div>
+                            <div class="chart-tab">Месяц</div>
+                            <div class="chart-tab">Год</div>
+                        </div>
+                    </div>
+                    <div class="chart-area" id="barChart"></div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>Каналы продаж</h3>
+                    </div>
+                    <div class="donut-container">
+                        <div class="donut"></div>
+                        <div class="donut-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:var(--accent)"></div>
+                                Прямые продажи
+                                <span>36%</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:var(--green)"></div>
+                                Kwork
+                                <span>25%</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:var(--orange)"></div>
+                                Реклама
+                                <span>19%</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:var(--pink)"></div>
+                                Сарафан
+                                <span>20%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h3>Последние заказы</h3>
+                    <button class="btn btn-primary">Все заказы</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Клиент</th>
+                            <th>Заказ</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar" style="background:var(--accent)">АК</div>
+                                    Алексей К.
+                                </div>
+                            </td>
+                            <td>Лендинг для автосервиса</td>
+                            <td>35 000 ₽</td>
+                            <td><span class="status-badge completed">Завершён</span></td>
+                            <td>22 мая</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar" style="background:var(--green)">МД</div>
+                                    Мария Д.
+                                </div>
+                            </td>
+                            <td>Дашборд аналитики</td>
+                            <td>52 000 ₽</td>
+                            <td><span class="status-badge pending">В работе</span></td>
+                            <td>21 мая</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar" style="background:var(--pink)">ЕС</div>
+                                    Елена С.
+                                </div>
+                            </td>
+                            <td>Портал недвижимости</td>
+                            <td>28 000 ₽</td>
+                            <td><span class="status-badge completed">Завершён</span></td>
+                            <td>20 мая</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar" style="background:var(--orange)">ИВ</div>
+                                    Игорь В.
+                                </div>
+                            </td>
+                            <td>Telegram WebApp</td>
+                            <td>24 000 ₽</td>
+                            <td><span class="status-badge pending">В работе</span></td>
+                            <td>19 мая</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar" style="background:var(--red)">ОН</div>
+                                    Ольга Н.
+                                </div>
+                            </td>
+                            <td>Калькулятор услуг</td>
+                            <td>15 000 ₽</td>
+                            <td><span class="status-badge cancelled">Отменён</span></td>
+                            <td>18 мая</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Bar chart
+        const chart = document.getElementById('barChart');
+        const days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+        const values = [65, 45, 80, 55, 90, 40, 70];
+        const colors = ['#6366f1','#818cf8','#6366f1','#818cf8','#6366f1','#818cf8','#6366f1'];
+
+        days.forEach((day, i) => {
+            const bar = document.createElement('div');
+            bar.className = 'chart-bar';
+            bar.style.height = values[i] + '%';
+            bar.style.background = colors[i];
+            bar.title = day + ': ' + values[i] + '%';
+            chart.appendChild(bar);
+        });
+
+        // Tab switching
+        document.querySelectorAll('.chart-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Nav item switching
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Магазин кроссовок — React Next.js</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #fafafa; color: #1a1a2e; }
+.header { background: white; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+.logo { font-size: 22px; font-weight: 800; }
+.logo span { color: #6c63ff; }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { color: #555; text-decoration: none; font-size: 14px; font-weight: 500; }
+.nav-links a:hover { color: #6c63ff; }
+.cart-btn { background: #6c63ff; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; }
+.hero { padding: 60px 40px; display: flex; align-items: center; gap: 40px; max-width: 1200px; margin: 0 auto; }
+.hero-text { flex: 1; }
+.hero-text h1 { font-size: 42px; line-height: 1.2; margin-bottom: 16px; }
+.hero-text h1 span { color: #6c63ff; }
+.hero-text p { color: #666; font-size: 16px; margin-bottom: 24px; line-height: 1.6; }
+.hero-btn { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; }
+.hero-img { width: 400px; height: 300px; background: linear-gradient(135deg, #6c63ff22, #6c63ff11); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+.products { padding: 40px; max-width: 1200px; margin: 0 auto; }
+.products h2 { font-size: 28px; margin-bottom: 24px; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.product { background: white; border-radius: 16px; padding: 20px; border: 1px solid #eee; transition: transform 0.2s; }
+.product:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.product-img { width: 100%; height: 140px; background: #f5f5f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 12px; }
+.product h3 { font-size: 15px; margin-bottom: 4px; }
+.product .brand { color: #999; font-size: 12px; margin-bottom: 8px; }
+.product .price { font-size: 18px; font-weight: 700; color: #6c63ff; }
+.product .old-price { font-size: 13px; color: #999; text-decoration: line-through; margin-left: 8px; }
+.product .rating { font-size: 12px; color: #f59e0b; margin-top: 4px; }
+.features { padding: 60px 40px; max-width: 1200px; margin: 0 auto; display: flex; gap: 24px; }
+.feature { flex: 1; background: white; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #eee; }
+.feature .icon { font-size: 36px; margin-bottom: 12px; }
+.feature h3 { font-size: 15px; margin-bottom: 6px; }
+.feature p { font-size: 13px; color: #888; }
+.footer { background: #1a1a2e; color: white; padding: 40px; text-align: center; margin-top: 40px; }
+.footer p { color: #888; font-size: 13px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">Sneak<span>Peak</span></div>
+  <div class="nav-links">
+    <a href="#">Каталог</a>
+    <a href="#">Новинки</a>
+    <a href="#">Бренды</a>
+    <a href="#">О нас</a>
+  </div>
+  <button class="cart-btn">🛒 Корзина (3)</button>
+</div>
+<div class="hero">
+  <div class="hero-text">
+    <h1>Новая коллекция <span>Spring 2026</span></h1>
+    <p>Стильные кроссовки от ведущих брендов с быстрой доставкой по всей России. Более 2000 моделей в наличии.</p>
+    <button class="hero-btn">Смотреть каталог</button>
+  </div>
+  <div class="hero-img">👟</div>
+</div>
+<div class="products">
+  <h2>Популярные модели</h2>
+  <div class="grid">
+    <div class="product">
+      <div class="product-img">👟</div>
+      <h3>Air Max Pulse</h3>
+      <div class="brand">Nike</div>
+      <div><span class="price">12 990 ₽</span><span class="old-price">15 990 ₽</span></div>
+      <div class="rating">★★★★★ (124)</div>
+    </div>
+    <div class="product">
+      <div class="product-img">👟</div>
+      <h3>Ultraboost Light</h3>
+      <div class="brand">Adidas</div>
+      <div><span class="price">14 490 ₽</span></div>
+      <div class="rating">★★★★☆ (89)</div>
+    </div>
+    <div class="product">
+      <div class="product-img">👟</div>
+      <h3>574 Classic</h3>
+      <div class="brand">New Balance</div>
+      <div><span class="price">9 990 ₽</span><span class="old-price">11 990 ₽</span></div>
+      <div class="rating">★★★★★ (201)</div>
+    </div>
+    <div class="product">
+      <div class="product-img">👟</div>
+      <h3>Gel-Kayano 30</h3>
+      <div class="brand">ASICS</div>
+      <div><span class="price">16 990 ₽</span></div>
+      <div class="rating">★★★★☆ (67)</div>
+    </div>
+  </div>
+</div>
+<div class="features">
+  <div class="feature"><div class="icon">🚀</div><h3>Быстрая доставка</h3><p>От 1 дня по Москве</p></div>
+  <div class="feature"><div class="icon">🔄</div><h3>Обмен и возврат</h3><p>30 дней на возврат</p></div>
+  <div class="feature"><div class="icon">✅</div><h3>Оригинал 100%</h3><p>Гарантия подлинности</p></div>
+  <div class="feature"><div class="icon">💳</div><h3>Оплата</h3><p>Любым способом</p></div>
+</div>
+<div class="footer">
+  <div class="logo">Sneak<span>Peak</span></div>
+  <p>© 2026 SneakPeak. React + Next.js + Tailwind CSS</p>
+</div>
+</body>
+</html>

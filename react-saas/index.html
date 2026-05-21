@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Landing — React Next.js</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; color: #1a1a2e; }
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; }
+.logo { font-size: 22px; font-weight: 800; color: #6c63ff; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { color: #555; text-decoration: none; font-size: 14px; }
+.btn-try { background: #6c63ff; color: white; border: none; padding: 10px 24px; border-radius: 24px; font-size: 14px; }
+.hero { text-align: center; padding: 80px 60px 60px; }
+.hero .badge { display: inline-block; background: #6c63ff11; color: #6c63ff; font-size: 13px; padding: 6px 16px; border-radius: 20px; margin-bottom: 20px; }
+.hero h1 { font-size: 52px; line-height: 1.15; margin-bottom: 20px; }
+.hero h1 span { background: linear-gradient(135deg, #6c63ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { color: #666; font-size: 18px; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; }
+.hero-buttons { display: flex; gap: 16px; justify-content: center; }
+.btn-primary { background: #6c63ff; color: white; border: none; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; }
+.btn-outline { background: white; color: #6c63ff; border: 2px solid #6c63ff; padding: 14px 32px; border-radius: 30px; font-size: 16px; font-weight: 600; }
+.stats { display: flex; justify-content: center; gap: 60px; padding: 40px 60px; }
+.stat { text-align: center; }
+.stat .num { font-size: 36px; font-weight: 800; color: #6c63ff; }
+.stat .label { font-size: 14px; color: #888; margin-top: 4px; }
+.features { padding: 80px 60px; background: #f8f9ff; }
+.features h2 { text-align: center; font-size: 36px; margin-bottom: 48px; }
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1100px; margin: 0 auto; }
+.feature { background: white; border-radius: 16px; padding: 28px; border: 1px solid #eee; }
+.feature .icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+.feature .icon.blue { background: #6c63ff15; }
+.feature .icon.green { background: #34d39915; }
+.feature .icon.orange { background: #fb923c15; }
+.feature .icon.purple { background: #a855f715; }
+.feature h3 { font-size: 17px; margin-bottom: 8px; }
+.feature p { font-size: 14px; color: #888; line-height: 1.5; }
+.pricing { padding: 80px 60px; text-align: center; }
+.pricing h2 { font-size: 36px; margin-bottom: 48px; }
+.plans { display: flex; gap: 24px; justify-content: center; }
+.plan { background: white; border: 2px solid #eee; border-radius: 20px; padding: 32px; width: 300px; }
+.plan.popular { border-color: #6c63ff; position: relative; }
+.plan.popular::before { content: 'Популярный'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #6c63ff; color: white; font-size: 12px; padding: 4px 14px; border-radius: 10px; }
+.plan h3 { font-size: 20px; margin-bottom: 8px; }
+.plan .price { font-size: 36px; font-weight: 800; color: #6c63ff; margin-bottom: 4px; }
+.plan .period { font-size: 13px; color: #888; margin-bottom: 20px; }
+.plan ul { list-style: none; text-align: left; margin-bottom: 24px; }
+.plan li { font-size: 14px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; color: #555; }
+.plan li::before { content: '✓'; color: #6c63ff; font-weight: 700; margin-right: 8px; }
+.cta { background: linear-gradient(135deg, #6c63ff, #a855f7); color: white; padding: 80px 60px; text-align: center; }
+.cta h2 { font-size: 36px; margin-bottom: 16px; }
+.cta p { font-size: 16px; opacity: 0.9; margin-bottom: 28px; }
+.btn-white { background: white; color: #6c63ff; border: none; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; }
+.footer { padding: 24px 60px; text-align: center; color: #888; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="logo">FlowSync</div>
+  <div class="nav-links">
+    <a href="#">Возможности</a>
+    <a href="#">Цены</a>
+    <a href="#">Документация</a>
+    <a href="#">Блог</a>
+    <button class="btn-try">Начать бесплатно</button>
+  </div>
+</div>
+<div class="hero">
+  <div class="badge">🚀 Новая версия 2.0</div>
+  <h1>Управление проектами<br><span>на новом уровне</span></h1>
+  <p>Автоматизируйте рутину, отслеживайте прогресс и сотрудничайте с командой в реальном времени</p>
+  <div class="hero-buttons">
+    <button class="btn-primary">Попробовать бесплатно</button>
+    <button class="btn-outline">Смотреть демо</button>
+  </div>
+</div>
+<div class="stats">
+  <div class="stat"><div class="num">10K+</div><div class="label">Пользователей</div></div>
+  <div class="stat"><div class="num">99.9%</div><div class="label">Аптайм</div></div>
+  <div class="stat"><div class="num">50М+</div><div class="label">Задач выполнено</div></div>
+  <div class="stat"><div class="num">4.9★</div><div class="label">Рейтинг</div></div>
+</div>
+<div class="features">
+  <h2>Возможности</h2>
+  <div class="feature-grid">
+    <div class="feature"><div class="icon blue">📊</div><h3>Аналитика</h3><p>Детальные отчёты и дашборды для принятия решений на основе данных</p></div>
+    <div class="feature"><div class="icon green">⚡</div><h3>Автоматизация</h3><p>Настройте автоматические правила и триггеры для рутинных задач</p></div>
+    <div class="feature"><div class="icon orange">👥</div><h3>Сотрудничество</h3><p>Работайте в реальном времени с командой, комментариями и уведомлениями</p></div>
+    <div class="feature"><div class="icon purple">🔗</div><h3>Интеграции</h3><p>Подключайте Slack, GitHub, Jira и более 100 сервисов</p></div>
+    <div class="feature"><div class="icon blue">🔒</div><h3>Безопасность</h3><p>Шифрование данных, 2FA и соответствие стандартам GDPR</p></div>
+    <div class="feature"><div class="icon green">📱</div><h3>Мобильное приложение</h3><p>Управляйте проектами из любой точки мира с любого устройства</p></div>
+  </div>
+</div>
+<div class="pricing">
+  <h2>Тарифы</h2>
+  <div class="plans">
+    <div class="plan"><h3>Старт</h3><div class="price">0 ₽</div><div class="period">навсегда</div><ul><li>До 5 проектов</li><li>3 участника</li><li>1 ГБ хранилище</li><li>Базовая аналитика</li></ul><button class="btn-outline" style="width:100%">Начать</button></div>
+    <div class="plan popular"><h3>Бизнес</h3><div class="price">1 490 ₽</div><div class="period">в месяц</div><ul><li>Безлимит проектов</li><li>20 участников</li><li>50 ГБ хранилище</li><li>Продвинутая аналитика</li><li>Автоматизация</li></ul><button class="btn-primary" style="width:100%">Попробовать</button></div>
+    <div class="plan"><h3>Корпорация</h3><div class="price">4 990 ₽</div><div class="period">в месяц</div><ul><li>Всё из Бизнес</li><li>Безлимит участников</li><li>500 ГБ хранилище</li><li>SSO и аудит</li><li>Приоритетная поддержка</li></ul><button class="btn-outline" style="width:100%">Связаться</button></div>
+  </div>
+</div>
+<div class="cta">
+  <h2>Готовы начать?</h2>
+  <p>Присоединяйтесь к 10 000+ командам, которые уже используют FlowSync</p>
+  <button class="btn-white">Начать бесплатно</button>
+</div>
+<div class="footer">© 2026 FlowSync. React + Next.js + Tailwind CSS</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Портфолио — React Next.js</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0a0a0a; color: #e5e5e5; }
+.nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 60px; }
+.logo { font-size: 20px; font-weight: 700; color: #fff; }
+.logo span { color: #22d3ee; }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a { color: #888; text-decoration: none; font-size: 14px; transition: color 0.2s; }
+.nav-links a:hover { color: #22d3ee; }
+.hero { padding: 100px 60px 60px; }
+.hero h1 { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+.hero h1 span { color: #22d3ee; }
+.hero p { color: #888; font-size: 18px; max-width: 500px; line-height: 1.6; margin-bottom: 32px; }
+.hero-btn { display: inline-block; background: #22d3ee; color: #0a0a0a; padding: 12px 28px; border-radius: 24px; font-size: 14px; font-weight: 600; text-decoration: none; }
+.projects { padding: 40px 60px; }
+.projects h2 { font-size: 28px; margin-bottom: 32px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.project { background: #1a1a1a; border-radius: 16px; overflow: hidden; border: 1px solid #2a2a2a; transition: transform 0.3s, border-color 0.3s; }
+.project:hover { transform: translateY(-6px); border-color: #22d3ee; }
+.project-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+.project-img.cyan { background: linear-gradient(135deg, #22d3ee15, #22d3ee08); }
+.project-img.purple { background: linear-gradient(135deg, #a855f715, #a855f708); }
+.project-img.green { background: linear-gradient(135deg, #34d39915, #34d39908); }
+.project-info { padding: 20px; }
+.project-info h3 { font-size: 16px; margin-bottom: 6px; }
+.project-info p { font-size: 13px; color: #888; line-height: 1.4; margin-bottom: 12px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 11px; padding: 4px 10px; border-radius: 12px; background: #2a2a2a; color: #aaa; }
+.tag.react { color: #22d3ee; background: #22d3ee15; }
+.tag.next { color: #a855f7; background: #a855f715; }
+.tag.tw { color: #34d399; background: #34d39915; }
+.about { padding: 80px 60px; display: flex; gap: 60px; align-items: center; }
+.about-text { flex: 1; }
+.about-text h2 { font-size: 32px; margin-bottom: 16px; }
+.about-text p { color: #888; font-size: 15px; line-height: 1.7; margin-bottom: 16px; }
+.skills { display: flex; gap: 10px; flex-wrap: wrap; }
+.skill { padding: 8px 16px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 20px; font-size: 13px; color: #ccc; }
+.contact { padding: 80px 60px; text-align: center; }
+.contact h2 { font-size: 36px; margin-bottom: 16px; }
+.contact p { color: #888; font-size: 16px; margin-bottom: 28px; }
+.contact-btn { display: inline-block; background: #22d3ee; color: #0a0a0a; padding: 14px 36px; border-radius: 30px; font-size: 16px; font-weight: 600; text-decoration: none; }
+.footer { padding: 24px 60px; border-top: 1px solid #2a2a2a; text-align: center; color: #555; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="logo">dev<span>.</span>portfolio</div>
+  <div class="nav-links">
+    <a href="#">Проекты</a>
+    <a href="#">Обо мне</a>
+    <a href="#">Контакты</a>
+  </div>
+</div>
+<div class="hero">
+  <h1>Создаю <span>веб-приложения</span> на React</h1>
+  <p>Frontend-разработчик. Специализируюсь на React, Next.js и современных веб-технологиях</p>
+  <a href="#" class="hero-btn">Смотреть работы</a>
+</div>
+<div class="projects">
+  <h2>Проекты</h2>
+  <div class="grid">
+    <div class="project">
+      <div class="project-img cyan">📊</div>
+      <div class="project-info">
+        <h3>Dashboard аналитики</h3>
+        <p>Панель управления с графиками, виджетами и real-time данными</p>
+        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
+      </div>
+    </div>
+    <div class="project">
+      <div class="project-img purple">🛒</div>
+      <div class="project-info">
+        <h3>Интернет-магазин</h3>
+        <p>E-commerce с корзиной, фильтрами и каталогом товаров</p>
+        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
+      </div>
+    </div>
+    <div class="project">
+      <div class="project-img green">📱</div>
+      <div class="project-info">
+        <h3>SaaS платформа</h3>
+        <p>Лендинг с тарифами, фичами и формами подписки</p>
+        <div class="tags"><span class="tag react">React</span><span class="tag next">Next.js</span><span class="tag tw">Tailwind</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="about">
+  <div class="about-text">
+    <h2>Обо мне</h2>
+    <p>Разрабатываю современные веб-приложения с акцентом на производительность, доступность и пользовательский опыт. Каждый проект — чистый код, адаптивный дизайн и быстрая загрузка.</p>
+    <p>Использую React 18, Next.js 14, TypeScript и Tailwind CSS — стек, который обеспечивает максимальную скорость разработки и качество результата.</p>
+    <div class="skills">
+      <span class="skill">React 18</span>
+      <span class="skill">Next.js 14</span>
+      <span class="skill">TypeScript</span>
+      <span class="skill">Tailwind CSS</span>
+      <span class="skill">Framer Motion</span>
+      <span class="skill">REST API</span>
+    </div>
+  </div>
+</div>
+<div class="contact">
+  <h2>Есть проект?</h2>
+  <p>Давайте обсудим вашу задачу и найдём лучшее решение</p>
+  <a href="#" class="contact-btn">Написать</a>
+</div>
+<div class="footer">© 2026 dev.portfolio — React + Next.js</div>
+</body>
+</html>
