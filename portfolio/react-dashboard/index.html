@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — React Next.js</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+.layout { display: flex; min-height: 100vh; }
+.sidebar { width: 260px; background: #1e293b; padding: 24px 16px; border-right: 1px solid #334155; }
+.sidebar h2 { color: #818cf8; font-size: 20px; margin-bottom: 8px; padding-left: 8px; }
+.sidebar .tag { display: inline-block; background: rgba(129,140,248,0.15); color: #818cf8; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+.nav { margin-top: 24px; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 8px; color: #94a3b8; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+.nav-item:hover, .nav-item.active { background: #334155; color: #e2e8f0; }
+.nav-item.active { background: rgba(129,140,248,0.15); color: #818cf8; }
+.nav-item svg { width: 20px; height: 20px; }
+.main { flex: 1; padding: 32px; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.header h1 { font-size: 28px; font-weight: 700; }
+.header .date { color: #64748b; font-size: 14px; }
+.cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 32px; }
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; }
+.card .label { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+.card .value { font-size: 28px; font-weight: 700; }
+.card .change { font-size: 12px; margin-top: 4px; }
+.card .change.up { color: #34d399; }
+.card .change.down { color: #f87171; }
+.card.blue .value { color: #60a5fa; }
+.card.purple .value { color: #a78bfa; }
+.card.green .value { color: #34d399; }
+.card.orange .value { color: #fb923c; }
+.grid2 { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+.chart-box { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; }
+.chart-box h3 { font-size: 16px; margin-bottom: 16px; }
+.chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; }
+.bar { flex: 1; border-radius: 4px 4px 0 0; transition: height 0.3s; }
+.bar.blue { background: linear-gradient(to top, #3b82f6, #60a5fa); }
+.bar.purple { background: linear-gradient(to top, #7c3aed, #a78bfa); }
+.activity { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; }
+.activity h3 { font-size: 16px; margin-bottom: 16px; }
+.activity-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #334155; }
+.activity-item:last-child { border: none; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+.dot.blue { background: #60a5fa; }
+.dot.green { background: #34d399; }
+.dot.orange { background: #fb923c; }
+.dot.purple { background: #a78bfa; }
+.activity-item .text { font-size: 13px; color: #94a3b8; flex: 1; }
+.activity-item .time { font-size: 12px; color: #475569; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="sidebar">
+    <h2>Dashboard <span class="tag">React</span></h2>
+    <div class="nav">
+      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Обзор</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Аналитика</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> Пользователи</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Заказы</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Сообщения</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Настройки</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="header">
+      <h1>Обзор</h1>
+      <span class="date">22 мая 2026</span>
+    </div>
+    <div class="cards">
+      <div class="card blue"><div class="label">Пользователи</div><div class="value">2,847</div><div class="change up">+12.5%</div></div>
+      <div class="card purple"><div class="label">Доход</div><div class="value">₽482K</div><div class="change up">+8.2%</div></div>
+      <div class="card green"><div class="label">Заказы</div><div class="value">1,234</div><div class="change up">+23.1%</div></div>
+      <div class="card orange"><div class="label">Конверсия</div><div class="value">3.24%</div><div class="change down">-0.4%</div></div>
+    </div>
+    <div class="grid2">
+      <div class="chart-box">
+        <h3>Статистика за неделю</h3>
+        <div class="chart">
+          <div class="bar blue" style="height:45%"></div>
+          <div class="bar blue" style="height:65%"></div>
+          <div class="bar purple" style="height:55%"></div>
+          <div class="bar blue" style="height:80%"></div>
+          <div class="bar purple" style="height:70%"></div>
+          <div class="bar blue" style="height:90%"></div>
+          <div class="bar blue" style="height:75%"></div>
+          <div class="bar purple" style="height:60%"></div>
+          <div class="bar blue" style="height:85%"></div>
+          <div class="bar purple" style="height:95%"></div>
+          <div class="bar blue" style="height:70%"></div>
+          <div class="bar blue" style="height:100%"></div>
+        </div>
+      </div>
+      <div class="activity">
+        <h3>Активность</h3>
+        <div class="activity-item"><div class="dot blue"></div><span class="text">Новый заказ #1234</span><span class="time">2 мин</span></div>
+        <div class="activity-item"><div class="dot green"></div><span class="text">Оплата получена</span><span class="time">15 мин</span></div>
+        <div class="activity-item"><div class="dot orange"></div><span class="text">Регистрация юзера</span><span class="time">1 ч</span></div>
+        <div class="activity-item"><div class="dot purple"></div><span class="text">Отзыв оставлен</span><span class="time">3 ч</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
